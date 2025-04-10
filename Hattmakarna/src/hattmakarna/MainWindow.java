@@ -1,5 +1,4 @@
 package hattmakarna;
-
 import java.awt.Component;
 import panels.*; // Hämtar alla paneler
 import javax.swing.JPanel;
@@ -7,7 +6,7 @@ import javax.swing.JPanel;
 public class MainWindow extends javax.swing.JFrame {
     public MainWindow() {
         initComponents();
-        
+
         // Börjar med att visa startpanelen
        showStartPanel();
     }

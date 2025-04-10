@@ -1,20 +1,14 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Main.java to edit this template
- */
 package hattmakarna;
 
-/**
- *
- * @author andre
- */
-public class Hattmakarna {
+import database.DatabaseManager;
 
-    /**
-     * @param args the command line arguments
-     */
+
+public class Hattmakarna {
+     public static DatabaseManager dbm = new DatabaseManager();
+
     public static void main(String[] args) {
-        // TODO code application logic here
+
+
             new MainWindow().setVisible(true);
     }
     
