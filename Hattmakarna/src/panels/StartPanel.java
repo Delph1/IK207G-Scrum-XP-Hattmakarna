@@ -3,14 +3,18 @@ package panels;
 
 import hattmakarna.MainWindow;
 
+import static hattmakarna.Hattmakarna.dbm;
+import models.*;
+
 
 public class StartPanel extends javax.swing.JPanel {
     private MainWindow window;
-    
+
     public StartPanel(MainWindow window) {
         // Vi tar emot och lagrar huvudfönstret som ett fält, då kan vi komma åt metoder som att byta panel
         this.window=window; 
         initComponents();
+        
     }
 
     @SuppressWarnings("unchecked")
