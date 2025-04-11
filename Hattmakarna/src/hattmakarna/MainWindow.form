@@ -32,6 +32,8 @@
                       <Component id="startButton" min="-2" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
                       <Component id="ordersButton" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace min="-2" pref="172" max="-2" attributes="0"/>
+                      <Component id="btnMaterialorder" min="-2" max="-2" attributes="0"/>
                       <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
                   </Group>
               </Group>
@@ -49,6 +51,7 @@
               <Group type="103" groupAlignment="3" attributes="0">
                   <Component id="startButton" alignment="3" min="-2" max="-2" attributes="0"/>
                   <Component id="ordersButton" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="btnMaterialorder" alignment="3" min="-2" max="-2" attributes="0"/>
               </Group>
               <EmptySpace max="-2" attributes="0"/>
               <Component id="jSeparator1" min="-2" pref="10" max="-2" attributes="0"/>
@@ -119,6 +122,14 @@
       </Events>
     </Component>
     <Component class="javax.swing.JSeparator" name="jSeparator1">
+    </Component>
+    <Component class="javax.swing.JButton" name="btnMaterialorder">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="Materialbest&#xe4;llning"/>
+      </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnMaterialorderActionPerformed"/>
+      </Events>
     </Component>
   </SubComponents>
 </Form>
