@@ -1,3 +1,4 @@
+
 package panels;
 
 import hattmakarna.MainWindow;
@@ -5,6 +6,7 @@ import static hattmakarna.Hattmakarna.dbm;
 import models.*;
 import java.util.ArrayList;
 import javax.swing.table.DefaultTableModel;
+
 
 public class OrderlistPanel extends javax.swing.JPanel {
 //Fält
@@ -56,6 +58,11 @@ public class OrderlistPanel extends javax.swing.JPanel {
         });
 
         showOrderButton.setText("Visa order");
+        showOrderButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                showOrderButtonActionPerformed(evt);
+            }
+        });
 
         deleteOrderButton.setText("Radera");
         deleteOrderButton.addActionListener(new java.awt.event.ActionListener() {
@@ -66,8 +73,7 @@ public class OrderlistPanel extends javax.swing.JPanel {
 
         orderTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null}
+
             },
             new String [] {
                 "OrderID", "KundID", "Datum", "Orderstatus", "Express", "Fraktkostnad"
@@ -145,6 +151,12 @@ public class OrderlistPanel extends javax.swing.JPanel {
 
 
     }//GEN-LAST:event_deleteOrderButtonActionPerformed
+
+    private void showOrderButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_showOrderButtonActionPerformed
+        int selectedRowId = orderTable.getSelectedRow();
+        int selectedOrderId = (int) orderTable.getValueAt(selectedRowId, 0);
+        window.showOrderPanel(selectedOrderId);
+    }//GEN-LAST:event_showOrderButtonActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

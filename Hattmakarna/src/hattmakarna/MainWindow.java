@@ -139,6 +139,10 @@ public class MainWindow extends javax.swing.JFrame {
        showPanel(new OrderlistPanel(this));
     }
     
+    public void showOrderPanel(int orderId) {
+       showPanel(new OrderPanel(this, orderId));
+    }
+    
     public void showOrderPanel() {
        showPanel(new OrderPanel(this));
     }
