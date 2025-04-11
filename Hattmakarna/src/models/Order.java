@@ -8,14 +8,16 @@ public class Order {
     private LocalDate order_date;
     private String order_status;
     private boolean express;
+    private int shipping_cost; 
 
 
-    public Order(int id, int customer_id, LocalDate order_date, String order_status, boolean express) {
+    public Order(int id, int customer_id, LocalDate order_date, String order_status, boolean express, int shipping_cost) {
         this.id = id;
         this.customer_id = customer_id;
         this.order_date = order_date;
         this.order_status = order_status;
         this.express = express;
+        this.shipping_cost = shipping_cost; 
     }
 
 
@@ -57,5 +59,13 @@ public class Order {
 
     public void setExpress(boolean express) {
         this.express = express;
+    }
+    
+    public void setShippingCost(int shippingCost) {
+        this.shipping_cost = shippingCost;
+    }
+    
+    public int getShippingCost(){
+        return shipping_cost; 
     }
 }

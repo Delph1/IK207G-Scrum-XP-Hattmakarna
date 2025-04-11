@@ -5,13 +5,14 @@ import static hattmakarna.Hattmakarna.dbm;
 import models.*;
 import java.util.ArrayList;
 import javax.swing.DefaultListModel;
+import javax.swing.table.DefaultTableModel;
 
 public class OrderlistPanel extends javax.swing.JPanel {
 //Fält
 
     private ArrayList<Order> allOrders;
     private MainWindow window;
-    private DefaultListModel<String> orderListModel;
+    // private DefaultListModel<String> orderListModel;
 
 //Konstruktor
     public OrderlistPanel(MainWindow window) {
@@ -19,13 +20,16 @@ public class OrderlistPanel extends javax.swing.JPanel {
         this.window = window;
         initComponents();
         dbm.createOrder();
-        DefaultListModel<String> orderListModel = new DefaultListModel<String>();
+
+        DefaultTableModel tableModel = (DefaultTableModel) orderTable.getModel();
         allOrders = dbm.getOrders();
         for (Order order : allOrders) {
+            tableModel.addRow(new Object[]{order.getId(), order.getCustomer_id(), order.getOrder_date(), order.getOrder_status(), order.isExpress(), order.getShippingCost() } );
+
             System.out.println(order.getId());
-            orderListModel.addElement("test");
+
         }
-        orderList.setModel(orderListModel);
+
     }
 
     @SuppressWarnings("unchecked")
@@ -34,10 +38,10 @@ public class OrderlistPanel extends javax.swing.JPanel {
 
         jLabel1 = new javax.swing.JLabel();
         newOrderButton = new javax.swing.JButton();
-        jScrollPane1 = new javax.swing.JScrollPane();
-        orderList = new javax.swing.JList<>();
         showOrderButton = new javax.swing.JButton();
         deleteOrderButton = new javax.swing.JButton();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        orderTable = new javax.swing.JTable();
 
         setName(""); // NOI18N
 
@@ -51,50 +55,69 @@ public class OrderlistPanel extends javax.swing.JPanel {
             }
         });
 
-        orderList.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
-        orderList.setToolTipText("");
-        jScrollPane1.setViewportView(orderList);
-
         showOrderButton.setText("Visa order");
 
         deleteOrderButton.setText("Radera");
+
+        orderTable.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null, null, null},
+                {null, null, null, null, null, null}
+            },
+            new String [] {
+                "OrderID", "KundID", "Datum", "Orderstatus", "Express", "Fraktkostnad"
+            }
+        ) {
+            Class[] types = new Class [] {
+                java.lang.Integer.class, java.lang.Integer.class, java.lang.String.class, java.lang.String.class, java.lang.Boolean.class, java.lang.Integer.class
+            };
+            boolean[] canEdit = new boolean [] {
+                false, false, false, false, false, false
+            };
+
+            public Class getColumnClass(int columnIndex) {
+                return types [columnIndex];
+            }
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        jScrollPane2.setViewportView(orderTable);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(newOrderButton)
-                .addGap(38, 38, 38))
+                .addContainerGap()
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 468, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(newOrderButton)
+                    .addComponent(showOrderButton)
+                    .addComponent(deleteOrderButton))
+                .addGap(68, 68, 68))
             .addGroup(layout.createSequentialGroup()
                 .addGap(269, 269, 269)
                 .addComponent(jLabel1)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-            .addGroup(layout.createSequentialGroup()
-                .addGap(36, 36, 36)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 291, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 100, Short.MAX_VALUE)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(showOrderButton)
-                    .addComponent(deleteOrderButton))
-                .addGap(91, 91, 91))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jLabel1)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(newOrderButton)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 102, Short.MAX_VALUE)
+                .addGap(9, 9, 9)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 194, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(layout.createSequentialGroup()
+                        .addComponent(newOrderButton)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(showOrderButton)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(deleteOrderButton)))
-                .addGap(63, 63, 63))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(deleteOrderButton))
+                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 407, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(229, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
 
@@ -106,9 +129,9 @@ public class OrderlistPanel extends javax.swing.JPanel {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton deleteOrderButton;
     private javax.swing.JLabel jLabel1;
-    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JButton newOrderButton;
-    private javax.swing.JList<String> orderList;
+    private javax.swing.JTable orderTable;
     private javax.swing.JButton showOrderButton;
     // End of variables declaration//GEN-END:variables
 }
