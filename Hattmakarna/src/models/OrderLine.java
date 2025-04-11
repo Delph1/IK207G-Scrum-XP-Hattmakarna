@@ -22,6 +22,7 @@ public class OrderLine {
         this.orderLine_id = orderLine_id;
         this.price = price;
         this.product_id = product_id;
+        System.out.println(orderLine_id);
     }
 
     public void setCustomerApproval(boolean customerApproval) {
@@ -32,6 +33,9 @@ public class OrderLine {
         return customer_approval;
     }
 
+        public void setProductId(int productId) {
+        this.product_id = productId;
+    }
     public void setDescription(String description) {
         this.description = description;
     }
