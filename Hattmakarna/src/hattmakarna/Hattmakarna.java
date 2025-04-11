@@ -4,7 +4,7 @@ import database.DatabaseManager;
 
 
 public class Hattmakarna {
-     public static DatabaseManager dbm = new DatabaseManager();
+    public static DatabaseManager dbm = new DatabaseManager();
 
     public static void main(String[] args) {
 
