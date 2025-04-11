@@ -30,7 +30,8 @@ public class DatabaseManager {
                         Integer.parseInt(row.get("customer_id")),
                         LocalDate.parse(row.get("order_date")),
                         row.get("order_status"),
-                        Boolean.parseBoolean(row.get("express"))
+                        Boolean.parseBoolean(row.get("express")),
+                        Integer.parseInt(row.get("shipping_cost"))
                 );
                 return order;
             } else {
@@ -98,7 +99,8 @@ public class DatabaseManager {
                             Integer.parseInt(row.get("customer_id")),
                             LocalDate.parse(row.get("order_date")),
                             row.get("order_status"),
-                            Boolean.parseBoolean(row.get("express"))
+                            Boolean.parseBoolean(row.get("express")),
+                            Integer.parseInt(row.get("shipping_cost"))
                     ));
                 }
             }

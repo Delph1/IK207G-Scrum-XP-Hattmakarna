@@ -4,7 +4,6 @@ import hattmakarna.MainWindow;
 import static hattmakarna.Hattmakarna.dbm;
 import models.*;
 import java.util.ArrayList;
-import javax.swing.DefaultListModel;
 import javax.swing.table.DefaultTableModel;
 
 public class OrderlistPanel extends javax.swing.JPanel {
@@ -12,6 +11,7 @@ public class OrderlistPanel extends javax.swing.JPanel {
 
     private ArrayList<Order> allOrders;
     private MainWindow window;
+    private DefaultTableModel tableModel;
     // private DefaultListModel<String> orderListModel;
 
 //Konstruktor
@@ -19,12 +19,12 @@ public class OrderlistPanel extends javax.swing.JPanel {
         // Vi tar emot och lagrar huvudfönstret som ett fält, då kan vi komma åt metoder som att byta panel
         this.window = window;
         initComponents();
-        dbm.createOrder();
+//        dbm.createOrder();
 
-        DefaultTableModel tableModel = (DefaultTableModel) orderTable.getModel();
+        tableModel = (DefaultTableModel) orderTable.getModel();
         allOrders = dbm.getOrders();
         for (Order order : allOrders) {
-            tableModel.addRow(new Object[]{order.getId(), order.getCustomer_id(), order.getOrder_date(), order.getOrder_status(), order.isExpress(), order.getShippingCost() } );
+            tableModel.addRow(new Object[]{order.getId(), order.getCustomer_id(), order.getOrder_date(), order.getOrder_status(), order.isExpress(), order.getShippingCost()});
 
             System.out.println(order.getId());
 
@@ -58,6 +58,11 @@ public class OrderlistPanel extends javax.swing.JPanel {
         showOrderButton.setText("Visa order");
 
         deleteOrderButton.setText("Radera");
+        deleteOrderButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                deleteOrderButtonActionPerformed(evt);
+            }
+        });
 
         orderTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -124,6 +129,22 @@ public class OrderlistPanel extends javax.swing.JPanel {
     private void newOrderButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_newOrderButtonActionPerformed
         window.showOrderPanel();
     }//GEN-LAST:event_newOrderButtonActionPerformed
+
+    private void deleteOrderButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deleteOrderButtonActionPerformed
+
+        int selectedRowId = orderTable.getSelectedRow();
+        System.out.println(selectedRowId);
+
+        int selectedOrderId = (int) orderTable.getValueAt(selectedRowId, 0);
+        System.out.println("OrderID:" + selectedOrderId);
+
+        if (dbm.deleteOrder(selectedOrderId)) {
+            tableModel.removeRow(selectedRowId);
+            System.out.println("YAY deleted");
+        }
+
+
+    }//GEN-LAST:event_deleteOrderButtonActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
