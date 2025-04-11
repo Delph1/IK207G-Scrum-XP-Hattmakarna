@@ -1,11 +1,14 @@
 
 package panels;
 
+import static hattmakarna.Hattmakarna.dbm;
 import hattmakarna.MainWindow;
+import models.Order;
 
 
 public class OrderlistPanel extends javax.swing.JPanel {
     private MainWindow window;
+    private Order order;
     
     public OrderlistPanel(MainWindow window) {
         // Vi tar emot och lagrar huvudfönstret som ett fält, då kan vi komma åt metoder som att byta panel
