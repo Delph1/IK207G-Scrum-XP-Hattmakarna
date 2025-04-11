@@ -41,6 +41,10 @@ public class DatabaseManager {
             return null;
         }
     }
+  public boolean deleteOrder(int id) {
+        try {
+            db.delete("DELETE FROM orders where order_id = " + id);
+
 
     // Ta bort en beställning
     public boolean deleteOrder(int id) {
@@ -61,7 +65,9 @@ public class DatabaseManager {
             String maxIdStr = db.fetchColumn("select MAX(order_id) from orders").getFirst();
             int newId = (maxIdStr == null || maxIdStr.isEmpty()) ? 1 : Integer.parseInt(maxIdStr) + 1;
             // Lägger in beställning i databasen
+
             db.insert("INSERT INTO orders (order_id,customer_id,order_date,order_status) values (" + newId + ",1,NOW(),'ÖPPEN')");
+
 
             // Returnerar den nya beställningen
             return getOrder(newId);
