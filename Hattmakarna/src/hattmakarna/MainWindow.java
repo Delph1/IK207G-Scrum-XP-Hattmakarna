@@ -3,6 +3,9 @@ import java.awt.Component;
 import panels.*; // Hämtar alla paneler
 import javax.swing.JPanel;
 import static hattmakarna.Hattmakarna.dbm;
+import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import models.*;
 
 public class MainWindow extends javax.swing.JFrame {
@@ -125,7 +128,11 @@ public class MainWindow extends javax.swing.JFrame {
 
     private void btnPrintActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPrintActionPerformed
         Order order = dbm.getOrder(1);
-        Print printOrder = new Print(order);        // TODO add your handling code here:
+        try {
+            Print printOrder = new Print(order);        // TODO add your handling code here:
+        } catch (IOException ex) {
+            Logger.getLogger(MainWindow.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }//GEN-LAST:event_btnPrintActionPerformed
 
     
