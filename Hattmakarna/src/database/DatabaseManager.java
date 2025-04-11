@@ -41,7 +41,8 @@ public class DatabaseManager {
             return null;
         }
     }
-  public boolean deleteOrder(int id) {
+    // Ta bort en beställning
+    public boolean deleteOrder(int id) {
         try {
             db.delete("DELETE FROM orders where order_id = " + id);
 
