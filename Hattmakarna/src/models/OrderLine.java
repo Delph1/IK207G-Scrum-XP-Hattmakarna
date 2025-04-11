@@ -15,13 +15,14 @@ public class OrderLine {
     private int price;
     private int product_id;
 
-    public OrderLine(boolean customer_approval, String description, int order_id, int orderLine_id, int price, int product_id) {
+    public OrderLine( int orderLine_id,int order_id,boolean customer_approval, String description,  int price, int product_id) {
         this.customer_approval = customer_approval;
         this.description = description;
         this.order_id = order_id;
         this.orderLine_id = orderLine_id;
         this.price = price;
         this.product_id = product_id;
+        System.out.println(orderLine_id);
     }
 
     public void setCustomerApproval(boolean customerApproval) {
@@ -32,6 +33,9 @@ public class OrderLine {
         return customer_approval;
     }
 
+        public void setProductId(int productId) {
+        this.product_id = productId;
+    }
     public void setDescription(String description) {
         this.description = description;
     }
