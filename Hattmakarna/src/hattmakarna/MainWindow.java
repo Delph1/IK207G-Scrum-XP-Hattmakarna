@@ -22,6 +22,7 @@ public class MainWindow extends javax.swing.JFrame {
         startButton = new javax.swing.JButton();
         ordersButton = new javax.swing.JButton();
         jSeparator1 = new javax.swing.JSeparator();
+        btnMaterialorder = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -60,6 +61,13 @@ public class MainWindow extends javax.swing.JFrame {
             }
         });
 
+        btnMaterialorder.setText("Materialbeställning");
+        btnMaterialorder.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnMaterialorderActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -73,6 +81,8 @@ public class MainWindow extends javax.swing.JFrame {
                         .addComponent(startButton)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(ordersButton)
+                        .addGap(172, 172, 172)
+                        .addComponent(btnMaterialorder)
                         .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
             .addComponent(jSeparator1)
@@ -85,7 +95,8 @@ public class MainWindow extends javax.swing.JFrame {
                 .addGap(4, 4, 4)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(startButton)
-                    .addComponent(ordersButton))
+                    .addComponent(ordersButton)
+                    .addComponent(btnMaterialorder))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -110,6 +121,9 @@ public class MainWindow extends javax.swing.JFrame {
         redrawCurrentPanel();
     }//GEN-LAST:event_mainPanelComponentResized
 
+    private void btnMaterialorderActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMaterialorderActionPerformed
+        showMaterialListPanel();
+    }//GEN-LAST:event_btnMaterialorderActionPerformed
     
     // Publik Metod för att skapa start-panelobjekt och anropa den interna metoden för att visa panelen
     public void showStartPanel() {
@@ -125,8 +139,10 @@ public class MainWindow extends javax.swing.JFrame {
        showPanel(new OrderPanel(this));
     }
     
-
-        
+    public void showMaterialListPanel() {
+       showPanel(new MaterialListPanel(this));
+    }
+     
     // Intern metod för att visa ett panelobjekt i vår mainPanel
     private void showPanel(JPanel newPanel) {
         // Rensa mainPanel från tidigare tillagda paneler
@@ -146,9 +162,9 @@ public class MainWindow extends javax.swing.JFrame {
         currentPanel.revalidate();
         currentPanel.repaint();
     }
-    
-    
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnMaterialorder;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JSeparator jSeparator1;

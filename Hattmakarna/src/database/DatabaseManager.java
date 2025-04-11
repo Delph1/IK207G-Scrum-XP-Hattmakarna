@@ -187,6 +187,30 @@ public class DatabaseManager {
         }
     }
 
-
+        //Returnera material som inte beställts mellan två datum
+    public ArrayList<Component> getMaterials(String StartDate, String StopDate) {
+        System.out.println("GET materials between " + StartDate + " and " + StopDate);
+        ArrayList<Component> componentList = new ArrayList<>();
+        try {
+            ArrayList<HashMap<String, String>> materials = db.fetchRows("SELECT c.component_id, c.component_name, c.color, SUM(pc.amount) AS total_amount_needed, c.unit FROM orders o JOIN orderlines ol ON o.order_id = ol.order_id JOIN products p ON ol.product_id = p.product_id JOIN product_components pc ON p.product_id = pc.product_id JOIN components c ON pc.component_id = c.component_id WHERE o.order_status = 'confirmed' AND o.order_date BETWEEN '" + StartDate + "' AND '" + StopDate + "' GROUP BY c.component_id, c.component_name, c.unit, c.color ORDER BY c.component_name;");
+            if (materials != null) {
+                for (HashMap<String, String> material : materials) {
+                    componentList.add(new Component(
+                            Double.parseDouble(material.get("total_amount_needed")),
+                            Integer.parseInt(material.get("component_id")),
+                            material.get("component_name"),
+                            material.get("color"),
+                            material.get("unit")
+                    ));
+                }
+                return componentList;
+            } else {
+                return null;
+            }
+        } catch (InfException e) {
+            System.err.println("Det gick inte att hämta material: " + e.getMessage());
+            return null;
+        }
+    }
 
 }
