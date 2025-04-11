@@ -2,6 +2,8 @@ package hattmakarna;
 import java.awt.Component;
 import panels.*; // Hämtar alla paneler
 import javax.swing.JPanel;
+import static hattmakarna.Hattmakarna.dbm;
+import models.*;
 
 public class MainWindow extends javax.swing.JFrame {
     public MainWindow() {
@@ -22,6 +24,7 @@ public class MainWindow extends javax.swing.JFrame {
         startButton = new javax.swing.JButton();
         ordersButton = new javax.swing.JButton();
         jSeparator1 = new javax.swing.JSeparator();
+        btnPrint = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -60,6 +63,13 @@ public class MainWindow extends javax.swing.JFrame {
             }
         });
 
+        btnPrint.setText("Print");
+        btnPrint.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnPrintActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -73,6 +83,8 @@ public class MainWindow extends javax.swing.JFrame {
                         .addComponent(startButton)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(ordersButton)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(btnPrint)
                         .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
             .addComponent(jSeparator1)
@@ -85,7 +97,8 @@ public class MainWindow extends javax.swing.JFrame {
                 .addGap(4, 4, 4)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(startButton)
-                    .addComponent(ordersButton))
+                    .addComponent(ordersButton)
+                    .addComponent(btnPrint))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -109,6 +122,11 @@ public class MainWindow extends javax.swing.JFrame {
         // Skalar nuvarande panel ifall fönster dras ut.
         redrawCurrentPanel();
     }//GEN-LAST:event_mainPanelComponentResized
+
+    private void btnPrintActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPrintActionPerformed
+        Order order = dbm.getOrder(1);
+        Print printOrder = new Print(order);        // TODO add your handling code here:
+    }//GEN-LAST:event_btnPrintActionPerformed
 
     
     // Publik Metod för att skapa start-panelobjekt och anropa den interna metoden för att visa panelen
@@ -149,6 +167,7 @@ public class MainWindow extends javax.swing.JFrame {
     
     
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnPrint;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JSeparator jSeparator1;
