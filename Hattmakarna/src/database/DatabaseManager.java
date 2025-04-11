@@ -26,8 +26,8 @@ public class DatabaseManager {
             HashMap<String, String> row = db.fetchRow("SELECT * FROM orders where order_id =" + id);
             if (row != null) {
                 Order order = new Order(
-                        Integer.parseInt(row.get("order_id")),
-                        Integer.parseInt(row.get("customer_id")),
+                        id,
+                        row.get("customer_id") == null ? 0 : Integer.parseInt(row.get("customer_id")),
                         LocalDate.parse(row.get("order_date")),
                         row.get("order_status"),
                         Boolean.parseBoolean(row.get("express"))
@@ -37,11 +37,13 @@ public class DatabaseManager {
                 return null;
             }
         } catch (InfException e) {
-            System.err.println("Det gick inte att skapa till en ny beställning : " + e.getMessage());
+            System.err.println("Det gick inte att hämta beställning : " + e.getMessage());
             return null;
         }
     }
-  public boolean deleteOrder(int id) {
+
+    // Ta bort en beställning
+    public boolean deleteOrder(int id) {
         try {
             db.delete("DELETE FROM orders where order_id = " + id);
 
@@ -51,6 +53,7 @@ public class DatabaseManager {
             return false;
         }
     }
+
     // Skapar en order, returnerar ett beställnings objekt
     public Order createOrder() {
         try {
@@ -58,7 +61,7 @@ public class DatabaseManager {
             String maxIdStr = db.fetchColumn("select MAX(order_id) from orders").getFirst();
             int newId = (maxIdStr == null || maxIdStr.isEmpty()) ? 1 : Integer.parseInt(maxIdStr) + 1;
             // Lägger in beställning i databasen
-            db.insert("INSERT INTO orders (order_id,customer_id,order_date,order_status) values (" + newId + ",1,NOW(),'SKAPAD')");
+            db.insert("INSERT INTO orders (order_id,customer_id,order_date,order_status) values (" + newId + ",1,NOW(),'ÖPPEN')");
 
             // Returnerar den nya beställningen
             return getOrder(newId);
@@ -68,7 +71,8 @@ public class DatabaseManager {
         }
 
     }
-    // Uppdaterar en order
+
+    // Uppdaterar en beställning
     public boolean updateOrder(Order order) {
         try {
             String query = "UPDATE orders SET "
@@ -94,8 +98,8 @@ public class DatabaseManager {
             if (results != null) {
                 for (HashMap<String, String> row : results) {
                     orders.add(new Order(
-                            Integer.parseInt(row.get("order_id")),
-                            Integer.parseInt(row.get("customer_id")),
+                            row.get("order_id") == null ? 0 : Integer.parseInt(row.get("order_id")),
+                            row.get("customer_id") == null ? 0 : Integer.parseInt(row.get("customer_id")),
                             LocalDate.parse(row.get("order_date")),
                             row.get("order_status"),
                             Boolean.parseBoolean(row.get("express"))
@@ -108,4 +112,80 @@ public class DatabaseManager {
         }
 
     }
+
+    // Hämta en beställningsrad från databas
+    public OrderLine getOrderLine(int id) {
+        System.out.println("GET orderline "+id);
+        try {
+            HashMap<String, String> row = db.fetchRow("SELECT * FROM orderlines where orderline_id =" + id);
+            if (row != null) {
+                OrderLine orderLine = new OrderLine(
+                        id,
+                        row.get("order_id") == null ? 0 : Integer.parseInt(row.get("order_id")),
+                        Boolean.parseBoolean(row.get("customer_approval")),
+                        row.get("description"),
+                        row.get("price") == null ? 0 : Integer.parseInt(row.get("price")),
+                        row.get("product_id") == null ? 0 : Integer.parseInt(row.get("product_id"))
+                );
+                return orderLine;
+            } else {
+                return null;
+            }
+        } catch (InfException e) {
+            System.err.println("Det gick inte att hämta beställningsrad: " + e.getMessage());
+            return null;
+        }
+    }
+
+    // Skapar en beställningsrad, returnerar ett beställningsrad objekt
+    public OrderLine createOrderLine(int orderId) {
+        try {
+            // Hämtar ett ID baserat på nuvarande högsta ID +1
+            String maxIdStr = db.fetchColumn("select MAX(orderline_id) from orderlines").getFirst();
+            int newId = (maxIdStr == null || maxIdStr.isEmpty()) ? 1 : Integer.parseInt(maxIdStr) + 1;
+            // Lägger in beställningrad i databasen
+            db.insert("INSERT INTO orderlines (order_id,orderline_id) "
+                    + "values ("+orderId+"," + newId+")");
+
+            // Returnerar den nya beställningen
+            return getOrderLine(newId);
+        } catch (InfException e) {
+            System.err.println("Det gick inte att skapa till en ny beställningsrad : " + e.getMessage());
+            return null;
+        }
+
+    }
+    
+        // Uppdaterar en beställning
+    public boolean updateOrderLine(OrderLine orderLine) {
+        try {
+            String query = "UPDATE orderlines SET "
+                    + "product_id = " + orderLine.getProductId()+ ", "
+                    + "price = " + orderLine.getPrice()+ ", "
+                    + "customer_approval = " + orderLine.getCustomerApproval()+ ", "
+                    + "description = '" + orderLine.getDescription()+ "' "
+                    + "WHERE orderline_id = " + orderLine.getOrderLineId();
+            System.out.println(query);
+            db.update(query);
+            return true;
+        } catch (InfException e) {
+            System.err.println("Kunde inte uppdatera beställningsrad " + e.getMessage());
+            return false;
+        }
+    }
+    
+        // Ta bort en beställningrad
+    public boolean deleteOrderLine(int id) {
+        try {
+            db.delete("DELETE FROM orderlines where orderline_id = " + id);
+
+            return true;
+        } catch (InfException e) {
+            System.err.println("Det gick inte att ta bort beställningsrad : " + e.getMessage());
+            return false;
+        }
+    }
+
+
+
 }
