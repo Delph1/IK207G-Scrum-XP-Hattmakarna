@@ -15,7 +15,7 @@ public class OrderLine {
     private int price;
     private int product_id;
 
-    public OrderLine(boolean customer_approval, String description, int order_id, int orderLine_id, int price, int product_id) {
+    public OrderLine( int orderLine_id,int order_id,boolean customer_approval, String description,  int price, int product_id) {
         this.customer_approval = customer_approval;
         this.description = description;
         this.order_id = order_id;

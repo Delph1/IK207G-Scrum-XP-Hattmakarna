@@ -41,16 +41,25 @@ public class DatabaseManager {
             return null;
         }
     }
+  public boolean deleteOrder(int id) {
+        try {
+            db.delete("DELETE FROM orders where order_id = " + id);
 
+            return true;
+        } catch (InfException e) {
+            System.err.println("Det gick inte att ta bort beställningen : " + e.getMessage());
+            return false;
+        }
+    }
     // Skapar en order, returnerar ett beställnings objekt
     public Order createOrder() {
         try {
             // Hämtar ett ID baserat på nuvarande högsta ID +1
-            int newId = Integer.parseInt(db.fetchColumn("select MAX(order_id) from orders").getFirst()) + 1;
-
+            String maxIdStr = db.fetchColumn("select MAX(order_id) from orders").getFirst();
+            int newId = (maxIdStr == null || maxIdStr.isEmpty()) ? 1 : Integer.parseInt(maxIdStr) + 1;
             // Lägger in beställning i databasen
-            db.insert("INSERT INTO orders (order_id,customer_id,order_date) values (" + newId + ",1,NOW())");
-            
+            db.insert("INSERT INTO orders (order_id,customer_id,order_date,order_status) values (" + newId + ",1,NOW(),'SKAPAD')");
+
             // Returnerar den nya beställningen
             return getOrder(newId);
         } catch (InfException e) {
@@ -59,7 +68,7 @@ public class DatabaseManager {
         }
 
     }
-
+    // Uppdaterar en order
     public boolean updateOrder(Order order) {
         try {
             String query = "UPDATE orders SET "
@@ -68,7 +77,6 @@ public class DatabaseManager {
                     + "order_status = '" + order.getOrder_status() + "', "
                     + "express = " + order.isExpress() + " "
                     + "WHERE order_id = " + order.getId();
-            System.out.println(query);
             db.update(query);
             return true;
         } catch (InfException e) {
