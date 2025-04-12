@@ -140,6 +140,31 @@ public class DatabaseManager {
         }
     }
 
+        // Hämtar en objektlista med alla beställningsrader
+    public ArrayList<OrderLine> getOrderlines(int order_id) {
+        try {
+            ArrayList<OrderLine> orderlines = new ArrayList<>();
+            String query = "SELECT * FROM orderlines WHERE order_id = " + order_id;
+            ArrayList<HashMap<String, String>> results = db.fetchRows(query);
+            if (results != null) {
+                for (HashMap<String, String> row : results) {
+                    orderlines.add(new OrderLine(
+                            Integer.parseInt(row.get("orderline_id")),
+                            order_id,
+                            Boolean.parseBoolean(row.get("customer_approval")),
+                            row.get("description"),
+                            Integer.parseInt(row.get("price")),
+                            Integer.parseInt(row.get("product_id"))
+                    ));
+                }
+            }
+            return orderlines;
+        } catch (InfException e) {
+            throw new RuntimeException("Fel vid hämtning av beställningar: " + e.getMessage());
+        }
+
+    }
+    
     // Skapar en beställningsrad, returnerar ett beställningsrad objekt
     public OrderLine createOrderLine(int orderId) {
         try {
