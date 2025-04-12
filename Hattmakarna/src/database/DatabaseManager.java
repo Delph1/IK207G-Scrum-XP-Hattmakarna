@@ -23,7 +23,7 @@ public class DatabaseManager {
 
     public Order getOrder(int id) {
         try {
-            HashMap<String, String> row = db.fetchRow("SELECT * FROM orders where order_id =" + id);
+            HashMap<String, String> row = db.fetchRow("SELECT * FROM orders where order_id = " + id);
             if (row != null) {
                 Order order = new Order(
                         id,
@@ -189,6 +189,29 @@ public class DatabaseManager {
         }
     }
 
-
-
+    public Customer getCustomer(int customer_id) {
+        System.out.println("GET customer " + customer_id);
+        try {
+            String query = "SELECT * FROM Customers WHERE customer_id = " + customer_id;
+            HashMap<String, String> row = db.fetchRow(query);
+            if (row != null) {
+                Customer customer = new Customer(
+                        customer_id,
+                        row.get("firstname"),
+                        row.get("lastname"),
+                        row.get("streetname"),
+                        row.get("postal_code"),
+                        row.get("postal_city"),
+                        row.get("state"),
+                        row.get("country")
+                );
+                return customer;
+            } else {
+                return null;
+            }
+        } catch (InfException e) {
+            System.err.println("Det gick inte att hämta kunden: " + e.getMessage());
+            return null;
+        }
+    }
 }
