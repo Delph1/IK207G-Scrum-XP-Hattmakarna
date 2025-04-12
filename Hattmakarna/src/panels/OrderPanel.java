@@ -3,9 +3,8 @@ package panels;
 import static hattmakarna.Hattmakarna.dbm;
 import hattmakarna.MainWindow;
 import javax.swing.table.DefaultTableModel;
-import static hattmakarna.Hattmakarna.dbm;
 import javax.swing.JOptionPane;
-import models.*;
+//import models.*;
 import models.Order;
 
 
@@ -28,6 +27,7 @@ public class OrderPanel extends javax.swing.JPanel {
         tfOrderID.setText(""+order.getId());
         tfOrderDate.setText(""+order.getOrder_date());
         tfOrderStatus.setText(order.getOrder_status());
+        tfShippingCostOrder.setText(""+order.getShippingCost());
       }
 
     @SuppressWarnings("unchecked")

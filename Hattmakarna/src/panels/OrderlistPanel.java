@@ -1,7 +1,6 @@
 
 package panels;
 
-import static hattmakarna.Hattmakarna.dbm;
 import hattmakarna.MainWindow;
 import static hattmakarna.Hattmakarna.dbm;
 import models.*;
