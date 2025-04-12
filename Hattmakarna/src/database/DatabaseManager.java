@@ -192,7 +192,7 @@ public class DatabaseManager {
     public Customer getCustomer(int customer_id) {
         System.out.println("GET customer " + customer_id);
         try {
-            String query = "SELECT * FROM Customers WHERE customer_id = " + customer_id;
+            String query = "SELECT * FROM customers WHERE customer_id = " + customer_id;
             HashMap<String, String> row = db.fetchRow(query);
             if (row != null) {
                 Customer customer = new Customer(
