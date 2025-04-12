@@ -239,4 +239,30 @@ public class DatabaseManager {
             return null;
         }
     }
+    
+    public Product getProduct(int product_id) {
+        System.out.println("GET product " + product_id);
+        try {
+            String query = "SELECT * FROM products WHERE product_id = " + product_id;
+            HashMap<String, String> row = db.fetchRow(query);
+            if (row != null) {
+                Product product = new Product(
+                        row.get("base_product_id") == null ? 0 : Integer.parseInt(row.get("base_product_id")),
+                        Integer.parseInt(row.get("product_id")),
+                        row.get("product_name"),
+                        Integer.parseInt(row.get("price")),
+                        Boolean.parseBoolean(row.get("copyright_approved")),
+                        Boolean.parseBoolean(row.get("discontinued")),
+                        Boolean.parseBoolean(row.get("stock_item")),
+                        Double.parseDouble(row.get("weight"))
+                );
+                return product;
+            } else {
+                return null;
+            }
+        } catch (InfException e) {
+            System.err.println("Det gick inte att hämta produkten:" + e.getMessage());
+            return null;
+        }
+    }
 }
