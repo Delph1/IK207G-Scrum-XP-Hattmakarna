@@ -62,7 +62,7 @@ public class DatabaseManager {
             int newId = (maxIdStr == null || maxIdStr.isEmpty()) ? 1 : Integer.parseInt(maxIdStr) + 1;
             // Lägger in beställning i databasen
 
-            db.insert("INSERT INTO orders (order_id,customer_id,order_date,order_status) values (" + newId + ",1,NOW(),'ÖPPEN')");
+            db.insert("INSERT INTO orders (order_id,customer_id,order_date,order_status, express, shipping_cost) values (" + newId + ",1,NOW(),'ÖPPEN', 0, 39)");
 
 
             // Returnerar den nya beställningen
