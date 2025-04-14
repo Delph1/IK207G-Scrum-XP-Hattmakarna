@@ -260,12 +260,12 @@
             <Property name="text" type="java.lang.String" value="Orderrad-ID"/>
           </Properties>
         </Component>
-        <Component class="javax.swing.JTextField" name="tfOrderlineID">
-        </Component>
         <Component class="javax.swing.JLabel" name="lblProductID">
           <Properties>
             <Property name="text" type="java.lang.String" value="Produkt-ID"/>
           </Properties>
+        </Component>
+        <Component class="javax.swing.JTextField" name="tfOrderlineID">
         </Component>
         <Component class="javax.swing.JTextField" name="tfProductID">
         </Component>
@@ -361,8 +361,8 @@
             </Property>
             <Property name="columnModel" type="javax.swing.table.TableColumnModel" editor="org.netbeans.modules.form.editors2.TableColumnModelEditor">
               <TableColumnModel selectionModel="0">
-                <Column maxWidth="-1" minWidth="-1" prefWidth="-1" resizable="true">
-                  <Title/>
+                <Column maxWidth="-1" minWidth="-1" prefWidth="-1" resizable="false">
+                  <Title value="Orderrad-ID"/>
                   <Editor/>
                   <Renderer/>
                 </Column>
