@@ -3,16 +3,17 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JPanel.java to edit this template
  */
 package panels;
-
+import hattmakarna.MainWindow;
 /**
  *
  * @author eriks
  */
 public class Orderstatistics extends javax.swing.JPanel {
-     
+     private MainWindow window;
 
-    public Orderstatistics() {
+    public Orderstatistics(MainWindow window) {
         initComponents();
+        this.window=window;
     }
     
     public void fyllTabell (){
