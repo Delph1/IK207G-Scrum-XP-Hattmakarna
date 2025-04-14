@@ -3,7 +3,8 @@ package panels;
 import static hattmakarna.Hattmakarna.dbm;
 import hattmakarna.MainWindow;
 import javax.swing.table.DefaultTableModel;
-import javax.swing.JOptionPane;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 //import models.*;
 import models.Order;
 import models.OrderLine;
@@ -12,8 +13,6 @@ public class OrderPanel extends javax.swing.JPanel {
 
     private MainWindow window;
     private Order order;
-    //private OrderLine orderline;
-    private DefaultTableModel tableModelOrderline;
 
     public OrderPanel(MainWindow window, int orderId) {
         // Vi tar emot och lagrar huvudfönstret som ett fält, då kan vi komma åt metoder som att byta panel
@@ -34,9 +33,18 @@ public class OrderPanel extends javax.swing.JPanel {
         tfShippingCostOrder.setText("" + order.getShippingCost());
         lblOrderlineID.setVisible(false);
         tfOrderlineID.setVisible(false);
-        tableModelOrderline = (DefaultTableModel) tblOrderline.getModel();
         tblOrderline.getColumnModel().getColumn(0).setMinWidth(0);
         tblOrderline.getColumnModel().getColumn(0).setMaxWidth(0);
+        btnRemoveOrderline.setEnabled(false);
+        tblOrderline.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
+            public void valueChanged(ListSelectionEvent event) {
+                if (tblOrderline.getSelectedRow() < 0) {
+                    btnRemoveOrderline.setEnabled(false);
+                } else {
+                    btnRemoveOrderline.setEnabled(true);
+                }
+            }
+        });
     }
 
     @SuppressWarnings("unchecked")
@@ -342,19 +350,10 @@ public class OrderPanel extends javax.swing.JPanel {
     private void btnRemoveOrderlineActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRemoveOrderlineActionPerformed
         int selectedTableRowID = tblOrderline.getSelectedRow();
         int selectedOrderlineID = (int) tblOrderline.getValueAt(selectedTableRowID, 0);
-
-        if (selectedTableRowID < 0) {
-            JOptionPane.showMessageDialog(this,
-                    "No row is selected, please select one row",
-                    "Select row",
-                    JOptionPane.ERROR_MESSAGE);
-        } else {
-            DefaultTableModel OrderLine = (DefaultTableModel) tblOrderline.getModel();
-            dbm.deleteOrderLine(selectedOrderlineID);
-            System.out.println("Orderline " + selectedOrderlineID + " has been deleted");
-            OrderLine.removeRow(selectedTableRowID);
-        }
-
+        DefaultTableModel OrderLine = (DefaultTableModel) tblOrderline.getModel();
+        dbm.deleteOrderLine(selectedOrderlineID);
+        System.out.println("Orderline " + selectedOrderlineID + " has been deleted");
+        OrderLine.removeRow(selectedTableRowID);
     }//GEN-LAST:event_btnRemoveOrderlineActionPerformed
 
 
