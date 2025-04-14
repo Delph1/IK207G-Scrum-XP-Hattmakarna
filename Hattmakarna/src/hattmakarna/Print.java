@@ -186,7 +186,11 @@ public class Print {
 
             // Text
             contentStream.beginText();
-            contentStream.setFont(PDType1Font.HELVETICA_BOLD, 12);
+            if (isHeader) { 
+                contentStream.setFont(PDType1Font.HELVETICA_BOLD, 12);
+            } else {
+                contentStream.setFont(PDType1Font.HELVETICA, 12);
+            }
             contentStream.newLineAtOffset(cellX + 2, y - 15);
             //NULL-check
             String celltext = texts[i] != null ? texts[i] : "";
