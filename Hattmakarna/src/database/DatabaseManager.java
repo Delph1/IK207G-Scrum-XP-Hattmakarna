@@ -31,7 +31,7 @@ public class DatabaseManager {
                         LocalDate.parse(row.get("order_date")),
                         row.get("order_status"),
                         Boolean.parseBoolean(row.get("express")),
-                        Integer.parseInt(row.get("shipping_cost"))
+                        row.get("shipping_cost") == null ? 0 : Integer.parseInt(row.get("shipping_cost"))
                 );
                 return order;
             } else {
@@ -42,6 +42,7 @@ public class DatabaseManager {
             return null;
         }
     }
+
     // Ta bort en beställning
     public boolean deleteOrder(int id) {
         try {
@@ -63,7 +64,6 @@ public class DatabaseManager {
             // Lägger in beställning i databasen
 
             db.insert("INSERT INTO orders (order_id,customer_id,order_date,order_status, express, shipping_cost) values (" + newId + ",1,NOW(),'ÖPPEN', 0, 39)");
-
 
             // Returnerar den nya beställningen
             return getOrder(newId);
@@ -105,7 +105,7 @@ public class DatabaseManager {
                             LocalDate.parse(row.get("order_date")),
                             row.get("order_status"),
                             Boolean.parseBoolean(row.get("express")),
-                            Integer.parseInt(row.get("shipping_cost"))
+                            row.get("shipping_cost") == null ? 0 : Integer.parseInt(row.get("shipping_cost"))
                     ));
                 }
             }
@@ -118,7 +118,7 @@ public class DatabaseManager {
 
     // Hämta en beställningsrad från databas
     public OrderLine getOrderLine(int id) {
-        System.out.println("GET orderline "+id);
+        System.out.println("GET orderline " + id);
         try {
             HashMap<String, String> row = db.fetchRow("SELECT * FROM orderlines where orderline_id =" + id);
             if (row != null) {
@@ -173,7 +173,7 @@ public class DatabaseManager {
             int newId = (maxIdStr == null || maxIdStr.isEmpty()) ? 1 : Integer.parseInt(maxIdStr) + 1;
             // Lägger in beställningrad i databasen
             db.insert("INSERT INTO orderlines (order_id,orderline_id) "
-                    + "values ("+orderId+"," + newId+")");
+                    + "values (" + orderId + "," + newId + ")");
 
             // Returnerar den nya beställningen
             return getOrderLine(newId);
@@ -183,15 +183,15 @@ public class DatabaseManager {
         }
 
     }
-    
-        // Uppdaterar en beställning
+
+    // Uppdaterar en beställning
     public boolean updateOrderLine(OrderLine orderLine) {
         try {
             String query = "UPDATE orderlines SET "
-                    + "product_id = " + orderLine.getProductId()+ ", "
-                    + "price = " + orderLine.getPrice()+ ", "
-                    + "customer_approval = " + orderLine.getCustomerApproval()+ ", "
-                    + "description = '" + orderLine.getDescription()+ "' "
+                    + "product_id = " + orderLine.getProductId() + ", "
+                    + "price = " + orderLine.getPrice() + ", "
+                    + "customer_approval = " + orderLine.getCustomerApproval() + ", "
+                    + "description = '" + orderLine.getDescription() + "' "
                     + "WHERE orderline_id = " + orderLine.getOrderLineId();
             System.out.println(query);
             db.update(query);
@@ -201,8 +201,8 @@ public class DatabaseManager {
             return false;
         }
     }
-    
-        // Ta bort en beställningrad
+
+    // Ta bort en beställningrad
     public boolean deleteOrderLine(int id) {
         try {
             db.delete("DELETE FROM orderlines where orderline_id = " + id);
@@ -291,5 +291,43 @@ public class DatabaseManager {
             return null;
         }
     }
+
+    // Uppdaterar beställningsstatus mellan två datum
+    public boolean updateOrderStatusBetweenDates(String StartDate, String StopDate, String status) {
+        try {
+            String query = "UPDATE orders SET "
+                    + "order_status = '" + status + "' "
+                    + "WHERE order_date BETWEEN '" + StartDate + "' AND '" + StopDate + "'";
+
+            db.update(query);
+            return true;
+        } catch (InfException e) {
+            System.err.println("Kunde inte uppdatera beställningstatus" + e.getMessage());
+            return false;
+        }
+    }
+    
+public ArrayList<HashMap<String, String>> productSalesBetweenDates(int productID, String startDate, String stopDate) {
+    ArrayList<HashMap<String, String>> result = null;
+
+    try {
+        String query = 
+            "SELECT o.order_date, COUNT(*) AS quantity_sold, SUM(ol.price) AS total_sale " +
+            "FROM orders o " +
+            "JOIN orderlines ol ON o.order_id = ol.order_id " +
+            "JOIN products p ON ol.product_id = p.product_id " +
+            "WHERE o.order_status = 'COMPLETED' " +
+            "AND p.product_id = " + productID + " " +
+            "AND o.order_date BETWEEN '" + startDate + "' AND '" + stopDate + "' " +
+            "GROUP BY o.order_date " +
+            "ORDER BY o.order_date";
+
+        result = db.fetchRows(query);
+    } catch (InfException e) {
+        System.err.println("Could not fetch sales data: " + e.getMessage());
+    }
+
+    return result;
+}
 
 }

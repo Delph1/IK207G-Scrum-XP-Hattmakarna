@@ -158,6 +158,7 @@ public class Print {
         //Saves the file to the project folder
         contentStream.close(); 
         String path = "./temp.pdf";
+
         try {
             document.save(path);  
         } catch(Exception e) {

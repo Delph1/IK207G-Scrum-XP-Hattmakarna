@@ -29,7 +29,9 @@ public class MainWindow extends javax.swing.JFrame {
         ordersButton = new javax.swing.JButton();
         jSeparator1 = new javax.swing.JSeparator();
         btnPrint = new javax.swing.JButton();
+        schemaButton = new javax.swing.JButton();
         btnMaterials = new javax.swing.JButton();
+        statisticsBTN = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -75,10 +77,24 @@ public class MainWindow extends javax.swing.JFrame {
             }
         });
 
+        schemaButton.setText("Schema");
+        schemaButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                schemaButtonActionPerformed(evt);
+            }
+        });
+
         btnMaterials.setText("Materiallista");
         btnMaterials.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnMaterialsActionPerformed(evt);
+            }
+        });
+
+        statisticsBTN.setText("Statistik");
+        statisticsBTN.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                statisticsBTNActionPerformed(evt);
             }
         });
 
@@ -90,15 +106,21 @@ public class MainWindow extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(btnPrint))
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(startButton)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(ordersButton)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(btnMaterials)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(btnPrint)))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(schemaButton, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(statisticsBTN)
+                        .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
             .addComponent(jSeparator1)
         );
@@ -106,13 +128,16 @@ public class MainWindow extends javax.swing.JFrame {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnPrint))
                 .addGap(4, 4, 4)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(startButton)
                     .addComponent(ordersButton)
-                    .addComponent(btnPrint)
-                    .addComponent(btnMaterials))
+                    .addComponent(schemaButton)
+                    .addComponent(btnMaterials)
+                    .addComponent(statisticsBTN))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -145,13 +170,28 @@ public class MainWindow extends javax.swing.JFrame {
         } catch (IOException e) {
             System.err.println(e.getMessage());
         }
+      
     }//GEN-LAST:event_btnPrintActionPerformed
+
+    private void schemaButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_schemaButtonActionPerformed
+       //Visar schemasida 
+        showSchemaPanel(); 
+    }//GEN-LAST:event_schemaButtonActionPerformed
+
+    
+
+
 
     private void btnMaterialsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMaterialsActionPerformed
         showMaterialListPanel();
     }//GEN-LAST:event_btnMaterialsActionPerformed
 
+    private void statisticsBTNActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_statisticsBTNActionPerformed
+showOrderStatisticsPanel();        // TODO add your handling code here:
+    }//GEN-LAST:event_statisticsBTNActionPerformed
+
    
+
     // Publik Metod för att skapa start-panelobjekt och anropa den interna metoden för att visa panelen
     public void showStartPanel() {
        showPanel(new StartPanel(this));
@@ -169,11 +209,21 @@ public class MainWindow extends javax.swing.JFrame {
     public void showOrderPanel() {
        showPanel(new OrderPanel(this));
     }
-    
+
+    public void showSchemaPanel() {
+        showPanel(new SchemaPanel(this)); 
+    }
+
+
     public void showMaterialListPanel() {
        showPanel(new MaterialListPanel(this));
     }
+    
+    public void showOrderStatisticsPanel() {
+        showPanel(new Orderstatistics(this)); 
+    }
      
+
     // Intern metod för att visa ett panelobjekt i vår mainPanel
     private void showPanel(JPanel newPanel) {
         // Rensa mainPanel från tidigare tillagda paneler
@@ -202,6 +252,8 @@ public class MainWindow extends javax.swing.JFrame {
     private javax.swing.JSeparator jSeparator1;
     private javax.swing.JPanel mainPanel;
     private javax.swing.JButton ordersButton;
+    private javax.swing.JButton schemaButton;
     private javax.swing.JButton startButton;
+    private javax.swing.JButton statisticsBTN;
     // End of variables declaration//GEN-END:variables
 }
