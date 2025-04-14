@@ -23,7 +23,7 @@ public class DatabaseManager {
 
     public Order getOrder(int id) {
         try {
-            HashMap<String, String> row = db.fetchRow("SELECT * FROM orders where order_id =" + id);
+            HashMap<String, String> row = db.fetchRow("SELECT * FROM orders where order_id = " + id);
             if (row != null) {
                 Order order = new Order(
                         id,
@@ -140,6 +140,31 @@ public class DatabaseManager {
         }
     }
 
+        // Hämtar en objektlista med alla beställningsrader
+    public ArrayList<OrderLine> getOrderlines(int order_id) {
+        try {
+            ArrayList<OrderLine> orderlines = new ArrayList<>();
+            String query = "SELECT * FROM orderlines WHERE order_id = " + order_id;
+            ArrayList<HashMap<String, String>> results = db.fetchRows(query);
+            if (results != null) {
+                for (HashMap<String, String> row : results) {
+                    orderlines.add(new OrderLine(
+                            Integer.parseInt(row.get("orderline_id")),
+                            order_id,
+                            Boolean.parseBoolean(row.get("customer_approval")),
+                            row.get("description"),
+                            Integer.parseInt(row.get("price")),
+                            Integer.parseInt(row.get("product_id"))
+                    ));
+                }
+            }
+            return orderlines;
+        } catch (InfException e) {
+            throw new RuntimeException("Fel vid hämtning av beställningar: " + e.getMessage());
+        }
+
+    }
+    
     // Skapar en beställningsrad, returnerar ett beställningsrad objekt
     public OrderLine createOrderLine(int orderId) {
         try {
@@ -189,7 +214,33 @@ public class DatabaseManager {
         }
     }
 
-    //Returnera material som inte beställts mellan två datum
+    public Customer getCustomer(int customer_id) {
+        System.out.println("GET customer " + customer_id);
+        try {
+            String query = "SELECT * FROM customers WHERE customer_id = " + customer_id;
+            HashMap<String, String> row = db.fetchRow(query);
+            if (row != null) {
+                Customer customer = new Customer(
+                        customer_id,
+                        row.get("firstname"),
+                        row.get("lastname"),
+                        row.get("streetname"),
+                        row.get("postal_code"),
+                        row.get("postal_city"),
+                        row.get("state"),
+                        row.get("country")
+                );
+                return customer;
+            } else {
+                return null;
+            }
+        } catch (InfException e) {
+            System.err.println("Det gick inte att hämta kunden: " + e.getMessage());
+            return null;
+        }
+    }
+
+        //Returnera material som inte beställts mellan två datum
     public ArrayList<Component> getMaterials(String StartDate, String StopDate) {
         System.out.println("GET materials between " + StartDate + " and " + StopDate);
         ArrayList<Component> componentList = new ArrayList<>();
@@ -211,6 +262,32 @@ public class DatabaseManager {
             }
         } catch (InfException e) {
             System.err.println("Det gick inte att hämta material: " + e.getMessage());
+            return null;
+        }
+    }
+  
+    public Product getProduct(int product_id) {
+        System.out.println("GET product " + product_id);
+        try {
+            String query = "SELECT * FROM products WHERE product_id = " + product_id;
+            HashMap<String, String> row = db.fetchRow(query);
+            if (row != null) {
+                Product product = new Product(
+                        row.get("base_product_id") == null ? 0 : Integer.parseInt(row.get("base_product_id")),
+                        Integer.parseInt(row.get("product_id")),
+                        row.get("product_name"),
+                        Integer.parseInt(row.get("price")),
+                        Boolean.parseBoolean(row.get("copyright_approved")),
+                        Boolean.parseBoolean(row.get("discontinued")),
+                        Boolean.parseBoolean(row.get("stock_item")),
+                        Double.parseDouble(row.get("weight"))
+                );
+                return product;
+            } else {
+                return null;
+            }
+        } catch (InfException e) {
+            System.err.println("Det gick inte att hämta produkten:" + e.getMessage());
             return null;
         }
     }
