@@ -330,5 +330,4 @@ public ArrayList<HashMap<String, String>> productSalesBetweenDates(int productID
     return result;
 }
 
-
 }
