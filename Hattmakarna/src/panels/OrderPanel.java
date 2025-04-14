@@ -12,6 +12,8 @@ public class OrderPanel extends javax.swing.JPanel {
 
     private MainWindow window;
     private Order order;
+    //private OrderLine orderline;
+    private DefaultTableModel tableModelOrderline;
 
     public OrderPanel(MainWindow window, int orderId) {
         // Vi tar emot och lagrar huvudfönstret som ett fält, då kan vi komma åt metoder som att byta panel
@@ -25,10 +27,16 @@ public class OrderPanel extends javax.swing.JPanel {
         this.window = window;
         initComponents();
         order = dbm.createOrder();
+        tfOrderlineID.setText("0");
         tfOrderID.setText("" + order.getId());
         tfOrderDate.setText("" + order.getOrder_date());
         tfOrderStatus.setText(order.getOrder_status());
         tfShippingCostOrder.setText("" + order.getShippingCost());
+        lblOrderlineID.setVisible(false);
+        tfOrderlineID.setVisible(false);
+        tableModelOrderline = (DefaultTableModel) tblOrderline.getModel();
+        tblOrderline.getColumnModel().getColumn(0).setMinWidth(0);
+        tblOrderline.getColumnModel().getColumn(0).setMaxWidth(0);
     }
 
     @SuppressWarnings("unchecked")
@@ -97,6 +105,8 @@ public class OrderPanel extends javax.swing.JPanel {
         lblOrderlineID.setText("Orderrad-ID");
 
         lblProductID.setText("Produkt-ID");
+
+        tfOrderlineID.setEditable(false);
 
         lblPrice.setText("Pris");
 
@@ -290,49 +300,59 @@ public class OrderPanel extends javax.swing.JPanel {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnAddOrderlineActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddOrderlineActionPerformed
-        //TODO: remove orderline_id field and from jtable
         int orderLine_id = Integer.parseInt(tfOrderlineID.getText());
         int product_id = Integer.parseInt(tfProductID.getText());
         int price = Integer.parseInt(tfPrice.getText());
         boolean customer_approval = cboxCustomerApproval.isSelected();
         String description = taDescription.getText();
 
-        DefaultTableModel OrderLine = (DefaultTableModel) tblOrderline.getModel();
-        OrderLine.addRow(new Object[]{orderLine_id, product_id, price, customer_approval, description});
+        DefaultTableModel tableModelOrderline = (DefaultTableModel) tblOrderline.getModel();
+        tableModelOrderline.addRow(new Object[]{orderLine_id, product_id, price, customer_approval, description});
+
+        tfProductID.setText("");
+        tfPrice.setText("");
+        taDescription.setText("");
     }//GEN-LAST:event_btnAddOrderlineActionPerformed
 
     private void btnSaveOrderActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSaveOrderActionPerformed
-        //dbm.updateOrder(order); 
         DefaultTableModel tableModelOrderline = (DefaultTableModel) tblOrderline.getModel();
 
         for (int i = 0; i < tableModelOrderline.getRowCount(); i++) {
-            OrderLine orderLine = dbm.createOrderLine(order.getId());
-            int prod_id = Integer.parseInt(tableModelOrderline.getValueAt(i, 1).toString());
-            int price = Integer.parseInt(tableModelOrderline.getValueAt(i, 2).toString());
-            boolean customer_approval = (Boolean) tableModelOrderline.getValueAt(i, 3);
-            String description = tableModelOrderline.getValueAt(i, 4).toString();
+            int null_orderId = 0;
 
-            orderLine.setProductId(prod_id);
-            orderLine.setPrice(price);
-            orderLine.setCustomerApproval(customer_approval);
-            orderLine.setDescription(description);
+            if (tableModelOrderline.getValueAt(i, 0).equals(null_orderId)) {
+                OrderLine orderLine = dbm.createOrderLine(order.getId());
+                tableModelOrderline.setValueAt(orderLine.getOrderLineId(), i, 0);
+                int prod_id = Integer.parseInt(tableModelOrderline.getValueAt(i, 1).toString());
+                int price = Integer.parseInt(tableModelOrderline.getValueAt(i, 2).toString());
+                boolean customer_approval = (Boolean) tableModelOrderline.getValueAt(i, 3);
+                String description = tableModelOrderline.getValueAt(i, 4).toString();
 
-            dbm.updateOrderLine(orderLine);
+                orderLine.setProductId(prod_id);
+                orderLine.setPrice(price);
+                orderLine.setCustomerApproval(customer_approval);
+                orderLine.setDescription(description);
+
+                dbm.updateOrderLine(orderLine);
+            }
         }
 
     }//GEN-LAST:event_btnSaveOrderActionPerformed
 
     private void btnRemoveOrderlineActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRemoveOrderlineActionPerformed
-        int tableRowID = tblOrderline.getSelectedRow();
+        int selectedTableRowID = tblOrderline.getSelectedRow();
+        int selectedOrderlineID = (int) tblOrderline.getValueAt(selectedTableRowID, 0);
 
-        if (tableRowID < 0) {
+        if (selectedTableRowID < 0) {
             JOptionPane.showMessageDialog(this,
                     "No row is selected, please select one row",
                     "Select row",
                     JOptionPane.ERROR_MESSAGE);
         } else {
             DefaultTableModel OrderLine = (DefaultTableModel) tblOrderline.getModel();
-            OrderLine.removeRow(tableRowID);
+            dbm.deleteOrderLine(selectedOrderlineID);
+            System.out.println("Orderline " + selectedOrderlineID + " has been deleted");
+            OrderLine.removeRow(selectedTableRowID);
         }
 
     }//GEN-LAST:event_btnRemoveOrderlineActionPerformed
