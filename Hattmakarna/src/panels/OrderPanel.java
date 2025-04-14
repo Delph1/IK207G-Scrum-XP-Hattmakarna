@@ -5,6 +5,7 @@ import hattmakarna.MainWindow;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.JOptionPane;
 //import models.*;
+
 import models.Order;
 
 
@@ -13,6 +14,14 @@ public class OrderPanel extends javax.swing.JPanel {
     private Order order;
     
     public OrderPanel(MainWindow window, int orderId) {
+
+        // Vi tar emot och lagrar huvudfönstret som ett fält, då kan vi komma åt metoder som att byta panel
+        this.window=window; 
+        initComponents();
+        Order order = dbm.getOrder(orderId);
+    }
+    
+    public OrderPanel(MainWindow window) {
         // Vi tar emot och lagrar huvudfönstret som ett fält, då kan vi komma åt metoder som att byta panel
         this.window=window; 
         initComponents();
