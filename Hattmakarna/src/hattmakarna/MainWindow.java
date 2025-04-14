@@ -28,11 +28,8 @@ public class MainWindow extends javax.swing.JFrame {
         ordersButton = new javax.swing.JButton();
         jSeparator1 = new javax.swing.JSeparator();
         btnPrint = new javax.swing.JButton();
-
         schemaButton = new javax.swing.JButton();
-
         btnMaterials = new javax.swing.JButton();
-
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -82,14 +79,13 @@ public class MainWindow extends javax.swing.JFrame {
         schemaButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 schemaButtonActionPerformed(evt);
-                          }
+            }
         });
 
         btnMaterials.setText("Materiallista");
         btnMaterials.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnMaterialsActionPerformed(evt);
-
             }
         });
 
@@ -107,15 +103,12 @@ public class MainWindow extends javax.swing.JFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(ordersButton)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(btnPrint)
+                        .addComponent(btnMaterials)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(schemaButton, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(btnPrint)
                         .addGap(0, 0, Short.MAX_VALUE)))
-
-                        .addComponent(btnMaterials)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(btnPrint)))
-
                 .addContainerGap())
             .addComponent(jSeparator1)
         );
@@ -129,11 +122,8 @@ public class MainWindow extends javax.swing.JFrame {
                     .addComponent(startButton)
                     .addComponent(ordersButton)
                     .addComponent(btnPrint)
-
-                    .addComponent(schemaButton))
-
+                    .addComponent(schemaButton)
                     .addComponent(btnMaterials))
-
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
