@@ -30,12 +30,8 @@ public class DatabaseManager {
                         row.get("customer_id") == null ? 0 : Integer.parseInt(row.get("customer_id")),
                         LocalDate.parse(row.get("order_date")),
                         row.get("order_status"),
-<<<<<<< Updated upstream
-                        Boolean.parseBoolean(row.get("express"))
-=======
                         Boolean.parseBoolean(row.get("express")),
-                       row.get("shipping_cost") == null ? 0 :  Integer.parseInt(row.get("shipping_cost"))
->>>>>>> Stashed changes
+                        Integer.parseInt(row.get("shipping_cost"))
                 );
                 return order;
             } else {
@@ -66,7 +62,7 @@ public class DatabaseManager {
             int newId = (maxIdStr == null || maxIdStr.isEmpty()) ? 1 : Integer.parseInt(maxIdStr) + 1;
             // Lägger in beställning i databasen
 
-            db.insert("INSERT INTO orders (order_id,customer_id,order_date,order_status) values (" + newId + ",1,NOW(),'ÖPPEN')");
+            db.insert("INSERT INTO orders (order_id,customer_id,order_date,order_status, express, shipping_cost) values (" + newId + ",1,NOW(),'ÖPPEN', 0, 39)");
 
 
             // Returnerar den nya beställningen
@@ -108,12 +104,8 @@ public class DatabaseManager {
                             row.get("customer_id") == null ? 0 : Integer.parseInt(row.get("customer_id")),
                             LocalDate.parse(row.get("order_date")),
                             row.get("order_status"),
-<<<<<<< Updated upstream
-                            Boolean.parseBoolean(row.get("express"))
-=======
                             Boolean.parseBoolean(row.get("express")),
-                            row.get("shipping_cost") == null ? 0 : Integer.parseInt(row.get("shipping_cost"))
->>>>>>> Stashed changes
+                            Integer.parseInt(row.get("shipping_cost"))
                     ));
                 }
             }
@@ -197,6 +189,30 @@ public class DatabaseManager {
         }
     }
 
-
+        //Returnera material som inte beställts mellan två datum
+    public ArrayList<Component> getMaterials(String StartDate, String StopDate) {
+        System.out.println("GET materials between " + StartDate + " and " + StopDate);
+        ArrayList<Component> componentList = new ArrayList<>();
+        try {
+            ArrayList<HashMap<String, String>> materials = db.fetchRows("SELECT c.component_id, c.component_name, c.color, SUM(pc.amount) AS total_amount_needed, c.unit FROM orders o JOIN orderlines ol ON o.order_id = ol.order_id JOIN products p ON ol.product_id = p.product_id JOIN product_components pc ON p.product_id = pc.product_id JOIN components c ON pc.component_id = c.component_id WHERE o.order_status = 'confirmed' AND o.order_date BETWEEN '" + StartDate + "' AND '" + StopDate + "' GROUP BY c.component_id, c.component_name, c.unit, c.color ORDER BY c.component_name;");
+            if (materials != null) {
+                for (HashMap<String, String> material : materials) {
+                    componentList.add(new Component(
+                            Double.parseDouble(material.get("total_amount_needed")),
+                            Integer.parseInt(material.get("component_id")),
+                            material.get("component_name"),
+                            material.get("color"),
+                            material.get("unit")
+                    ));
+                }
+                return componentList;
+            } else {
+                return null;
+            }
+        } catch (InfException e) {
+            System.err.println("Det gick inte att hämta material: " + e.getMessage());
+            return null;
+        }
+    }
 
 }
