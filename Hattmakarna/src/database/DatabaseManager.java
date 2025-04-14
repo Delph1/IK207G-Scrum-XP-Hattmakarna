@@ -241,7 +241,7 @@ public class DatabaseManager {
     }
 
         //Returnera material som inte beställts mellan två datum
-    public ArrayList<Component> getMaterials(String StartDate, String StopDate) {
+    public ArrayList<Component> getComponentsBetweenDates(String StartDate, String StopDate) {
         System.out.println("GET materials between " + StartDate + " and " + StopDate);
         ArrayList<Component> componentList = new ArrayList<>();
         try {
