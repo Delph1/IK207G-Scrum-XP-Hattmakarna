@@ -30,3 +30,5 @@ replay_pid*
 
 *.properties
 /Hattmakarna/build/
+Hattmakarna/build/built-jar.properties
+Hattmakarna/build/built-jar.properties

@@ -216,7 +216,7 @@ public class DatabaseManager {
     }
 
     // Uppdaterar beställningsstatus mellan två datum
-    public boolean updateOrderStatusBetween(String StartDate, String StopDate, String status) {
+    public boolean updateOrderStatusBetweenDates(String StartDate, String StopDate, String status) {
         try {
             String query = "UPDATE orders SET "
                     + "order_status = '" + status + "' "
