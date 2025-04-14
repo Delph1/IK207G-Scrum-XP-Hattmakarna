@@ -140,7 +140,7 @@ public class DatabaseManager {
         }
     }
 
-        // Hämtar en objektlista med alla beställningsrader
+    // Hämtar en objektlista med alla beställningsrader
     public ArrayList<OrderLine> getOrderlines(int order_id) {
         try {
             ArrayList<OrderLine> orderlines = new ArrayList<>();
@@ -164,7 +164,56 @@ public class DatabaseManager {
         }
 
     }
+     // Hämtar en objektlista med alla beställningsrader
+    public ArrayList<OrderLine> getOrderlines() {
+        try {
+            ArrayList<OrderLine> orderlines = new ArrayList<>();
+            String query = "SELECT * FROM orderlines";
+            ArrayList<HashMap<String, String>> results = db.fetchRows(query);
+            if (results != null) {
+                for (HashMap<String, String> row : results) {
+                    orderlines.add(new OrderLine(
+                            Integer.parseInt(row.get("orderline_id")),
+                            Integer.parseInt(row.get("order_id")),
+                            Boolean.parseBoolean(row.get("customer_approval")),
+                            row.get("description"),
+                            Integer.parseInt(row.get("price")),
+                            Integer.parseInt(row.get("product_id"))
+                    ));
+                }
+            }
+            return orderlines;
+        } catch (InfException e) {
+            throw new RuntimeException("Fel vid hämtning av beställningar: " + e.getMessage());
+        }
+
+    }
     
+        // Hämtar en objektlista med alla beställningsrader för en hattmakare
+    public ArrayList<OrderLine> getHatmakerOrderlines(int user_id) {
+        try {
+            ArrayList<OrderLine> orderlines = new ArrayList<>();
+            String query = "SELECT * FROM orderlines, hatmaker WHERE hatmaker.hatmaker = " + user_id;
+            ArrayList<HashMap<String, String>> results = db.fetchRows(query);
+            if (results != null) {
+                for (HashMap<String, String> row : results) {
+                    orderlines.add(new OrderLine(
+                            Integer.parseInt(row.get("orderline_id")),
+                            Integer.parseInt(row.get("order_id")),
+                            Boolean.parseBoolean(row.get("customer_approval")),
+                            row.get("description"),
+                            Integer.parseInt(row.get("price")),
+                            Integer.parseInt(row.get("product_id"))
+                    ));
+                }
+            }
+            return orderlines;
+        } catch (InfException e) {
+            throw new RuntimeException("Fel vid hämtning av beställningar: " + e.getMessage());
+        }
+
+    }
+
     // Skapar en beställningsrad, returnerar ett beställningsrad objekt
     public OrderLine createOrderLine(int orderId) {
         try {
@@ -240,7 +289,7 @@ public class DatabaseManager {
         }
     }
 
-        //Returnera material som inte beställts mellan två datum
+    //Returnera material som inte beställts mellan två datum
     public ArrayList<Component> getComponentsBetweenDates(String StartDate, String StopDate) {
         System.out.println("GET materials between " + StartDate + " and " + StopDate);
         ArrayList<Component> componentList = new ArrayList<>();
@@ -265,7 +314,7 @@ public class DatabaseManager {
             return null;
         }
     }
-  
+
     public Product getProduct(int product_id) {
         System.out.println("GET product " + product_id);
         try {
@@ -306,28 +355,51 @@ public class DatabaseManager {
             return false;
         }
     }
-    
-public ArrayList<HashMap<String, String>> productSalesBetweenDates(int productID, String startDate, String stopDate) {
-    ArrayList<HashMap<String, String>> result = null;
 
-    try {
-        String query = 
-            "SELECT o.order_date, COUNT(*) AS quantity_sold, SUM(ol.price) AS total_sale " +
-            "FROM orders o " +
-            "JOIN orderlines ol ON o.order_id = ol.order_id " +
-            "JOIN products p ON ol.product_id = p.product_id " +
-            "WHERE o.order_status = 'COMPLETED' " +
-            "AND p.product_id = " + productID + " " +
-            "AND o.order_date BETWEEN '" + startDate + "' AND '" + stopDate + "' " +
-            "GROUP BY o.order_date " +
-            "ORDER BY o.order_date";
+    public ArrayList<HashMap<String, String>> productSalesBetweenDates(int productID, String startDate, String stopDate) {
+        ArrayList<HashMap<String, String>> result = null;
 
-        result = db.fetchRows(query);
-    } catch (InfException e) {
-        System.err.println("Could not fetch sales data: " + e.getMessage());
+        try {
+            String query
+                    = "SELECT o.order_date, COUNT(*) AS quantity_sold, SUM(ol.price) AS total_sale "
+                    + "FROM orders o "
+                    + "JOIN orderlines ol ON o.order_id = ol.order_id "
+                    + "JOIN products p ON ol.product_id = p.product_id "
+                    + "WHERE o.order_status = 'COMPLETED' "
+                    + "AND p.product_id = " + productID + " "
+                    + "AND o.order_date BETWEEN '" + startDate + "' AND '" + stopDate + "' "
+                    + "GROUP BY o.order_date "
+                    + "ORDER BY o.order_date";
+
+            result = db.fetchRows(query);
+        } catch (InfException e) {
+            System.err.println("Could not fetch sales data: " + e.getMessage());
+        }
+
+        return result;
     }
 
-    return result;
-}
+    // Hämtar en objektlista med alla users
+    public ArrayList<User> getUsers() {
+        try {
+            ArrayList<User> users = new ArrayList<>();
+            String query = "SELECT * FROM users";
+            ArrayList<HashMap<String, String>> results = db.fetchRows(query);
+            if (results != null) {
+                for (HashMap<String, String> row : results) {
+                    users.add(new User(
+                            row.get("user_id") == null ? 0 : Integer.parseInt(row.get("user_id")),
+                            row.get("username"),
+                            row.get("password"),
+                            Boolean.parseBoolean(row.get("active"))
+                    ));
 
+                }
+            }
+            return users;
+        } catch (InfException e) {
+            throw new RuntimeException("Fel vid hämtning av användare " + e.getMessage());
+        }
+
+    }
 }
