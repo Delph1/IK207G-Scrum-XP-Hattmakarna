@@ -6,6 +6,7 @@ import javax.swing.table.DefaultTableModel;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 //import models.*;
+
 import models.Order;
 import models.OrderLine;
 
@@ -15,6 +16,7 @@ public class OrderPanel extends javax.swing.JPanel {
     private Order order;
 
     public OrderPanel(MainWindow window, int orderId) {
+
         // Vi tar emot och lagrar huvudfönstret som ett fält, då kan vi komma åt metoder som att byta panel
         this.window = window;
         initComponents();
