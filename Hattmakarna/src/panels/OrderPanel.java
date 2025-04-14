@@ -1,38 +1,53 @@
-
 package panels;
+
 import static hattmakarna.Hattmakarna.dbm;
 import hattmakarna.MainWindow;
 import javax.swing.table.DefaultTableModel;
-import javax.swing.JOptionPane;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 //import models.*;
 
 import models.Order;
-
+import models.OrderLine;
 
 public class OrderPanel extends javax.swing.JPanel {
+
     private MainWindow window;
     private Order order;
-    
+
     public OrderPanel(MainWindow window, int orderId) {
 
         // Vi tar emot och lagrar huvudfönstret som ett fält, då kan vi komma åt metoder som att byta panel
-        this.window=window; 
+        this.window = window;
         initComponents();
         Order order = dbm.getOrder(orderId);
     }
-    
-    
-    
+
     public OrderPanel(MainWindow window) {
         // Vi tar emot och lagrar huvudfönstret som ett fält, då kan vi komma åt metoder som att byta panel
-        this.window=window; 
+        this.window = window;
         initComponents();
         order = dbm.createOrder();
-        tfOrderID.setText(""+order.getId());
-        tfOrderDate.setText(""+order.getOrder_date());
+        tfOrderlineID.setText("0");
+        tfOrderID.setText("" + order.getId());
+        tfOrderDate.setText("" + order.getOrder_date());
         tfOrderStatus.setText(order.getOrder_status());
-        tfShippingCostOrder.setText(""+order.getShippingCost());
-      }
+        tfShippingCostOrder.setText("" + order.getShippingCost());
+        lblOrderlineID.setVisible(false);
+        tfOrderlineID.setVisible(false);
+        tblOrderline.getColumnModel().getColumn(0).setMinWidth(0);
+        tblOrderline.getColumnModel().getColumn(0).setMaxWidth(0);
+        btnRemoveOrderline.setEnabled(false);
+        tblOrderline.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
+            public void valueChanged(ListSelectionEvent event) {
+                if (tblOrderline.getSelectedRow() < 0) {
+                    btnRemoveOrderline.setEnabled(false);
+                } else {
+                    btnRemoveOrderline.setEnabled(true);
+                }
+            }
+        });
+    }
 
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
@@ -50,8 +65,8 @@ public class OrderPanel extends javax.swing.JPanel {
         tfOrderStatus = new javax.swing.JTextField();
         lblAddOrderline = new javax.swing.JLabel();
         lblOrderlineID = new javax.swing.JLabel();
-        tfOrderlineID = new javax.swing.JTextField();
         lblProductID = new javax.swing.JLabel();
+        tfOrderlineID = new javax.swing.JTextField();
         tfProductID = new javax.swing.JTextField();
         lblPrice = new javax.swing.JLabel();
         tfPrice = new javax.swing.JTextField();
@@ -100,6 +115,8 @@ public class OrderPanel extends javax.swing.JPanel {
         lblOrderlineID.setText("Orderrad-ID");
 
         lblProductID.setText("Produkt-ID");
+
+        tfOrderlineID.setEditable(false);
 
         lblPrice.setText("Pris");
 
@@ -243,6 +260,10 @@ public class OrderPanel extends javax.swing.JPanel {
             }
         ));
         jScrollPane2.setViewportView(tblOrderline);
+        if (tblOrderline.getColumnModel().getColumnCount() > 0) {
+            tblOrderline.getColumnModel().getColumn(0).setResizable(false);
+            tblOrderline.getColumnModel().getColumn(0).setHeaderValue("Orderrad-ID");
+        }
 
         btnSaveOrder.setText("Spara");
         btnSaveOrder.addActionListener(new java.awt.event.ActionListener() {
@@ -294,30 +315,47 @@ public class OrderPanel extends javax.swing.JPanel {
         int price = Integer.parseInt(tfPrice.getText());
         boolean customer_approval = cboxCustomerApproval.isSelected();
         String description = taDescription.getText();
-        
-        DefaultTableModel OrderLine = (DefaultTableModel) tblOrderline.getModel();
-        OrderLine.addRow(new Object[] {orderLine_id, product_id, price, customer_approval, description});
+
+        DefaultTableModel tableModelOrderline = (DefaultTableModel) tblOrderline.getModel();
+        tableModelOrderline.addRow(new Object[]{orderLine_id, product_id, price, customer_approval, description});
+
+        tfProductID.setText("");
+        tfPrice.setText("");
+        taDescription.setText("");
     }//GEN-LAST:event_btnAddOrderlineActionPerformed
 
     private void btnSaveOrderActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSaveOrderActionPerformed
-        //order.setCustomer_id(Integer.parseInt(tfCustomerID.getText()));
-        dbm.updateOrder(order); 
-        
+        DefaultTableModel tableModelOrderline = (DefaultTableModel) tblOrderline.getModel();
+
+        for (int i = 0; i < tableModelOrderline.getRowCount(); i++) {
+            int null_orderId = 0;
+
+            if (tableModelOrderline.getValueAt(i, 0).equals(null_orderId)) {
+                OrderLine orderLine = dbm.createOrderLine(order.getId());
+                tableModelOrderline.setValueAt(orderLine.getOrderLineId(), i, 0);
+                int prod_id = Integer.parseInt(tableModelOrderline.getValueAt(i, 1).toString());
+                int price = Integer.parseInt(tableModelOrderline.getValueAt(i, 2).toString());
+                boolean customer_approval = (Boolean) tableModelOrderline.getValueAt(i, 3);
+                String description = tableModelOrderline.getValueAt(i, 4).toString();
+
+                orderLine.setProductId(prod_id);
+                orderLine.setPrice(price);
+                orderLine.setCustomerApproval(customer_approval);
+                orderLine.setDescription(description);
+
+                dbm.updateOrderLine(orderLine);
+            }
+        }
+
     }//GEN-LAST:event_btnSaveOrderActionPerformed
 
     private void btnRemoveOrderlineActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRemoveOrderlineActionPerformed
-        int tableRowID = tblOrderline.getSelectedRow();
-        
-        if (tableRowID < 0) {
-            JOptionPane.showMessageDialog(this,
-                    "No row is selected, please select one row",
-                    "Select row",
-                    JOptionPane.ERROR_MESSAGE);
-        } else {
-            DefaultTableModel OrderLine = (DefaultTableModel) tblOrderline.getModel();
-            OrderLine.removeRow(tableRowID);
-        }
-        
+        int selectedTableRowID = tblOrderline.getSelectedRow();
+        int selectedOrderlineID = (int) tblOrderline.getValueAt(selectedTableRowID, 0);
+        DefaultTableModel OrderLine = (DefaultTableModel) tblOrderline.getModel();
+        dbm.deleteOrderLine(selectedOrderlineID);
+        System.out.println("Orderline " + selectedOrderlineID + " has been deleted");
+        OrderLine.removeRow(selectedTableRowID);
     }//GEN-LAST:event_btnRemoveOrderlineActionPerformed
 
 

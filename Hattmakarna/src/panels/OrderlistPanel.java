@@ -134,6 +134,7 @@ public class OrderlistPanel extends javax.swing.JPanel {
 
     private void newOrderButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_newOrderButtonActionPerformed
         window.showOrderPanel();
+        
     }//GEN-LAST:event_newOrderButtonActionPerformed
 
     private void deleteOrderButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deleteOrderButtonActionPerformed
