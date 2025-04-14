@@ -3,6 +3,9 @@ import java.awt.Component;
 import panels.*; // Hämtar alla paneler
 import javax.swing.JPanel;
 import static hattmakarna.Hattmakarna.dbm;
+import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import models.*;
 
 public class MainWindow extends javax.swing.JFrame {
@@ -25,7 +28,11 @@ public class MainWindow extends javax.swing.JFrame {
         ordersButton = new javax.swing.JButton();
         jSeparator1 = new javax.swing.JSeparator();
         btnPrint = new javax.swing.JButton();
+
         schemaButton = new javax.swing.JButton();
+
+        btnMaterials = new javax.swing.JButton();
+
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -75,6 +82,14 @@ public class MainWindow extends javax.swing.JFrame {
         schemaButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 schemaButtonActionPerformed(evt);
+                          }
+        });
+
+        btnMaterials.setText("Materiallista");
+        btnMaterials.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnMaterialsActionPerformed(evt);
+
             }
         });
 
@@ -96,6 +111,11 @@ public class MainWindow extends javax.swing.JFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(schemaButton, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(0, 0, Short.MAX_VALUE)))
+
+                        .addComponent(btnMaterials)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(btnPrint)))
+
                 .addContainerGap())
             .addComponent(jSeparator1)
         );
@@ -109,7 +129,11 @@ public class MainWindow extends javax.swing.JFrame {
                     .addComponent(startButton)
                     .addComponent(ordersButton)
                     .addComponent(btnPrint)
+
                     .addComponent(schemaButton))
+
+                    .addComponent(btnMaterials))
+
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -135,6 +159,7 @@ public class MainWindow extends javax.swing.JFrame {
     }//GEN-LAST:event_mainPanelComponentResized
 
     private void btnPrintActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPrintActionPerformed
+
     //    Order order = dbm.getOrder(1);
       //  Print printOrder = new Print(order);        // TODO add your handling code here:
     }//GEN-LAST:event_btnPrintActionPerformed
@@ -145,6 +170,15 @@ public class MainWindow extends javax.swing.JFrame {
     }//GEN-LAST:event_schemaButtonActionPerformed
 
     
+
+
+
+    private void btnMaterialsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMaterialsActionPerformed
+        showMaterialListPanel();
+    }//GEN-LAST:event_btnMaterialsActionPerformed
+
+   
+
     // Publik Metod för att skapa start-panelobjekt och anropa den interna metoden för att visa panelen
     public void showStartPanel() {
        showPanel(new StartPanel(this));
@@ -162,12 +196,17 @@ public class MainWindow extends javax.swing.JFrame {
     public void showOrderPanel() {
        showPanel(new OrderPanel(this));
     }
-    
+
     public void showSchemaPanel() {
         showPanel(new SchemaPanel(this)); 
     }
 
-        
+
+    public void showMaterialListPanel() {
+       showPanel(new MaterialListPanel(this));
+    }
+     
+
     // Intern metod för att visa ett panelobjekt i vår mainPanel
     private void showPanel(JPanel newPanel) {
         // Rensa mainPanel från tidigare tillagda paneler
@@ -187,9 +226,9 @@ public class MainWindow extends javax.swing.JFrame {
         currentPanel.revalidate();
         currentPanel.repaint();
     }
-    
-    
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnMaterials;
     private javax.swing.JButton btnPrint;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
