@@ -21,12 +21,7 @@ public class OrderPanel extends javax.swing.JPanel {
         Order order = dbm.getOrder(orderId);
     }
     
-    public OrderPanel(MainWindow window) {
-        // Vi tar emot och lagrar huvudfönstret som ett fält, då kan vi komma åt metoder som att byta panel
-        this.window=window; 
-        initComponents();
-        Order order = dbm.getOrder(orderId);
-    }
+    
     
     public OrderPanel(MainWindow window) {
         // Vi tar emot och lagrar huvudfönstret som ett fält, då kan vi komma åt metoder som att byta panel
