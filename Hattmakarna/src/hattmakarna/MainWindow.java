@@ -25,6 +25,7 @@ public class MainWindow extends javax.swing.JFrame {
         ordersButton = new javax.swing.JButton();
         jSeparator1 = new javax.swing.JSeparator();
         btnPrint = new javax.swing.JButton();
+        schemaButton = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -70,6 +71,13 @@ public class MainWindow extends javax.swing.JFrame {
             }
         });
 
+        schemaButton.setText("Schema");
+        schemaButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                schemaButtonActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -85,6 +93,8 @@ public class MainWindow extends javax.swing.JFrame {
                         .addComponent(ordersButton)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(btnPrint)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(schemaButton, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
             .addComponent(jSeparator1)
@@ -98,7 +108,8 @@ public class MainWindow extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(startButton)
                     .addComponent(ordersButton)
-                    .addComponent(btnPrint))
+                    .addComponent(btnPrint)
+                    .addComponent(schemaButton))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -124,9 +135,14 @@ public class MainWindow extends javax.swing.JFrame {
     }//GEN-LAST:event_mainPanelComponentResized
 
     private void btnPrintActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPrintActionPerformed
-        Order order = dbm.getOrder(1);
-        Print printOrder = new Print(order);        // TODO add your handling code here:
+    //    Order order = dbm.getOrder(1);
+      //  Print printOrder = new Print(order);        // TODO add your handling code here:
     }//GEN-LAST:event_btnPrintActionPerformed
+
+    private void schemaButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_schemaButtonActionPerformed
+       //Visar schemasida 
+        showSchemaPanel(); 
+    }//GEN-LAST:event_schemaButtonActionPerformed
 
     
     // Publik Metod för att skapa start-panelobjekt och anropa den interna metoden för att visa panelen
@@ -147,6 +163,9 @@ public class MainWindow extends javax.swing.JFrame {
        showPanel(new OrderPanel(this));
     }
     
+    public void showSchemaPanel() {
+        showPanel(new SchemaPanel(this)); 
+    }
 
         
     // Intern metod för att visa ett panelobjekt i vår mainPanel
@@ -177,6 +196,7 @@ public class MainWindow extends javax.swing.JFrame {
     private javax.swing.JSeparator jSeparator1;
     private javax.swing.JPanel mainPanel;
     private javax.swing.JButton ordersButton;
+    private javax.swing.JButton schemaButton;
     private javax.swing.JButton startButton;
     // End of variables declaration//GEN-END:variables
 }

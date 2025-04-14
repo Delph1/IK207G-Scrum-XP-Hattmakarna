@@ -1,0 +1,120 @@
+Release Notes -- Apache PDFBox -- Version 3.0.4
+
+Introduction
+------------
+
+The Apache PDFBox library is an open source Java tool for working with PDF documents.
+
+This is an incremental bugfix release based on the earlier 3.0.3 release. It contains
+a couple of fixes and small improvements.
+
+A migration guide is available at https://pdfbox.apache.org/3.0/migration.html. It is
+still a work in progress and we are happy to include any valuable feedback from our 
+community. 
+
+For more details on these changes and all the other fixes and improvements
+included in this release, please refer to the following issues on the
+PDFBox issue tracker at https://issues.apache.org/jira/browse/PDFBOX.
+
+Bug
+[PDFBOX-3690] - Character positions shifted
+[PDFBOX-3774] - Incorrectly extracted text (broken words)
+[PDFBOX-4627] - Wrong color of uncolored tiling pattern
+[PDFBOX-4718] - OutOfMemoryError - during renderImageWithDPI
+[PDFBOX-5025] - BaseParser fails when a number is followed by a string starting with 'e'
+[PDFBOX-5054] - Type3 font is not rendered
+[PDFBOX-5225] - Flattening removes all annotations when widget annotation has no page
+[PDFBOX-5307] - Image lost on page render
+[PDFBOX-5487] - extra whitespaces when extracting Arabic text
+[PDFBOX-5657] - SMaskInData not supported for JPX images
+[PDFBOX-5766] - CharStringCommand-mapping does not work for HintMask-cmd
+[PDFBOX-5797] - Kid Widget /DA is ignored in setDefaultAppearance() call
+[PDFBOX-5854] - PDFBox is unable to remove ID
+[PDFBOX-5866] - Unable to load password protected pdf
+[PDFBOX-5868] - PDFBox not extracting text of non-latin languages(tamil, bengali) properly but adobe reader's save as text does
+[PDFBOX-5869] - Checkstyle
+[PDFBOX-5870] - [PATCH] Detect CMYK image without relying on metadata
+[PDFBOX-5879] - Regression from PDFBOX-5841: Text extraction with rotation magic fails for PDF with multiple content streams in a page
+[PDFBOX-5880] - PDF render blank page: The end of the stream doesn't point to the correct offset, using workaround to read the stream, stream start position: 196, length: 0, expected end position: 196
+[PDFBOX-5881] - CVE for Lucene libraries
+[PDFBOX-5882] - The pattern created with PDFBox shows inconsistent colors between Safari and Adobe.
+[PDFBOX-5890] - BDC sequence with resource reference instead of with MCID
+[PDFBOX-5894] - Problem loading FDF
+[PDFBOX-5896] - StackOverflowError in PDFieldFactory.findFieldType
+[PDFBOX-5900] - ClassCastException in AnnotationValidator
+[PDFBOX-5902] - The CPU usage of a PDF file with a size of 85.6 MB is abnormal
+[PDFBOX-5905] - Many ZapfDingbats symbols do not appear when page is rendered.
+[PDFBOX-5906] - IOException when reading isolated "+"
+[PDFBOX-5908] - IllegalArgumentException: capacity < 0: (-75475220 < 0) in RandomAccessReadBuffer constructor
+[PDFBOX-5913] - FontBox spawns a `cmd` subprocess to read an environment variable (on Windows)
+[PDFBOX-5914] - Implement PDF 2.0 dash phase clarification (2)
+[PDFBOX-5915] - false "Unknown charstring command in glyph" messages
+[PDFBOX-5917] - Particular PDF fails on renderImageWithDPI call
+[PDFBOX-5919] - PDPage.getTrimBox() returns null
+[PDFBOX-5920] - PDType0Font return invalid space width
+[PDFBOX-5924] - Icons of text annotations sometimes too large
+[PDFBOX-5927] - Saved file has "Invalid dictionary" when reloading
+[PDFBOX-5928] - Orphan page check doesn't check annotation destinations
+[PDFBOX-5931] - NPE in COSArray.indexOfObject
+[PDFBOX-5932] - NPE in PagePane.mouseMoved()
+[PDFBOX-5936] - TestCreateSignature.testCreateSignedTimeStamp checkLTV build test fail (2) / Support several issuers
+
+New Feature
+[PDFBOX-5865] - Show ASN.1 decoded Contents for Signature-Dictionary
+
+Improvement
+[PDFBOX-1529] - Exchange hard-coded values for variables and provide command-line options in TextToPDF component
+[PDFBOX-4743] - Long rendering time of fonts in a specific PDF
+[PDFBOX-5872] - Support imageio-jnr / imageio-openjpeg library for JPEG2000 decoding
+[PDFBOX-5873] - Improve ExtractTTFFonts
+[PDFBOX-5874] - Change Loglevel from Warn to info when rebuilding font cache
+[PDFBOX-5884] - Support OCG visibility expressions
+[PDFBOX-5887] - Add page getter/setter to PDObjectReference
+[PDFBOX-5889] - Support long values for COSInteger objects
+[PDFBOX-5891] - Empty constructor for PDViewerPreferences
+[PDFBOX-5892] - Add check of /P to PDFMergerUtilityTest
+[PDFBOX-5893] - Restore PreflightParser constructor with non file parameter
+[PDFBOX-5895] - support Markdown extraction from the command line
+[PDFBOX-5911] - Calculate dpi dynamically when printing with raster
+[PDFBOX-5921] - Show usage of non-latin language in FreeText annotation example
+[PDFBOX-5929] - Remove orphan annotations in structure tree
+[PDFBOX-5930] - Add font name to PrintTextLocations
+
+Wish
+[PDFBOX-3345] - Improve detection whether printing or viewing
+
+
+Release Contents
+----------------
+
+This release consists of a single source archive packaged as a zip file.
+The archive can be unpacked with the jar tool from your JDK installation.
+See the README.txt file for instructions on how to build this release.
+
+The source archive is accompanied by SHA512 checksums and a PGP signature
+that you can use to verify the authenticity of your download.
+The public key used for the PGP signature can be found at
+https://www.apache.org/dist/pdfbox/KEYS.
+
+About Apache PDFBox
+-------------------
+
+Apache PDFBox is an open source Java library for working with PDF documents.
+This project allows creation of new PDF documents, manipulation of existing
+documents and the ability to extract content from documents. Apache PDFBox
+also includes several command line utilities. Apache PDFBox is published
+under the Apache License, Version 2.0.
+
+For more information, visit https://pdfbox.apache.org/
+
+About The Apache Software Foundation
+------------------------------------
+
+Established in 1999, The Apache Software Foundation provides organizational,
+legal, and financial support for more than 100 freely-available,
+collaboratively-developed Open Source projects. The pragmatic Apache License
+enables individual and commercial users to easily deploy Apache software;
+the Foundation's intellectual property framework limits the legal exposure
+of its 2,500+ contributors.
+
+For more information, visit https://www.apache.org/
