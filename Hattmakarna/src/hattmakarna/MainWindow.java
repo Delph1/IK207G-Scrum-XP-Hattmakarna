@@ -187,7 +187,7 @@ public class MainWindow extends javax.swing.JFrame {
     }//GEN-LAST:event_btnMaterialsActionPerformed
 
     private void statisticsBTNActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_statisticsBTNActionPerformed
-showOrderStatisticsPanel();        // TODO add your handling code here:
+        showOrderStatisticsPanel();        // TODO add your handling code here:
     }//GEN-LAST:event_statisticsBTNActionPerformed
 
    
