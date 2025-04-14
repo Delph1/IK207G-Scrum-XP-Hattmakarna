@@ -19,7 +19,9 @@
 *.tar.gz
 *.rar
 
-.lib/
+lib/
+pdfbox-3.0/
+pdfbox-app-2.033.ext
 
 # virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
 hs_err_pid*
