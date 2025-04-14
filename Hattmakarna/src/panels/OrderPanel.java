@@ -1,7 +1,9 @@
+
 package panels;
 
 import static hattmakarna.Hattmakarna.dbm;
 import hattmakarna.MainWindow;
+import java.util.ArrayList;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
@@ -10,17 +12,18 @@ import javax.swing.event.ListSelectionListener;
 import models.Order;
 import models.OrderLine;
 
+
 public class OrderPanel extends javax.swing.JPanel {
 
     private MainWindow window;
     private Order order;
 
     public OrderPanel(MainWindow window, int orderId) {
-
         // Vi tar emot och lagrar huvudfönstret som ett fält, då kan vi komma åt metoder som att byta panel
         this.window = window;
         initComponents();
         Order order = dbm.getOrder(orderId);
+        this.constructorHelp(order);
     }
 
     public OrderPanel(MainWindow window) {
@@ -28,6 +31,11 @@ public class OrderPanel extends javax.swing.JPanel {
         this.window = window;
         initComponents();
         order = dbm.createOrder();
+        constructorHelp(order);
+    }
+    
+    private void constructorHelp(Order theOrder) {
+        this.order = theOrder; 
         tfOrderlineID.setText("0");
         tfOrderID.setText("" + order.getId());
         tfOrderDate.setText("" + order.getOrder_date());
@@ -47,6 +55,12 @@ public class OrderPanel extends javax.swing.JPanel {
                 }
             }
         });
+        ArrayList<OrderLine> allOrderlines = dbm.getOrderlines(order.getId());
+        DefaultTableModel tableModelOrderline = (DefaultTableModel) tblOrderline.getModel();
+        
+        for(OrderLine orderline : allOrderlines) {
+            tableModelOrderline.addRow(new Object[] {orderline.getOrderLineId(), orderline.getProductId(), orderline.getPrice(), orderline.getCustomerApproval(), orderline.getDescription()});
+        }
     }
 
     @SuppressWarnings("unchecked")
