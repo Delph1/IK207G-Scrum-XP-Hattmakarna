@@ -30,7 +30,12 @@ public class DatabaseManager {
                         row.get("customer_id") == null ? 0 : Integer.parseInt(row.get("customer_id")),
                         LocalDate.parse(row.get("order_date")),
                         row.get("order_status"),
+<<<<<<< Updated upstream
                         Boolean.parseBoolean(row.get("express"))
+=======
+                        Boolean.parseBoolean(row.get("express")),
+                       row.get("shipping_cost") == null ? 0 :  Integer.parseInt(row.get("shipping_cost"))
+>>>>>>> Stashed changes
                 );
                 return order;
             } else {
@@ -103,7 +108,12 @@ public class DatabaseManager {
                             row.get("customer_id") == null ? 0 : Integer.parseInt(row.get("customer_id")),
                             LocalDate.parse(row.get("order_date")),
                             row.get("order_status"),
+<<<<<<< Updated upstream
                             Boolean.parseBoolean(row.get("express"))
+=======
+                            Boolean.parseBoolean(row.get("express")),
+                            row.get("shipping_cost") == null ? 0 : Integer.parseInt(row.get("shipping_cost"))
+>>>>>>> Stashed changes
                     ));
                 }
             }
