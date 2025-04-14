@@ -19,9 +19,9 @@
 *.tar.gz
 *.rar
 
-lib/
-pdfbox-3.0/
-pdfbox-app-2.033.ext
+git rm --cached -r lib/
+git rm --cached -r pdfbox-3.0/
+git rm --cached pdfbox-app-2.033.ext
 
 # virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
 hs_err_pid*
