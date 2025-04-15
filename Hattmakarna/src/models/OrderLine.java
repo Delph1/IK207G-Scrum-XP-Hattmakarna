@@ -64,4 +64,8 @@ public class OrderLine {
         return product_id;
     }
 
+    @Override
+    public String toString() {
+        return "Order-id: " + order_id + ",  " + "OrderLine-Id: " + orderLine_id + ",  " + "Beskrivning: " +description;
+    }
 }

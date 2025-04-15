@@ -1,20 +1,20 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
+
 package hattmakarna;
 
 import static hattmakarna.Hattmakarna.dbm;
+import java.awt.Desktop;
+import java.awt.print.PrinterException;
+import java.awt.print.PrinterJob;
+import java.io.File;
 import java.io.IOException;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import models.*;
 import org.apache.pdfbox.pdmodel.*;
 import org.apache.pdfbox.pdmodel.font.PDType1Font;
+import org.apache.pdfbox.printing.PDFPrintable;
+import org.apache.pdfbox.printing.Scaling;
 
-/**
- *
- * @author nolle
- */
 public class Print {
     
     PDDocument document = new PDDocument();
@@ -23,13 +23,51 @@ public class Print {
     private OrderLine orderline;
     private Product product;
     
-    public Print (Order order) throws IOException{
+    public Print (Order order) {
+        this.order = order;
+    }
 
-        //Base data collection
+    public void showQoute() throws IOException {
+        String headerText = "Offert";
+        createPDF(headerText);
+        Desktop.getDesktop().open(new File ("temp.pdf"));
+    }
+        
+    public void printQoute() throws IOException, PrinterException {
+        PrinterJob printJob = PrinterJob.getPrinterJob();
+        String headerText = "Offert";
+        document = createPDF(headerText);
+        PDFPrintable printdoc = new PDFPrintable (PDDocument.load(new File("temp.pdf")), Scaling.SHRINK_TO_FIT);
+        if (printJob.printDialog()) {
+            printJob.setPrintable(printdoc);
+            printJob.print();
+        }
+    }
+    
+    public void showConfirmation() throws IOException {
         String headerText = "Orderbekräftelse";
+        createPDF(headerText);
+        Desktop.getDesktop().open(new File ("temp.pdf"));
+    }
+
+    public void printConfirmation() throws IOException, PrinterException {
+        PrinterJob printJob = PrinterJob.getPrinterJob();
+        String headerText = "Orderbekräftelse";
+        document = createPDF(headerText);
+        PDFPrintable printdoc = new PDFPrintable (PDDocument.load(new File("temp.pdf")), Scaling.SHRINK_TO_FIT);
+        if (printJob.printDialog()) {
+            printJob.setPrintable(printdoc);
+            printJob.print();
+        }
+    }
+    
+    private PDDocument createPDF (String header) throws IOException {
+        //Base data collection
+        String headerText = header;
         int orderId = order.getId();
         int customerId = order.getCustomer_id();
-        int orderTotal = 0;
+        double orderTotal = 0;
+        DecimalFormat df = new DecimalFormat("##.00");
         customer = dbm.getCustomer(customerId);
         String state = customer.getState();
         ArrayList<OrderLine> orderlines = dbm.getOrderlines(orderId);
@@ -101,21 +139,26 @@ public class Print {
             yPosition -= rowHeight;
         }
         
-        //int orderTotalVAT = orderTotal * 1.25;
+        double orderTotalVAT = orderTotal * 1.25;
  
-        yPosition = yPosition - 20;
+        yPosition = yPosition - 40;
         contentStream.beginText();
         contentStream.setFont(PDType1Font.HELVETICA, 20);
         contentStream.newLineAtOffset(240, yPosition);
-        contentStream.showText("Summa exkl moms: " + orderTotal + " SEK");
-//        yPosition = yPosition - 20;
-//        contentStream.newLineAtOffset(600, yPosition);
-//        contentStream.showText("Summa inkl moms: " + orderTotalVAT + " SEK");
+        contentStream.showText("Summa exkl moms: " + df.format(orderTotal) + " SEK");
+        contentStream.newLineAtOffset(0, -40);
+        contentStream.showText("Moms: "); 
+        contentStream.newLineAtOffset(190, 0);
+        contentStream.showText(df.format(orderTotal * .25) + " SEK");
+        contentStream.newLineAtOffset(-190, -40);
+        contentStream.showText("Summa inkl moms: " + df.format(orderTotalVAT) + " SEK");
         contentStream.endText();
+
         
         //Saves the file to the project folder
         contentStream.close(); 
-        String path = "./test.pdf";
+        String path = "./temp.pdf";
+
         try {
             document.save(path);  
         } catch(Exception e) {
@@ -127,8 +170,9 @@ public class Print {
         catch (Exception e) {
             System.err.println("");
         }
+        return document;
     }
-
+    
     private static void drawRow(PDPageContentStream contentStream, float x, float y, float height, float[] colWidths, String[] texts, boolean isHeader) throws IOException {
         float cellX = x;
 
@@ -142,7 +186,11 @@ public class Print {
 
             // Text
             contentStream.beginText();
-            contentStream.setFont(PDType1Font.HELVETICA_BOLD, 12);
+            if (isHeader) { 
+                contentStream.setFont(PDType1Font.HELVETICA_BOLD, 12);
+            } else {
+                contentStream.setFont(PDType1Font.HELVETICA, 12);
+            }
             contentStream.newLineAtOffset(cellX + 2, y - 15);
             //NULL-check
             String celltext = texts[i] != null ? texts[i] : "";

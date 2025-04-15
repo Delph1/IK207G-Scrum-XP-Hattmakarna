@@ -29,6 +29,7 @@ public class MaterialListPanel extends javax.swing.JPanel {
         tblMaterialList = new javax.swing.JTable();
         lblStartDate = new javax.swing.JLabel();
         lblStopDate = new javax.swing.JLabel();
+        btnPlaceOrder = new javax.swing.JButton();
 
         btnSearch.setText("Sök");
         btnSearch.addActionListener(new java.awt.event.ActionListener() {
@@ -66,14 +67,17 @@ public class MaterialListPanel extends javax.swing.JPanel {
 
         lblStopDate.setText("Stoppdatum:");
 
+        btnPlaceOrder.setText("Beställ");
+        btnPlaceOrder.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnPlaceOrderActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(38, Short.MAX_VALUE)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 375, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(26, 26, 26))
             .addGroup(layout.createSequentialGroup()
                 .addGap(64, 64, 64)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -89,6 +93,12 @@ public class MaterialListPanel extends javax.swing.JPanel {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(btnSearch)
                         .addGap(50, 50, 50))))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap(145, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(btnPlaceOrder)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 375, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(26, 26, 26))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -104,7 +114,9 @@ public class MaterialListPanel extends javax.swing.JPanel {
                     .addComponent(txtStopDate, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 275, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(25, Short.MAX_VALUE))
+                .addGap(18, 18, 18)
+                .addComponent(btnPlaceOrder)
+                .addContainerGap(24, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
 
@@ -112,7 +124,7 @@ public class MaterialListPanel extends javax.swing.JPanel {
         String startDate = txtStartDate.getText();
         String stopDate = txtStopDate.getText();
         
-        ArrayList<Component> components = dbm.getMaterials(startDate, stopDate);
+        ArrayList<Component> components = dbm.getComponentsBetweenDates(startDate, stopDate);
 
         String[] columns = {"ID", "Namn", "Färg", "Mängd"};
         
@@ -137,8 +149,16 @@ public class MaterialListPanel extends javax.swing.JPanel {
         
     }//GEN-LAST:event_btnSearchActionPerformed
 
+    private void btnPlaceOrderActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPlaceOrderActionPerformed
+        String startDate = txtStartDate.getText();
+        String stopDate = txtStopDate.getText();
+        String status = "ready";
+        dbm.updateOrderStatusBetweenDates(startDate, stopDate, status);
+    }//GEN-LAST:event_btnPlaceOrderActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnPlaceOrder;
     private javax.swing.JButton btnSearch;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JLabel lblStartDate;
