@@ -5,8 +5,6 @@ import javax.swing.JPanel;
 import static hattmakarna.Hattmakarna.dbm;
 import java.awt.print.PrinterException;
 import java.io.IOException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import models.*;
 
 public class MainWindow extends javax.swing.JFrame {
@@ -191,21 +189,18 @@ public class MainWindow extends javax.swing.JFrame {
         Order order = dbm.getOrder(1);
         try {
             Print printOrder = new Print(order);
-            printOrder.showQoute();
+            printOrder.printQoute();
         } catch (IOException e) {
             System.err.println(e.getMessage());
+        } catch (PrinterException ep) {
+            System.err.println(ep.getMessage());
         }
-
     }//GEN-LAST:event_btnPrintActionPerformed
 
     private void schemaButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_schemaButtonActionPerformed
        //Visar schemasida 
         showSchemaPanel(); 
     }//GEN-LAST:event_schemaButtonActionPerformed
-
-    
-
-
 
     private void btnMaterialsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMaterialsActionPerformed
         showMaterialListPanel();
@@ -216,14 +211,12 @@ public class MainWindow extends javax.swing.JFrame {
     }//GEN-LAST:event_statisticsBTNActionPerformed
 
     private void customerListBTNActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_customerListBTNActionPerformed
-showCustomerListPanel();        
+        showCustomerListPanel();        
     }//GEN-LAST:event_customerListBTNActionPerformed
 
     private void ProductListBTNActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ProductListBTNActionPerformed
-    showProductListPanel();   
+        showProductListPanel();   
     }//GEN-LAST:event_ProductListBTNActionPerformed
-
-   
 
     // Publik Metod för att skapa start-panelobjekt och anropa den interna metoden för att visa panelen
     public void showStartPanel() {
@@ -247,7 +240,6 @@ showCustomerListPanel();
         showPanel(new SchemaPanel(this)); 
     }
 
-    
     public void showMaterialListPanel() {
        showPanel(new MaterialListPanel(this));
     }
@@ -259,13 +251,16 @@ showCustomerListPanel();
     public void showCustomerPanel() {
        showPanel(new CustomerPanel(this));
     }
+    
     public void showCustomerListPanel() {
        showPanel(new CustomerListPanel(this));
     }
+    
     public void showProductPanel() {
        showPanel(new ProductPanel(this));
     }
-        public void showProductListPanel() {
+    
+    public void showProductListPanel() {
        showPanel(new ProductListPanel(this));
     }
 
