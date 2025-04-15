@@ -1,23 +1,17 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JPanel.java to edit this template
- */
+
 package panels;
+
 import hattmakarna.MainWindow;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.JOptionPane;
 import java.util.ArrayList;
 import java.util.HashMap;
 import static hattmakarna.Hattmakarna.dbm;
+import hattmakarna.Print;
+import java.awt.print.PrinterException;
+import java.io.IOException;
 import models.*;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.SQLException;
 
-/**
- *
- * @author eriks
- */
 public class Orderstatistics extends javax.swing.JPanel {
      private MainWindow window;
      private ArrayList<Integer> productIds = new ArrayList<>();
@@ -98,6 +92,7 @@ public void fyllComboBox() {
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
+        btnPrintHatStats = new javax.swing.JButton();
 
         hattComboBox.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -116,7 +111,6 @@ public void fyllComboBox() {
                 slutDatumActionPerformed(evt);
             }
         });
-
 
         jButton1.setText("Sök");
         jButton1.addActionListener(new java.awt.event.ActionListener() {
@@ -141,34 +135,42 @@ public void fyllComboBox() {
 
         jLabel3.setText("Vänligen skriv datum i formatet: 2024-01-01");
 
+        btnPrintHatStats.setText("Skriv ut");
+        btnPrintHatStats.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnPrintHatStatsActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addGap(57, 57, 57)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 523, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(hattComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, 135, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 71, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(startDatum, javax.swing.GroupLayout.PREFERRED_SIZE, 101, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(18, 18, 18)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(slutDatum, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(jButton1))
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(jLabel2)
-                                .addGap(0, 0, Short.MAX_VALUE))))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addComponent(jLabel3)
-                        .addGap(161, 161, 161)))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(btnPrintHatStats)
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 523, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGroup(layout.createSequentialGroup()
+                            .addComponent(hattComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, 135, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGap(18, 18, 18)
+                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 71, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(startDatum, javax.swing.GroupLayout.PREFERRED_SIZE, 101, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGap(18, 18, 18)
+                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addGroup(layout.createSequentialGroup()
+                                    .addComponent(slutDatum, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(jButton1))
+                                .addGroup(layout.createSequentialGroup()
+                                    .addComponent(jLabel2)
+                                    .addGap(0, 0, Short.MAX_VALUE))))
+                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                            .addComponent(jLabel3)
+                            .addGap(161, 161, 161))))
                 .addGap(98, 98, 98))
-
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -187,7 +189,9 @@ public void fyllComboBox() {
                     .addComponent(slutDatum, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 66, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(226, Short.MAX_VALUE))
+                .addGap(18, 18, 18)
+                .addComponent(btnPrintHatStats)
+                .addContainerGap(185, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
 
@@ -207,8 +211,33 @@ public void fyllComboBox() {
         // TODO add your handling code here:
     }//GEN-LAST:event_slutDatumActionPerformed
 
+    private void btnPrintHatStatsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPrintHatStatsActionPerformed
+        
+        String startDate = startDatum.getText();
+        String stopDate = slutDatum.getText();
+        
+        int productId = productIds.get(hattComboBox.getSelectedIndex());
+        
+        String stringData[][] = new String[hattTabell.getRowCount()][3];
+        
+        for (int i = 0; i < hattTabell.getRowCount(); i++) {
+            stringData[i][0] = hattTabell.getValueAt(i, 0).toString();
+            stringData[i][1] = hattTabell.getValueAt(i, 1).toString();
+            stringData[i][2] = hattTabell.getValueAt(i, 2).toString() + " SEK";
+        }
+        Print printHatStats = new Print(stringData, productId, startDate, stopDate);
+        try {
+            printHatStats.printHatStats();
+        } catch (IOException e) {
+            System.err.println(e.getMessage());
+        } catch (PrinterException ep) {
+            System.err.println(ep.getMessage());
+        }
+    }//GEN-LAST:event_btnPrintHatStatsActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnPrintHatStats;
     private javax.swing.JComboBox<String> hattComboBox;
     private javax.swing.JTable hattTabell;
     private javax.swing.JButton jButton1;
@@ -218,6 +247,5 @@ public void fyllComboBox() {
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTextField slutDatum;
     private javax.swing.JTextField startDatum;
-
     // End of variables declaration//GEN-END:variables
 }
