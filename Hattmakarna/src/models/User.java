@@ -46,4 +46,8 @@ public class User {
         return active;
     }
 
+    @Override
+    public String toString() {
+        return userName;
+    }
 }

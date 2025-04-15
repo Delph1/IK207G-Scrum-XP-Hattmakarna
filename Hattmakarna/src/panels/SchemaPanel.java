@@ -4,23 +4,60 @@
  */
 package panels;
 
+import static hattmakarna.Hattmakarna.dbm;
 import hattmakarna.MainWindow;
-
+import models.User;
+import java.util.ArrayList; 
+import javax.swing.DefaultComboBoxModel;
+import javax.swing.DefaultListModel;
+import models.OrderLine;
 /**
  *
  * @author Petra Schröder
  */
 public class SchemaPanel extends javax.swing.JPanel {
-
+//Fält
     private MainWindow window;
-
+    private ArrayList<OrderLine>allOrderLines;
+     private DefaultListModel<OrderLine> listModel;
+    
     /**
-     * Creates new form SchemaPanel
+     * Konstruktor, Creates new form SchemaPanel
      */
     public SchemaPanel(MainWindow window) {
-        this.window = window;
         initComponents();
-
+        this.window = window;
+        loadUsers(); 
+        allOrderLines = dbm.getOrderlines();
+         listModel = new DefaultListModel<>();
+        orderLineList.setModel(listModel);
+        listOrderLines();
+    }
+    
+    private void loadUsers() {
+        //Hämtar alla users från databasen via DatabaseManager
+        ArrayList<User>users = dbm.getUsers(); 
+        // Skapa en DefaultComboBoxModel för JComboBox
+        DefaultComboBoxModel<User> userModel = new DefaultComboBoxModel<>();
+        // Lägg till ett standardalternativ för "Alla avdelningar"
+        userModel.addElement(new User(0, "", "Alla användare", false));
+    
+        // Lägg till varje avdelning i modellen
+        if (users!= null) {
+            for (User user : users) {
+                userModel.addElement(user);
+            }
+        }
+        // Sätt modellen 
+        userComboBox.setModel(userModel);
+    }
+    
+    private void listOrderLines(){
+        listModel.clear(); // Rensa befintliga poster i modellen
+        
+         for (OrderLine orderLine: allOrderLines) {
+                listModel.addElement(orderLine);
+         }
     }
 
     /**
@@ -36,10 +73,8 @@ public class SchemaPanel extends javax.swing.JPanel {
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jButton1 = new javax.swing.JButton();
-        jButton2 = new javax.swing.JButton();
+        orderLineList = new javax.swing.JList<>();
 
-        userComboBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
         userComboBox.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 userComboBoxActionPerformed(evt);
@@ -50,9 +85,7 @@ public class SchemaPanel extends javax.swing.JPanel {
 
         jLabel2.setText("Tilldelade ordrar");
 
-        jButton1.setText("jButton1");
-
-        jButton2.setText("jButton2");
+        jScrollPane1.setViewportView(orderLineList);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
@@ -62,20 +95,16 @@ public class SchemaPanel extends javax.swing.JPanel {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
                         .addGap(34, 34, 34)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 135, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(jLabel1)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(userComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, 102, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                        .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 135, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(layout.createSequentialGroup()
                         .addGap(16, 16, 16)
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 263, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jButton1)
-                            .addComponent(jButton2))))
-                .addContainerGap(341, Short.MAX_VALUE))
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 263, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(22, 22, 22)
+                        .addComponent(jLabel1)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(userComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, 141, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(428, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -87,27 +116,27 @@ public class SchemaPanel extends javax.swing.JPanel {
                     .addComponent(jLabel1)
                     .addComponent(userComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(27, 27, 27)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(jButton1)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jButton2))
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 220, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 220, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(240, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
 
     private void userComboBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_userComboBoxActionPerformed
-        // TODO add your handling code here:
+        int userId = ((User) userComboBox.getSelectedItem()).getUserId();
+        if (userId == 0) {
+            allOrderLines = dbm.getOrderlines();
+        } else {
+            allOrderLines = dbm.getHatmakerOrderlines(userId);
+        }
+        listOrderLines();
     }//GEN-LAST:event_userComboBoxActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JComboBox<String> userComboBox;
+    private javax.swing.JList<OrderLine> orderLineList;
+    private javax.swing.JComboBox<User> userComboBox;
     // End of variables declaration//GEN-END:variables
 }
