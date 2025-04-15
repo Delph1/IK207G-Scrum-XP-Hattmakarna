@@ -20,16 +20,71 @@ import java.sql.SQLException;
  */
 public class Orderstatistics extends javax.swing.JPanel {
      private MainWindow window;
+     private ArrayList<Integer> productID = new ArrayList<>();
+
 
     public Orderstatistics(MainWindow window) {
         initComponents();
         this.window=window;
+        fyllComboBox();
     }
     
-    
+   public void fyllComboBox() {
+       
+    hattComboBox.addItem("Klassisk Fedora");
+    productID.add(1);
 
-   public void fyllTabell() {
+    hattComboBox.addItem("Barnslig Solhatt");
+    productID.add(2);
+
+    hattComboBox.addItem("Limited Edition Cylinderhatt");
+    productID.add(3);
+
+    hattComboBox.addItem("Fedora – Svart Edition");
+    productID.add(4);
+
+    hattComboBox.addItem("Solhatt med Band");
+    productID.add(5);
+}
+
     
+    
+   public void fyllTabell() {
+    try {
+        int index = hattComboBox.getSelectedIndex();
+            if(index < 0 ){
+                JOptionPane.showMessageDialog(this, "Välj en hatt från listan.");
+                return;
+            }
+        
+        int productId = productID.get(index);
+        String startDate = startDatum.getText().trim();
+        String stopDate = slutDatum.getText().trim();
+
+        ArrayList<HashMap<String, String>> salesData = dbm.productSalesBetweenDates(productId, startDate, stopDate);
+
+        DefaultTableModel model = new DefaultTableModel();
+        model.addColumn("Datum");
+        model.addColumn("Antal Sålda");
+        model.addColumn("Summa");
+
+        if (salesData != null && !salesData.isEmpty()) {
+            for (HashMap<String, String> row : salesData) {
+                model.addRow(new Object[]{
+                    row.get("order_date"),
+                    row.get("quantity_sold"),
+                    row.get("total_sale")
+                });
+            }
+        } else {
+            JOptionPane.showMessageDialog(null, "Inga försäljningsdata hittades för perioden.");
+        }
+
+        hattTabell.setModel(model);
+
+    } catch (Exception e) {
+        JOptionPane.showMessageDialog(null, "Ett fel uppstod: " + e.getMessage());
+    }
 }
 
 
@@ -52,7 +107,6 @@ public class Orderstatistics extends javax.swing.JPanel {
         jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
 
-        hattComboBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Klassisk Fedora", "Barnslig Solhatt", "Limited Edition Cylinderhatt", "Fedora - Svart Edition", "Solhatt med Band" }));
         hattComboBox.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 hattComboBoxActionPerformed(evt);
