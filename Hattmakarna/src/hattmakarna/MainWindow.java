@@ -253,7 +253,7 @@ showCustomerListPanel();
     }
     
     public void showOrderStatisticsPanel() {
-        showPanel(new OrderStatistics(this)); 
+        showPanel(new Orderstatistics(this)); 
     }
     
     public void showCustomerPanel() {
