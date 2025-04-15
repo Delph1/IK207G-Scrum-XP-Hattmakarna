@@ -8,6 +8,8 @@ import java.util.ArrayList;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
 import hattmakarna.Print;
+import java.awt.print.PrinterException;
+import java.io.IOException;
 
 public class MaterialListPanel extends javax.swing.JPanel {
     private MainWindow window;
@@ -153,9 +155,24 @@ public class MaterialListPanel extends javax.swing.JPanel {
     private void btnPlaceOrderActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPlaceOrderActionPerformed
         String startDate = txtStartDate.getText();
         String stopDate = txtStopDate.getText();        
-        dbm.updateOrderStatusBetweenDates(startDate, stopDate, "ready")
-        Print printMaterial = new Print(materialLista);
-        printMaterial.showMaterialList(materialLista, startDate, stopDate);
+        dbm.updateOrderStatusBetweenDates(startDate, stopDate, "ready");
+
+        String stringData[][] = new String[tblMaterialList.getRowCount()][4];
+        
+        for (int i = 0; i < tblMaterialList.getRowCount(); i++) {
+            stringData[i][0] = tblMaterialList.getValueAt(i, 0).toString();
+            stringData[i][1] = tblMaterialList.getValueAt(i, 1).toString();
+            stringData[i][1] = tblMaterialList.getValueAt(i, 2).toString();
+            stringData[i][1] = tblMaterialList.getValueAt(i, 3).toString();
+        }
+        Print printMaterial = new Print(stringData, startDate, stopDate);
+        try {
+            printMaterial.showMaterialList(stringData, startDate, stopDate);
+        } catch (IOException e) {
+            System.err.println(e.getMessage());
+//        } catch (PrinterException ep) {
+//            System.err.println(ep.getMessage());
+        }
     }//GEN-LAST:event_btnPlaceOrderActionPerformed
 
 

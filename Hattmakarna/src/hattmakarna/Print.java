@@ -24,13 +24,17 @@ public class Print {
     private OrderLine orderline;
     private Product product;
     private String[][] materialLista;
+    private String startDate;
+    private String stopDate;
     
     public Print (Order order) {
         this.order = order;
     }
     
-    public Print (String[][] materialLista) {
+    public Print (String[][] materialLista, String startDate, String stopDate) {
         this.materialLista = materialLista;
+        this.startDate = startDate;
+        this.stopDate = stopDate;
     }
 
     public void showQoute() throws IOException {
@@ -225,7 +229,7 @@ public class Print {
     public void showMaterialList(String[][] data, String startDate, String stopDate) throws IOException {
         String[][] materialData = data;
         createMaterialList(data, startDate, stopDate);
-        Desktop.getDesktop().open(new File ("./materiallista.pdf"));
+        Desktop.getDesktop().open(new File ("materiallista.pdf"));
     }
     
     public void printMaterialList(String[][] data, String startDate, String stopDate) throws IOException, PrinterException {
@@ -260,7 +264,7 @@ public class Print {
 
         //Saves the file to the project folder
         contentStream.close(); 
-        String path = "./materiallista.pdf";
+        String path = "materiallista.pdf";
 
         try {
             document.save(path);  
