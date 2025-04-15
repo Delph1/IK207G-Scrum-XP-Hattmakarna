@@ -7,43 +7,46 @@ package panels;
 import static hattmakarna.Hattmakarna.dbm;
 import hattmakarna.MainWindow;
 import models.User;
-import java.util.ArrayList; 
+import java.util.ArrayList;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.DefaultListModel;
+import models.Order;
 import models.OrderLine;
+
 /**
  *
  * @author Petra Schröder
  */
 public class SchemaPanel extends javax.swing.JPanel {
 //Fält
+
     private MainWindow window;
-    private ArrayList<OrderLine>allOrderLines;
-     private DefaultListModel<OrderLine> listModel;
-    
+    private ArrayList<OrderLine> allOrderLines;
+    private DefaultListModel<OrderLine> listModel;
+
     /**
      * Konstruktor, Creates new form SchemaPanel
      */
     public SchemaPanel(MainWindow window) {
         initComponents();
         this.window = window;
-        loadUsers(); 
+        loadUsers();
         allOrderLines = dbm.getOrderlines();
-         listModel = new DefaultListModel<>();
+        listModel = new DefaultListModel<>();
         orderLineList.setModel(listModel);
         listOrderLines();
     }
-    
+
     private void loadUsers() {
         //Hämtar alla users från databasen via DatabaseManager
-        ArrayList<User>users = dbm.getUsers(); 
+        ArrayList<User> users = dbm.getUsers();
         // Skapa en DefaultComboBoxModel för JComboBox
         DefaultComboBoxModel<User> userModel = new DefaultComboBoxModel<>();
         // Lägg till ett standardalternativ för "Alla avdelningar"
         userModel.addElement(new User(0, "", "Alla användare", false));
-    
-        // Lägg till varje avdelning i modellen
-        if (users!= null) {
+        userModel.addElement(new User(-1, "", "Ej tilldelade", false));
+        // Lägg till varje användare i modellen
+        if (users != null) {
             for (User user : users) {
                 userModel.addElement(user);
             }
@@ -51,13 +54,13 @@ public class SchemaPanel extends javax.swing.JPanel {
         // Sätt modellen 
         userComboBox.setModel(userModel);
     }
-    
-    private void listOrderLines(){
+
+    private void listOrderLines() {
         listModel.clear(); // Rensa befintliga poster i modellen
-        
-         for (OrderLine orderLine: allOrderLines) {
-                listModel.addElement(orderLine);
-         }
+
+        for (OrderLine orderLine : allOrderLines) {
+            listModel.addElement(orderLine);
+        }
     }
 
     /**
@@ -74,6 +77,8 @@ public class SchemaPanel extends javax.swing.JPanel {
         jLabel2 = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
         orderLineList = new javax.swing.JList<>();
+        jLabel4 = new javax.swing.JLabel();
+        orderStatusLabel = new javax.swing.JLabel();
 
         userComboBox.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -85,7 +90,14 @@ public class SchemaPanel extends javax.swing.JPanel {
 
         jLabel2.setText("Tilldelade ordrar");
 
+        orderLineList.addListSelectionListener(new javax.swing.event.ListSelectionListener() {
+            public void valueChanged(javax.swing.event.ListSelectionEvent evt) {
+                orderLineListValueChanged(evt);
+            }
+        });
         jScrollPane1.setViewportView(orderLineList);
+
+        jLabel4.setText("Status:");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
@@ -97,14 +109,19 @@ public class SchemaPanel extends javax.swing.JPanel {
                         .addGap(34, 34, 34)
                         .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 135, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(16, 16, 16)
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 263, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(layout.createSequentialGroup()
                         .addGap(22, 22, 22)
-                        .addComponent(jLabel1)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 667, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(jLabel1)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(userComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, 141, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(38, 38, 38)
+                        .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(userComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, 141, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(428, Short.MAX_VALUE))
+                        .addComponent(orderStatusLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 136, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(18, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -115,9 +132,13 @@ public class SchemaPanel extends javax.swing.JPanel {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel1)
                     .addComponent(userComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(27, 27, 27)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 220, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(240, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(jLabel4, javax.swing.GroupLayout.DEFAULT_SIZE, 24, Short.MAX_VALUE)
+                    .addComponent(orderStatusLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(219, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
 
@@ -125,18 +146,29 @@ public class SchemaPanel extends javax.swing.JPanel {
         int userId = ((User) userComboBox.getSelectedItem()).getUserId();
         if (userId == 0) {
             allOrderLines = dbm.getOrderlines();
+        } else if (userId == -1) {
+            allOrderLines = dbm.getUnassignedOrderlines();
         } else {
             allOrderLines = dbm.getHatmakerOrderlines(userId);
         }
         listOrderLines();
     }//GEN-LAST:event_userComboBoxActionPerformed
 
+    private void orderLineListValueChanged(javax.swing.event.ListSelectionEvent evt) {//GEN-FIRST:event_orderLineListValueChanged
+        if (orderLineList.getSelectedIndex() != -1) {
+            Order order = dbm.getOrder(listModel.get(orderLineList.getSelectedIndex()).getOrderId());
+            orderStatusLabel.setText(order.getOrder_status());
+        }
+    }//GEN-LAST:event_orderLineListValueChanged
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel4;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JList<OrderLine> orderLineList;
+    private javax.swing.JLabel orderStatusLabel;
     private javax.swing.JComboBox<User> userComboBox;
     // End of variables declaration//GEN-END:variables
 }

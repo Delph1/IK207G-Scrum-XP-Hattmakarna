@@ -194,7 +194,7 @@ public class DatabaseManager {
     public ArrayList<OrderLine> getHatmakerOrderlines(int user_id) {
         try {
             ArrayList<OrderLine> orderlines = new ArrayList<>();
-            String query = "SELECT * FROM orderlines, hatmaker WHERE hatmaker.hatmaker = " + user_id;
+            String query = "SELECT orderlines.* FROM orderlines, hatmaker WHERE orderlines.orderline_id IN (SELECT orderline_id FROM hatmaker WHERE hatmaker.hatmaker = " + user_id + ")";
             ArrayList<HashMap<String, String>> results = db.fetchRows(query);
             if (results != null) {
                 for (HashMap<String, String> row : results) {
@@ -213,6 +213,30 @@ public class DatabaseManager {
             throw new RuntimeException("Fel vid hämtning av beställningar: " + e.getMessage());
         }
 
+    }
+    
+     // Hämtar en objektlista med alla beställningsrader som inte tillhör en hattmakare
+    public ArrayList<OrderLine> getUnassignedOrderlines() {
+        try {
+            ArrayList<OrderLine> orderlines = new ArrayList<>();
+            String query = "SELECT orderlines.* FROM orderlines, hatmaker WHERE orderlines.orderline_id NOT IN (SELECT orderline_id FROM hatmaker)" ;
+            ArrayList<HashMap<String, String>> results = db.fetchRows(query);
+            if (results != null) {
+                for (HashMap<String, String> row : results) {
+                    orderlines.add(new OrderLine(
+                            Integer.parseInt(row.get("orderline_id")),
+                            Integer.parseInt(row.get("order_id")),
+                            ParseBoolean(row.get("customer_approval")),
+                            row.get("description"),
+                            Integer.parseInt(row.get("price")),
+                            Integer.parseInt(row.get("product_id"))
+                    ));
+                }
+            }
+            return orderlines;
+        } catch (InfException e) {
+            throw new RuntimeException("Fel vid hämtning av beställningar: " + e.getMessage());
+        }
     }
 
     // Skapar en beställningsrad, returnerar ett beställningsrad objekt
