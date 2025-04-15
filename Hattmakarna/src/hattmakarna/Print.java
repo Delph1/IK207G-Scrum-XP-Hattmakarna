@@ -9,7 +9,6 @@ import java.io.File;
 import java.io.IOException;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
-import javax.swing.table.DefaultTableModel;
 import models.*;
 import org.apache.pdfbox.pdmodel.*;
 import org.apache.pdfbox.pdmodel.font.PDType1Font;
@@ -77,7 +76,7 @@ public class Print {
         double orderTotal = 0;
         DecimalFormat df = new DecimalFormat("##.00");
 
-        //Setting up the document for PDFbox
+        //Skapar upp variabler för dokumentet
         PDPage page = new PDPage();
         document.addPage(page);
         PDPageContentStream contentStream = new PDPageContentStream(document, page);
@@ -146,7 +145,7 @@ public class Print {
     private void createOrderHeader(PDPageContentStream contentStream, Order order, Customer customer, String Header) throws IOException {
         String state = customer.getState();
         
-        //Document header, y offset is from the bottom of the document = higher number, higher up on the page, x offset is the from the left border. Also, offset is RELATIVE, NOT ABSOLUTE.
+        //Dokumenthuvud, y offset räknas från botten = högre nummer, högre upp, x offset är från vänster. Alla värden är RELATIVA, INTE ABSOLUTA.
         contentStream.setFont(PDType1Font.HELVETICA, 24);
         contentStream.newLineAtOffset(50, 740);
         contentStream.showText(Header);
@@ -158,7 +157,7 @@ public class Print {
         contentStream.newLineAtOffset(0, -16);
         contentStream.showText("Orderdatum: " + order.getOrder_date());
                 
-        //Customer data output below
+        //Kunddata
         contentStream.newLineAtOffset(-370, 16);
         contentStream.showText("Kundnummer: " + Integer.toString(customer.getId()));
         contentStream.newLineAtOffset(0, -16);
@@ -182,15 +181,15 @@ public class Print {
     
     private float createTable(PDPageContentStream contentStream, float[] columnWidths, String[] headers, String[][] lines, float yStart) throws IOException {
 
-        //Table for orderlines ... it looks "OK"
+        //Tabell
         float yPosition = yStart;
         float rowHeight = 20;
 
-        // Header row
+        // Rubrikrad
         drawRow(contentStream, 50, yPosition, rowHeight, columnWidths, headers, true);
         yPosition -= rowHeight;
 
-        // rewrite this
+        // Själva datan
         for (int i = 0; i < lines.length; i++) {
             drawRow(contentStream, 50, yPosition, rowHeight, columnWidths, lines[i], false);
             yPosition -= rowHeight;
@@ -205,7 +204,7 @@ public class Print {
 
         for (int i = 0; i < colWidths.length; i++) {
             float cellWidth = colWidths[i];
-            // Draw cell rectangle
+            // Rektangel
             contentStream.addRect(cellX, y - height, cellWidth, height);
             contentStream.stroke();
 
@@ -217,7 +216,7 @@ public class Print {
                 contentStream.setFont(PDType1Font.HELVETICA, 12);
             }
             contentStream.newLineAtOffset(cellX + 2, y - 15);
-            //NULL-check
+            //NULL-kontroll
             String celltext = texts[i] != null ? texts[i] : "";
             contentStream.showText(celltext);
             contentStream.endText();
@@ -226,15 +225,14 @@ public class Print {
         }
     }
     
-    public void showMaterialList(String[][] data, String startDate, String stopDate) throws IOException {
-        String[][] materialData = data;
-        createMaterialList(data, startDate, stopDate);
+    public void showMaterialList() throws IOException {
+        createMaterialList(materialLista, startDate, stopDate);
         Desktop.getDesktop().open(new File ("materiallista.pdf"));
     }
     
-    public void printMaterialList(String[][] data, String startDate, String stopDate) throws IOException, PrinterException {
+    public void printMaterialList() throws IOException, PrinterException {
         PrinterJob printJob = PrinterJob.getPrinterJob();
-        createMaterialList(data, startDate, stopDate);
+        createMaterialList(materialLista, startDate, stopDate);
         PDFPrintable printdoc = new PDFPrintable (PDDocument.load(new File("./materiallista.pdf")), Scaling.SHRINK_TO_FIT);
         if (printJob.printDialog()) {
             printJob.setPrintable(printdoc);
@@ -262,7 +260,7 @@ public class Print {
         
         createTable(contentStream, columnWidths, headers, materialData, 680);
 
-        //Saves the file to the project folder
+        //Sparar filen. Ett namn som varierar kan vara pås in plats?
         contentStream.close(); 
         String path = "materiallista.pdf";
 
