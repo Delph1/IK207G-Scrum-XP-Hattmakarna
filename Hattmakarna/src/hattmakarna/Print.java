@@ -22,16 +22,24 @@ public class Print {
     private Customer customer;
     private OrderLine orderline;
     private Product product;
-    private String[][] materialLista;
+    private String[][] data;
     private String startDate;
     private String stopDate;
+    private int productId;
     
     public Print (Order order) {
         this.order = order;
     }
     
     public Print (String[][] materialLista, String startDate, String stopDate) {
-        this.materialLista = materialLista;
+        this.data = materialLista;
+        this.startDate = startDate;
+        this.stopDate = stopDate;
+    }
+    
+    public Print (String[][] hatStats, int productId, String startDate, String stopDate) {
+        this.data = hatStats;
+        this.productId = productId;
         this.startDate = startDate;
         this.stopDate = stopDate;
     }
@@ -226,13 +234,13 @@ public class Print {
     }
     
     public void showMaterialList() throws IOException {
-        createMaterialList(materialLista, startDate, stopDate);
+        createMaterialList(data, startDate, stopDate);
         Desktop.getDesktop().open(new File ("materiallista.pdf"));
     }
     
     public void printMaterialList() throws IOException, PrinterException {
         PrinterJob printJob = PrinterJob.getPrinterJob();
-        createMaterialList(materialLista, startDate, stopDate);
+        createMaterialList(data, startDate, stopDate);
         PDFPrintable printdoc = new PDFPrintable (PDDocument.load(new File("./materiallista.pdf")), Scaling.SHRINK_TO_FIT);
         if (printJob.printDialog()) {
             printJob.setPrintable(printdoc);
@@ -263,6 +271,90 @@ public class Print {
         //Sparar filen. Ett namn som varierar kan vara pås in plats?
         contentStream.close(); 
         String path = "materiallista.pdf";
+
+        try {
+            document.save(path);  
+        } catch(Exception e) {
+            System.err.println("");
+        }
+        try {
+            document.close();
+        }
+        catch (Exception e) {
+            System.err.println("");
+        }
+        return document;
+    }
+    
+    public void printHatStats() throws PrinterException, IOException {
+        PrinterJob printJob = PrinterJob.getPrinterJob();
+        createStatsList(data, productId);
+        PDFPrintable printdoc = new PDFPrintable (PDDocument.load(new File("hatstats.pdf")), Scaling.SHRINK_TO_FIT);
+        if (printJob.printDialog()) {
+            printJob.setPrintable(printdoc);
+            printJob.print();
+        }
+    }
+    
+    private void createHatHeader(PDPageContentStream contentStream, Product product) throws IOException {
+        contentStream.beginText();
+        contentStream.setFont(PDType1Font.HELVETICA, 14);
+        contentStream.newLineAtOffset(50, 695);
+        contentStream.showText("Produktnummer: " + Integer.toString(product.getProductId()));
+        contentStream.newLineAtOffset(0, -16);
+        contentStream.showText("Produktnamn: " + product.getProductName());
+        contentStream.newLineAtOffset(0, -16);
+        contentStream.showText("Pris: " + product.getPrice() + " SEK");
+        contentStream.newLineAtOffset(0, -16);
+        contentStream.showText("Vikt: " + String.valueOf(product.getWeight()).replace(".", ",") + " Kg");
+        contentStream.newLineAtOffset(400, 48);
+        String stockitem = product.getStockItem() ? "Ja" : "Nej";
+        contentStream.showText("Lagervara: " + stockitem);
+        contentStream.newLineAtOffset(0, -16);
+        String copyright = product.getcopyRightApproved() ? "Ja" : "Nej";
+        contentStream.showText("Copyright: " + copyright);
+        contentStream.newLineAtOffset(0, -16);
+        String discontinued = product.getcopyRightApproved() ? "Ja" : "Nej";
+        contentStream.showText("Utgången vara: " + discontinued);
+        int baseId = product.getBaseProductId();
+        if (baseId > 0) { 
+            contentStream.newLineAtOffset(0, -16);
+            contentStream.showText("Baserad på: " + baseId);
+        }
+        contentStream.endText();
+
+        contentStream.moveTo(40, 610);
+        contentStream.lineTo(580, 610);
+        contentStream.stroke();
+    }
+    
+    private PDDocument createStatsList (String[][] data, int productId) throws IOException {
+        String[] headers = {"Datum", "Antal sålda", "Summa"};
+        
+        float[] columnWidths = {150, 150, 150};
+        
+        PDPage page = new PDPage();
+        document.addPage(page);
+        PDPageContentStream contentStream = new PDPageContentStream(document, page);
+        contentStream.beginText();
+        contentStream.setFont(PDType1Font.HELVETICA, 24);
+        contentStream.newLineAtOffset(50, 740);
+        contentStream.showText("Antal sålda hattar: " + startDate + " - " + stopDate);
+        contentStream.endText();
+
+        contentStream.moveTo(40, 715);
+        contentStream.lineTo(580, 715);
+        contentStream.stroke();
+        
+        Product product = dbm.getProduct(productId);
+        
+        createHatHeader(contentStream, product);
+        
+        createTable(contentStream, columnWidths, headers, data, 600);
+        
+        //Sparar filen
+        contentStream.close(); 
+        String path = "hatstats.pdf";
 
         try {
             document.save(path);  
