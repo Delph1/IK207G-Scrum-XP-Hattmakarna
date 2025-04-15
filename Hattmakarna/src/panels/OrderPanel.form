@@ -243,9 +243,6 @@
           </Properties>
         </Component>
         <Component class="javax.swing.JTextField" name="tfOrderStatus">
-          <Properties>
-            <Property name="enabled" type="boolean" value="false"/>
-          </Properties>
         </Component>
         <Component class="javax.swing.JLabel" name="lblAddOrderline">
           <Properties>

@@ -55,6 +55,7 @@ public class OrderPanel extends javax.swing.JPanel {
                 }
             }
         });
+        
         ArrayList<OrderLine> allOrderlines = dbm.getOrderlines(order.getId());
         DefaultTableModel tableModelOrderline = (DefaultTableModel) tblOrderline.getModel();
         
@@ -120,8 +121,6 @@ public class OrderPanel extends javax.swing.JPanel {
         tfOrderDate.setEnabled(false);
 
         lblOrderStatus.setText("Orderstatus");
-
-        tfOrderStatus.setEnabled(false);
 
         lblAddOrderline.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         lblAddOrderline.setText("Lägg till orderrad");
