@@ -18,7 +18,6 @@ public class DatabaseManager {
             System.out.println(e.getMessage());
             System.exit(1);
         }
-
     }
 
     public Order getOrder(int id) {
@@ -352,15 +351,14 @@ public class DatabaseManager {
                 for (HashMap<String, String> row : results) {
                     //Product (double weight )
                     products.add(new Product(
-                             row.get("base_product_id") == null ? 0 : Integer.parseInt(row.get("base_product_id")),
-                            Integer.parseInt(row.get("product_id")),
-                                row.get("product_name"),
-                           row.get("price") == null ? 0 :  Integer.parseInt(row.get("price")),
-                            ParseBoolean(row.get("copyright_approved")),
-                            ParseBoolean(row.get("discountinued")),  
-                            ParseBoolean(row.get("stock_item")),  
-                             Double.parseDouble(row.get("weight"))
-                            
+                        row.get("base_product_id") == null ? 0 : Integer.parseInt(row.get("base_product_id")),
+                        Integer.parseInt(row.get("product_id")),
+                        row.get("product_name"),
+                        row.get("price") == null ? 0 :  Integer.parseInt(row.get("price")),
+                        ParseBoolean(row.get("copyright_approved")),
+                        ParseBoolean(row.get("discountinued")),  
+                        ParseBoolean(row.get("stock_item")),  
+                        Double.parseDouble(row.get("weight"))
                     ));
                 }
             }

@@ -1,8 +1,6 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JPanel.java to edit this template
- */
+
 package panels;
+
 import hattmakarna.MainWindow;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.JOptionPane;
@@ -10,18 +8,10 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import static hattmakarna.Hattmakarna.dbm;
 import models.*;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.SQLException;
 
-/**
- *
- * @author eriks
- */
 public class Orderstatistics extends javax.swing.JPanel {
      private MainWindow window;
      private ArrayList<Integer> productIds = new ArrayList<>();
-
 
     public Orderstatistics(MainWindow window) {
         initComponents();

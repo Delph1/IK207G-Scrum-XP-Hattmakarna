@@ -16,14 +16,14 @@ public class Product {
     private double weight; 
     
     public Product (int base_product_id, int product_id, String product_name, int price, boolean copyRight_approved, boolean discontinued, boolean stock_item,double weight ){
-    this.base_product_id= base_product_id;
-    this.product_id = product_id;
-   this.product_name = product_name;
-    this.price = price;
-    this.copyRight_approved= copyRight_approved;
-    this.discontinued=  discontinued; 
-    this.stock_item= stock_item;
-    this.weight = weight; 
+        this.base_product_id= base_product_id;
+        this.product_id = product_id;
+        this.product_name = product_name;
+        this.price = price;
+        this.copyRight_approved= copyRight_approved;
+        this.discontinued = discontinued; 
+        this.stock_item= stock_item;
+        this.weight = weight; 
     }
     
     public int getBaseProductId(){
