@@ -6,7 +6,6 @@ import static hattmakarna.Hattmakarna.dbm;
 import models.*;
 import java.util.ArrayList;
 import javax.swing.table.DefaultTableModel;
-import javax.swing.table.TableModel;
 import hattmakarna.Print;
 import java.awt.print.PrinterException;
 import java.io.IOException;
@@ -144,7 +143,7 @@ public class MaterialListPanel extends javax.swing.JPanel {
             materialData[i][0] = component.getComponentId();
             materialData[i][1] = component.getComponentName();
             materialData[i][2] = component.getColor();
-            materialData[i][3] = component.getAmount() + " " + component.getUnit();
+            materialData[i][3] = String.valueOf(component.getAmount()).replace('.', ',') + " " + component.getUnit();
             MaterialModel.addRow(materialData[i]);
         };
         
@@ -155,24 +154,24 @@ public class MaterialListPanel extends javax.swing.JPanel {
     private void btnPlaceOrderActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPlaceOrderActionPerformed
         String startDate = txtStartDate.getText();
         String stopDate = txtStopDate.getText();        
-        dbm.updateOrderStatusBetweenDates(startDate, stopDate, "ready");
 
         String stringData[][] = new String[tblMaterialList.getRowCount()][4];
         
         for (int i = 0; i < tblMaterialList.getRowCount(); i++) {
             stringData[i][0] = tblMaterialList.getValueAt(i, 0).toString();
             stringData[i][1] = tblMaterialList.getValueAt(i, 1).toString();
-            stringData[i][1] = tblMaterialList.getValueAt(i, 2).toString();
-            stringData[i][1] = tblMaterialList.getValueAt(i, 3).toString();
+            stringData[i][2] = tblMaterialList.getValueAt(i, 2).toString();
+            stringData[i][3] = tblMaterialList.getValueAt(i, 3).toString();
         }
         Print printMaterial = new Print(stringData, startDate, stopDate);
         try {
-            printMaterial.showMaterialList(stringData, startDate, stopDate);
+            printMaterial.printMaterialList();
         } catch (IOException e) {
             System.err.println(e.getMessage());
-//        } catch (PrinterException ep) {
-//            System.err.println(ep.getMessage());
+        } catch (PrinterException ep) {
+            System.err.println(ep.getMessage());
         }
+        dbm.updateOrderStatusBetweenDates(startDate, stopDate, "ready");
     }//GEN-LAST:event_btnPlaceOrderActionPerformed
 
 
