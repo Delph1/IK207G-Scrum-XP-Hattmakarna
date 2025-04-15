@@ -3,6 +3,7 @@ package panels;
 
 import static hattmakarna.Hattmakarna.dbm;
 import hattmakarna.MainWindow;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.event.ListSelectionEvent;
@@ -36,6 +37,7 @@ public class OrderPanel extends javax.swing.JPanel {
     
     private void constructorHelp(Order theOrder) {
         this.order = theOrder; 
+        tfCustomerID.setText("" + order.getCustomer_id());
         tfOrderlineID.setText("0");
         tfOrderID.setText("" + order.getId());
         tfOrderDate.setText("" + order.getOrder_date());
@@ -55,6 +57,7 @@ public class OrderPanel extends javax.swing.JPanel {
                 }
             }
         });
+        
         ArrayList<OrderLine> allOrderlines = dbm.getOrderlines(order.getId());
         DefaultTableModel tableModelOrderline = (DefaultTableModel) tblOrderline.getModel();
         
@@ -120,8 +123,6 @@ public class OrderPanel extends javax.swing.JPanel {
         tfOrderDate.setEnabled(false);
 
         lblOrderStatus.setText("Orderstatus");
-
-        tfOrderStatus.setEnabled(false);
 
         lblAddOrderline.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         lblAddOrderline.setText("Lägg till orderrad");
@@ -339,6 +340,21 @@ public class OrderPanel extends javax.swing.JPanel {
     }//GEN-LAST:event_btnAddOrderlineActionPerformed
 
     private void btnSaveOrderActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSaveOrderActionPerformed
+        int customer_id = Integer.parseInt(tfCustomerID.getText());
+        LocalDate order_date = LocalDate.parse(tfOrderDate.getText()); 
+        String order_status = tfOrderStatus.getText();
+        boolean express = cboxExpressOrder.isSelected(); 
+        int shippingCost = Integer.parseInt(tfShippingCostOrder.getText());
+        
+        order.setCustomer_id(customer_id);
+        order.setOrder_date(order_date);
+        order.setOrder_status(order_status);
+        order.setExpress(express);
+        order.setShippingCost(shippingCost);
+        
+        System.out.println(shippingCost);
+        dbm.updateOrder(order);
+        
         DefaultTableModel tableModelOrderline = (DefaultTableModel) tblOrderline.getModel();
 
         for (int i = 0; i < tableModelOrderline.getRowCount(); i++) {
