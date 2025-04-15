@@ -1,15 +1,16 @@
 package hattmakarna;
 
 import database.DatabaseManager;
+import javax.swing.JFrame;
 
 
 public class Hattmakarna {
     public static DatabaseManager dbm = new DatabaseManager();
 
     public static void main(String[] args) {
-
-
-            new MainWindow().setVisible(true);
+            LoginWindow window = new LoginWindow();
+            window.setVisible(true);
+         
     }
     
 }

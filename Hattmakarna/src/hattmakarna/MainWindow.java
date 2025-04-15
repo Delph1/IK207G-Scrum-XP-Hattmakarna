@@ -32,6 +32,8 @@ public class MainWindow extends javax.swing.JFrame {
         schemaButton = new javax.swing.JButton();
         btnMaterials = new javax.swing.JButton();
         statisticsBTN = new javax.swing.JButton();
+        customerListBTN = new javax.swing.JButton();
+        ProductListBTN = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -98,11 +100,24 @@ public class MainWindow extends javax.swing.JFrame {
             }
         });
 
+        customerListBTN.setText("Kunder");
+        customerListBTN.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                customerListBTNActionPerformed(evt);
+            }
+        });
+
+        ProductListBTN.setText("Produkter");
+        ProductListBTN.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                ProductListBTNActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(mainPanel, javax.swing.GroupLayout.DEFAULT_SIZE, 600, Short.MAX_VALUE)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -112,17 +127,24 @@ public class MainWindow extends javax.swing.JFrame {
                         .addComponent(btnPrint))
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(startButton)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGap(18, 18, 18)
                         .addComponent(ordersButton)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGap(18, 18, 18)
                         .addComponent(btnMaterials)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(schemaButton, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(statisticsBTN)
+                        .addGap(18, 18, 18)
+                        .addComponent(schemaButton, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(statisticsBTN, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(customerListBTN, javax.swing.GroupLayout.PREFERRED_SIZE, 87, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(ProductListBTN)
                         .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
             .addComponent(jSeparator1)
+            .addGroup(layout.createSequentialGroup()
+                .addComponent(mainPanel, javax.swing.GroupLayout.PREFERRED_SIZE, 965, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -137,11 +159,14 @@ public class MainWindow extends javax.swing.JFrame {
                     .addComponent(ordersButton)
                     .addComponent(schemaButton)
                     .addComponent(btnMaterials)
-                    .addComponent(statisticsBTN))
+                    .addComponent(statisticsBTN)
+                    .addComponent(customerListBTN)
+                    .addComponent(ProductListBTN))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(mainPanel, javax.swing.GroupLayout.DEFAULT_SIZE, 372, Short.MAX_VALUE))
+                .addComponent(mainPanel, javax.swing.GroupLayout.PREFERRED_SIZE, 543, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         pack();
@@ -190,6 +215,14 @@ public class MainWindow extends javax.swing.JFrame {
 showOrderStatisticsPanel();        // TODO add your handling code here:
     }//GEN-LAST:event_statisticsBTNActionPerformed
 
+    private void customerListBTNActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_customerListBTNActionPerformed
+showCustomerListPanel();        
+    }//GEN-LAST:event_customerListBTNActionPerformed
+
+    private void ProductListBTNActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ProductListBTNActionPerformed
+    showProductListPanel();   
+    }//GEN-LAST:event_ProductListBTNActionPerformed
+
    
 
     // Publik Metod för att skapa start-panelobjekt och anropa den interna metoden för att visa panelen
@@ -222,7 +255,19 @@ showOrderStatisticsPanel();        // TODO add your handling code here:
     public void showOrderStatisticsPanel() {
         showPanel(new Orderstatistics(this)); 
     }
-     
+    
+    public void showCustomerPanel() {
+       showPanel(new CustomerPanel(this));
+    }
+    public void showCustomerListPanel() {
+       showPanel(new CustomerListPanel(this));
+    }
+    public void showProductPanel() {
+       showPanel(new ProductPanel(this));
+    }
+        public void showProductListPanel() {
+       showPanel(new ProductListPanel(this));
+    }
 
     // Intern metod för att visa ett panelobjekt i vår mainPanel
     private void showPanel(JPanel newPanel) {
@@ -245,8 +290,10 @@ showOrderStatisticsPanel();        // TODO add your handling code here:
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton ProductListBTN;
     private javax.swing.JButton btnMaterials;
     private javax.swing.JButton btnPrint;
+    private javax.swing.JButton customerListBTN;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JSeparator jSeparator1;
