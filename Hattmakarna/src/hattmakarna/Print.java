@@ -22,21 +22,30 @@ public class Print {
     private Customer customer;
     private OrderLine orderline;
     private Product product;
+    private String[][] materialLista;
+    private String startDate;
+    private String stopDate;
     
     public Print (Order order) {
         this.order = order;
     }
+    
+    public Print (String[][] materialLista, String startDate, String stopDate) {
+        this.materialLista = materialLista;
+        this.startDate = startDate;
+        this.stopDate = stopDate;
+    }
 
     public void showQoute() throws IOException {
         String headerText = "Offert";
-        createPDF(headerText);
+        createPDFForOrder(headerText);
         Desktop.getDesktop().open(new File ("temp.pdf"));
     }
         
     public void printQoute() throws IOException, PrinterException {
         PrinterJob printJob = PrinterJob.getPrinterJob();
         String headerText = "Offert";
-        document = createPDF(headerText);
+        document = createPDFForOrder(headerText);
         PDFPrintable printdoc = new PDFPrintable (PDDocument.load(new File("temp.pdf")), Scaling.SHRINK_TO_FIT);
         if (printJob.printDialog()) {
             printJob.setPrintable(printdoc);
@@ -46,14 +55,14 @@ public class Print {
     
     public void showConfirmation() throws IOException {
         String headerText = "Orderbekräftelse";
-        createPDF(headerText);
+        createPDFForOrder(headerText);
         Desktop.getDesktop().open(new File ("temp.pdf"));
     }
 
     public void printConfirmation() throws IOException, PrinterException {
         PrinterJob printJob = PrinterJob.getPrinterJob();
         String headerText = "Orderbekräftelse";
-        document = createPDF(headerText);
+        document = createPDFForOrder(headerText);
         PDFPrintable printdoc = new PDFPrintable (PDDocument.load(new File("temp.pdf")), Scaling.SHRINK_TO_FIT);
         if (printJob.printDialog()) {
             printJob.setPrintable(printdoc);
@@ -61,69 +70,28 @@ public class Print {
         }
     }
     
-    private PDDocument createPDF (String header) throws IOException {
-        //Base data collection
-        String headerText = header;
-        int orderId = order.getId();
-        int customerId = order.getCustomer_id();
+    private PDDocument createPDFForOrder (String header) throws IOException {
+
+        customer = dbm.getCustomer(order.getCustomer_id());
         double orderTotal = 0;
         DecimalFormat df = new DecimalFormat("##.00");
-        customer = dbm.getCustomer(customerId);
-        String state = customer.getState();
-        ArrayList<OrderLine> orderlines = dbm.getOrderlines(orderId);
-        
-        //Setting up the document for PDFbox
-        float margin = 50;
+
+        //Skapar upp variabler för dokumentet
         PDPage page = new PDPage();
         document.addPage(page);
         PDPageContentStream contentStream = new PDPageContentStream(document, page);
         contentStream.beginText();
         
-        //Document header, y offset is from the bottom of the document = higher number, higher up on the page, x offset is the from the left border. Also, offset is RELATIVE, NOT ABSOLUTE.
-        contentStream.setFont(PDType1Font.HELVETICA, 24);
-        contentStream.newLineAtOffset(margin, 740);
-        contentStream.showText(headerText);
-        contentStream.endText();
-        contentStream.beginText();
-        contentStream.setFont(PDType1Font.HELVETICA, 14);
-        contentStream.newLineAtOffset(420, 700);
-        contentStream.showText("Ordernummer: " + Integer.toString(orderId));
-        contentStream.newLineAtOffset(0, -16);
-        contentStream.showText("Orderdatum: " + order.getOrder_date());
-                
-        //Customer data output below
-        contentStream.newLineAtOffset(-370, 16);
-        contentStream.showText("Kundnummer: " + Integer.toString(customerId));
-        contentStream.newLineAtOffset(0, -16);
-        contentStream.showText("Namn: " + customer.getFirstName() + " " + customer.getLastName());
-        contentStream.newLineAtOffset(0, -16);
-        contentStream.showText("Gata: " + customer.getStreetName());
-        contentStream.newLineAtOffset(0, -16);
-        contentStream.showText("Postadress: " + customer.getPostalCode() + " " + customer.getPostalCity());
-        if ( state != null && !state.isEmpty()) {
-            contentStream.newLineAtOffset(0, -16);
-            contentStream.showText("Delstat: " + state);
-        }
-        contentStream.newLineAtOffset(0, -16);
-        contentStream.showText("Land: " + customer.getCountry());
-        contentStream.endText();
+        createOrderHeader(contentStream, order, customer, header);
 
-        contentStream.moveTo(40, 610);
-        contentStream.lineTo(580, 610);
-        contentStream.stroke();
-        
-        //Table for orderlines ... it looks "OK"
-        float yStart = 600;
-        float yPosition = yStart;
-        float rowHeight = 20;
-        float[] columnWidths = {50, 70, 200, 60, 80}; 
-
-        // Header row
         String[] headers = {"ID", "Produkt-ID", "Beskrivning", "Pris", "Säljas igen?"};
-        drawRow(contentStream, margin, yPosition, rowHeight, columnWidths, headers, true);
-        yPosition -= rowHeight;
+        float[] columnWidths = {50, 70, 200, 60, 80};
+        float yStart = 600;
+        ArrayList<OrderLine> orderlines = dbm.getOrderlines(order.getId());
+        String[][] lines = new String[orderlines.size()][columnWidths.length];
+        int i = 0;
+        
 
-        // Table rows
         for (OrderLine line : orderlines) {
             Product product = dbm.getProduct(line.getProductId());
             String product_name = product.getProductName();
@@ -134,10 +102,12 @@ public class Print {
                 String.valueOf(line.getPrice()),
                 line.getCustomerApproval() ? "Ja" : "Nej"
             };
-            drawRow(contentStream, margin, yPosition, rowHeight, columnWidths, data, false);
+            lines[i] = data;
+            i += 1;
             orderTotal += line.getPrice();
-            yPosition -= rowHeight;
         }
+        
+        float yPosition = createTable(contentStream, columnWidths, headers, lines, yStart);
         
         double orderTotalVAT = orderTotal * 1.25;
  
@@ -154,7 +124,6 @@ public class Print {
         contentStream.showText("Summa inkl moms: " + df.format(orderTotalVAT) + " SEK");
         contentStream.endText();
 
-        
         //Saves the file to the project folder
         contentStream.close(); 
         String path = "./temp.pdf";
@@ -172,7 +141,62 @@ public class Print {
         }
         return document;
     }
+        
+    private void createOrderHeader(PDPageContentStream contentStream, Order order, Customer customer, String Header) throws IOException {
+        String state = customer.getState();
+        
+        //Dokumenthuvud, y offset räknas från botten = högre nummer, högre upp, x offset är från vänster. Alla värden är RELATIVA, INTE ABSOLUTA.
+        contentStream.setFont(PDType1Font.HELVETICA, 24);
+        contentStream.newLineAtOffset(50, 740);
+        contentStream.showText(Header);
+        contentStream.endText();
+        contentStream.beginText();
+        contentStream.setFont(PDType1Font.HELVETICA, 14);
+        contentStream.newLineAtOffset(420, 700);
+        contentStream.showText("Ordernummer: " + Integer.toString(order.getId()));
+        contentStream.newLineAtOffset(0, -16);
+        contentStream.showText("Orderdatum: " + order.getOrder_date());
+                
+        //Kunddata
+        contentStream.newLineAtOffset(-370, 16);
+        contentStream.showText("Kundnummer: " + Integer.toString(customer.getId()));
+        contentStream.newLineAtOffset(0, -16);
+        contentStream.showText("Namn: " + customer.getFirstName() + " " + customer.getLastName());
+        contentStream.newLineAtOffset(0, -16);
+        contentStream.showText("Gata: " + customer.getStreetName());
+        contentStream.newLineAtOffset(0, -16);
+        contentStream.showText("Postadress: " + customer.getPostalCode() + " " + customer.getPostalCity());
+        if ( state != null && !state.isEmpty()) {
+            contentStream.newLineAtOffset(0, -16);
+            contentStream.showText("Delstat: " + state);
+        }
+        contentStream.newLineAtOffset(0, -16);
+        contentStream.showText("Land: " + customer.getCountry());
+        contentStream.endText();
+
+        contentStream.moveTo(40, 610);
+        contentStream.lineTo(580, 610);
+        contentStream.stroke();
+    }
     
+    private float createTable(PDPageContentStream contentStream, float[] columnWidths, String[] headers, String[][] lines, float yStart) throws IOException {
+
+        //Tabell
+        float yPosition = yStart;
+        float rowHeight = 20;
+
+        // Rubrikrad
+        drawRow(contentStream, 50, yPosition, rowHeight, columnWidths, headers, true);
+        yPosition -= rowHeight;
+
+        // Själva datan
+        for (int i = 0; i < lines.length; i++) {
+            drawRow(contentStream, 50, yPosition, rowHeight, columnWidths, lines[i], false);
+            yPosition -= rowHeight;
+        }
+        return yPosition;
+    }
+   
     private static void drawRow(PDPageContentStream contentStream, float x, float y, float height, float[] colWidths, String[] texts, boolean isHeader) throws IOException {
         float cellX = x;
 
@@ -180,7 +204,7 @@ public class Print {
 
         for (int i = 0; i < colWidths.length; i++) {
             float cellWidth = colWidths[i];
-            // Draw cell rectangle
+            // Rektangel
             contentStream.addRect(cellX, y - height, cellWidth, height);
             contentStream.stroke();
 
@@ -192,13 +216,66 @@ public class Print {
                 contentStream.setFont(PDType1Font.HELVETICA, 12);
             }
             contentStream.newLineAtOffset(cellX + 2, y - 15);
-            //NULL-check
+            //NULL-kontroll
             String celltext = texts[i] != null ? texts[i] : "";
             contentStream.showText(celltext);
             contentStream.endText();
 
             cellX += cellWidth;
         }
+    }
+    
+    public void showMaterialList() throws IOException {
+        createMaterialList(materialLista, startDate, stopDate);
+        Desktop.getDesktop().open(new File ("materiallista.pdf"));
+    }
+    
+    public void printMaterialList() throws IOException, PrinterException {
+        PrinterJob printJob = PrinterJob.getPrinterJob();
+        createMaterialList(materialLista, startDate, stopDate);
+        PDFPrintable printdoc = new PDFPrintable (PDDocument.load(new File("./materiallista.pdf")), Scaling.SHRINK_TO_FIT);
+        if (printJob.printDialog()) {
+            printJob.setPrintable(printdoc);
+            printJob.print();
+        }
+    }
+    
+    public PDDocument createMaterialList(String[][] materialData, String startDate, String stopDate) throws IOException {
+        
+        String[] headers = {"ID", "Namn", "Färg", "Mängd"};
+        float[] columnWidths = {50, 200, 60, 150};
+        
+        PDPage page = new PDPage();
+        document.addPage(page);
+        PDPageContentStream contentStream = new PDPageContentStream(document, page);
+        contentStream.beginText();
+        contentStream.setFont(PDType1Font.HELVETICA, 24);
+        contentStream.newLineAtOffset(50, 740);
+        contentStream.showText("Material att beställa: " + startDate + " - " + stopDate);
+        contentStream.endText();
+
+        contentStream.moveTo(40, 710);
+        contentStream.lineTo(580, 710);
+        contentStream.stroke();
+        
+        createTable(contentStream, columnWidths, headers, materialData, 680);
+
+        //Sparar filen. Ett namn som varierar kan vara pås in plats?
+        contentStream.close(); 
+        String path = "materiallista.pdf";
+
+        try {
+            document.save(path);  
+        } catch(Exception e) {
+            System.err.println("");
+        }
+        try {
+            document.close();
+        }
+        catch (Exception e) {
+            System.err.println("");
+        }
+        return document;
     }
 }
 
