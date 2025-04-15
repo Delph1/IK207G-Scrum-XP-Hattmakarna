@@ -30,7 +30,7 @@ public class DatabaseManager {
                         row.get("customer_id") == null ? 0 : Integer.parseInt(row.get("customer_id")),
                         LocalDate.parse(row.get("order_date")),
                         row.get("order_status"),
-                        Boolean.parseBoolean(row.get("express")),
+                        ParseBoolean(row.get("express")),
                         row.get("shipping_cost") == null ? 0 : Integer.parseInt(row.get("shipping_cost"))
                 );
                 return order;
@@ -104,7 +104,7 @@ public class DatabaseManager {
                             row.get("customer_id") == null ? 0 : Integer.parseInt(row.get("customer_id")),
                             LocalDate.parse(row.get("order_date")),
                             row.get("order_status"),
-                            Boolean.parseBoolean(row.get("express")),
+                            ParseBoolean(row.get("express")),
                             row.get("shipping_cost") == null ? 0 : Integer.parseInt(row.get("shipping_cost"))
                     ));
                 }
@@ -125,7 +125,7 @@ public class DatabaseManager {
                 OrderLine orderLine = new OrderLine(
                         id,
                         row.get("order_id") == null ? 0 : Integer.parseInt(row.get("order_id")),
-                        Boolean.parseBoolean(row.get("customer_approval")),
+                        ParseBoolean(row.get("customer_approval")),
                         row.get("description"),
                         row.get("price") == null ? 0 : Integer.parseInt(row.get("price")),
                         row.get("product_id") == null ? 0 : Integer.parseInt(row.get("product_id"))
@@ -151,7 +151,7 @@ public class DatabaseManager {
                     orderlines.add(new OrderLine(
                             Integer.parseInt(row.get("orderline_id")),
                             order_id,
-                            Boolean.parseBoolean(row.get("customer_approval")),
+                            ParseBoolean(row.get("customer_approval")),
                             row.get("description"),
                             Integer.parseInt(row.get("price")),
                             Integer.parseInt(row.get("product_id"))
@@ -175,7 +175,7 @@ public class DatabaseManager {
                     orderlines.add(new OrderLine(
                             Integer.parseInt(row.get("orderline_id")),
                             Integer.parseInt(row.get("order_id")),
-                            Boolean.parseBoolean(row.get("customer_approval")),
+                            ParseBoolean(row.get("customer_approval")),
                             row.get("description"),
                             Integer.parseInt(row.get("price")),
                             Integer.parseInt(row.get("product_id"))
@@ -200,7 +200,7 @@ public class DatabaseManager {
                     orderlines.add(new OrderLine(
                             Integer.parseInt(row.get("orderline_id")),
                             Integer.parseInt(row.get("order_id")),
-                            Boolean.parseBoolean(row.get("customer_approval")),
+                            ParseBoolean(row.get("customer_approval")),
                             row.get("description"),
                             Integer.parseInt(row.get("price")),
                             Integer.parseInt(row.get("product_id"))
@@ -325,10 +325,10 @@ public class DatabaseManager {
                         row.get("base_product_id") == null ? 0 : Integer.parseInt(row.get("base_product_id")),
                         Integer.parseInt(row.get("product_id")),
                         row.get("product_name"),
-                        Integer.parseInt(row.get("price")),
-                        Boolean.parseBoolean(row.get("copyright_approved")),
-                        Boolean.parseBoolean(row.get("discontinued")),
-                        Boolean.parseBoolean(row.get("stock_item")),
+                        row.get("price") == null ? 0 : Integer.parseInt(row.get("price")),
+                        ParseBoolean(row.get("copyright_approved")),
+                        ParseBoolean(row.get("discontinued")),
+                        ParseBoolean(row.get("stock_item")),
                         Double.parseDouble(row.get("weight"))
                 );
                 return product;
@@ -339,6 +339,35 @@ public class DatabaseManager {
             System.err.println("Det gick inte att hämta produkten:" + e.getMessage());
             return null;
         }
+    }
+    
+         // Hämtar en objektlista med alla beställningsrader
+    public ArrayList<Product> getProducts() {
+        try {
+            ArrayList<Product> products = new ArrayList<>();
+            String query = "SELECT * FROM products";
+            ArrayList<HashMap<String, String>> results = db.fetchRows(query);
+            if (results != null) {
+                for (HashMap<String, String> row : results) {
+                    //Product (double weight )
+                    products.add(new Product(
+                             row.get("base_product_id") == null ? 0 : Integer.parseInt(row.get("base_product_id")),
+                            Integer.parseInt(row.get("product_id")),
+                                row.get("product_name"),
+                           row.get("price") == null ? 0 :  Integer.parseInt(row.get("price")),
+                            ParseBoolean(row.get("copyright_approved")),
+                            ParseBoolean(row.get("discountinued")),  
+                            ParseBoolean(row.get("stock_item")),  
+                             Double.parseDouble(row.get("weight"))
+                            
+                    ));
+                }
+            }
+            return products;
+        } catch (InfException e) {
+            throw new RuntimeException("Fel vid hämtning av produkter: " + e.getMessage());
+        }
+
     }
 
     // Uppdaterar beställningsstatus mellan två datum
@@ -391,7 +420,7 @@ public class DatabaseManager {
                             row.get("user_id") == null ? 0 : Integer.parseInt(row.get("user_id")),
                             row.get("username"),
                             row.get("password"),
-                            Boolean.parseBoolean(row.get("active"))
+                            ParseBoolean(row.get("active"))
                     ));
 
                 }
@@ -402,4 +431,8 @@ public class DatabaseManager {
         }
 
     }
+    
+        private boolean ParseBoolean(String tinyIntString) {
+            return "1".equals(tinyIntString);
+        }
 }
