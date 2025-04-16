@@ -14,6 +14,7 @@ public class ModuleSpecialOrder extends javax.swing.JPanel {
 
     private ModuleWindow window;
     private DefaultTableModel materialTable;
+
     
     public ModuleSpecialOrder(ModuleWindow window) {
         this.window = window;
@@ -41,6 +42,7 @@ public class ModuleSpecialOrder extends javax.swing.JPanel {
         colorColumn.setCellEditor(new DefaultCellEditor(comboBoxNames));
     }
     
+
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
