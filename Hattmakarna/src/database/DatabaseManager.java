@@ -327,7 +327,8 @@ public class DatabaseManager {
                             Integer.parseInt(material.get("component_id")),
                             material.get("component_name"),
                             material.get("color"),
-                            material.get("unit")
+                            material.get("unit"),
+                            material.get("")
                     ));
                 }
                 return componentList;
@@ -383,7 +384,7 @@ public class DatabaseManager {
                             ParseBoolean(row.get("copyright_approved")),
                             ParseBoolean(row.get("discountinued")),  
                             ParseBoolean(row.get("stock_item")),  
-                             Double.parseDouble(row.get("weight"))
+                            Double.parseDouble(row.get("weight"))
                             
                     ));
                 }
@@ -457,7 +458,34 @@ public class DatabaseManager {
 
     }
     
-        private boolean ParseBoolean(String tinyIntString) {
+    private boolean ParseBoolean(String tinyIntString) {
             return "1".equals(tinyIntString);
+    }
+    
+    //Returnera allt material
+    public ArrayList<Component> getComponents() {
+        System.out.println("GET materials");
+        ArrayList<Component> componentList = new ArrayList<>();
+        try {
+            ArrayList<HashMap<String, String>> materials = db.fetchRows("SELECT * FROM components");
+            if (materials != null) {
+                for (HashMap<String, String> material : materials) {
+                    componentList.add(new Component(
+                            0,
+                            Integer.parseInt(material.get("component_id")),
+                            material.get("component_name"),
+                            material.get("color"),
+                            material.get("unit"),
+                            material.get("type")
+                    ));
+                }
+                return componentList;
+            } else {
+                return null;
+            }
+        } catch (InfException e) {
+            System.err.println("Det gick inte att hämta material: " + e.getMessage());
+            return null;
         }
+    }
 }
