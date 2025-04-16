@@ -47,11 +47,11 @@ public class ModuleWindow extends javax.swing.JFrame {
         pnlModule.setLayout(pnlModuleLayout);
         pnlModuleLayout.setHorizontalGroup(
             pnlModuleLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 388, Short.MAX_VALUE)
+            .addGap(0, 590, Short.MAX_VALUE)
         );
         pnlModuleLayout.setVerticalGroup(
             pnlModuleLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 288, Short.MAX_VALUE)
+            .addGap(0, 450, Short.MAX_VALUE)
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());

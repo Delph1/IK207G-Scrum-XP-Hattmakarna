@@ -3,6 +3,7 @@ package panels;
 
 import static hattmakarna.Hattmakarna.dbm;
 import hattmakarna.MainWindow;
+import hattmakarna.ModuleWindow;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import javax.swing.table.DefaultTableModel;
@@ -98,6 +99,7 @@ public class OrderPanel extends javax.swing.JPanel {
         lblShippingCostOrder = new javax.swing.JLabel();
         tfShippingCostOrder = new javax.swing.JTextField();
         cboxOrderstatus = new javax.swing.JComboBox<>();
+        btnSpecialOrder = new javax.swing.JButton();
         jPanel1 = new javax.swing.JPanel();
         btnSaveOrder = new javax.swing.JButton();
         jScrollPane2 = new javax.swing.JScrollPane();
@@ -163,6 +165,13 @@ public class OrderPanel extends javax.swing.JPanel {
 
         cboxOrderstatus.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Open", "Confirmed", "Ready", "Completed" }));
 
+        btnSpecialOrder.setText("Specialorder");
+        btnSpecialOrder.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnSpecialOrderActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout pnlNewOrderLayout = new javax.swing.GroupLayout(pnlNewOrder);
         pnlNewOrder.setLayout(pnlNewOrderLayout);
         pnlNewOrderLayout.setHorizontalGroup(
@@ -205,6 +214,8 @@ public class OrderPanel extends javax.swing.JPanel {
                             .addComponent(cboxOrderstatus, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnlNewOrderLayout.createSequentialGroup()
                         .addGap(0, 0, Short.MAX_VALUE)
+                        .addComponent(btnSpecialOrder)
+                        .addGap(18, 18, 18)
                         .addComponent(btnAddOrderline, javax.swing.GroupLayout.PREFERRED_SIZE, 101, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap())
         );
@@ -258,7 +269,9 @@ public class OrderPanel extends javax.swing.JPanel {
                     .addComponent(lblDescription)
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 22, Short.MAX_VALUE)
-                .addComponent(btnAddOrderline)
+                .addGroup(pnlNewOrderLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(btnAddOrderline)
+                    .addComponent(btnSpecialOrder))
                 .addContainerGap())
         );
 
@@ -423,12 +436,20 @@ public class OrderPanel extends javax.swing.JPanel {
         cboxOrderstatus.setSelectedIndex(1);
     }//GEN-LAST:event_btnConfirmOrderActionPerformed
 
+    private void btnSpecialOrderActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSpecialOrderActionPerformed
+        ModuleWindow moduleWindow = new ModuleWindow();
+        moduleWindow.specialOrder();
+        moduleWindow.setVisible(true);
+        moduleWindow.setAlwaysOnTop(true);
+    }//GEN-LAST:event_btnSpecialOrderActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAddOrderline;
     private javax.swing.JButton btnConfirmOrder;
     private javax.swing.JButton btnRemoveOrderline;
     private javax.swing.JButton btnSaveOrder;
+    private javax.swing.JButton btnSpecialOrder;
     private javax.swing.JCheckBox cboxCustomerApproval;
     private javax.swing.JCheckBox cboxExpressOrder;
     private javax.swing.JComboBox<String> cboxOrderstatus;
