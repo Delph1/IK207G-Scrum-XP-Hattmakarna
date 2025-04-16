@@ -4,6 +4,7 @@ package panels;
 import static hattmakarna.Hattmakarna.dbm;
 import hattmakarna.ModuleWindow;
 import java.util.ArrayList;
+import java.util.HashSet;
 import javax.swing.DefaultCellEditor;
 import javax.swing.JComboBox;
 import javax.swing.table.TableColumn;
@@ -20,28 +21,33 @@ public class ModuleSpecialOrder extends javax.swing.JPanel {
         this.window = window;
         initComponents();
         fillComboBoxes();
-        materialTable = new DefaultTableModel();
+        materialTable = (DefaultTableModel) tblMaterial.getModel();
         tblMaterial.setModel(materialTable);
     }
 
     private void fillComboBoxes() {
         JComboBox comboBoxNames = new JComboBox();
         JComboBox comboBoxColor = new JComboBox();
+        JComboBox comboBoxTypes = new JComboBox();
         
         ArrayList<Component> components = dbm.getComponents();
         
         for (Component component : components) {
             comboBoxNames.addItem(component.getComponentName());
             comboBoxColor.addItem(component.getColor());
+            comboBoxTypes.addItem(component.getType());
         }
 
-        TableColumn nameColumn = tblMaterial.getColumnModel().getColumn(1);
+        TableColumn nameColumn = tblMaterial.getColumnModel().getColumn(0);
         nameColumn.setCellEditor(new DefaultCellEditor(comboBoxNames));
         
         TableColumn colorColumn = tblMaterial.getColumnModel().getColumn(1);
         colorColumn.setCellEditor(new DefaultCellEditor(comboBoxNames));
+        
+        TableColumn typesColumn = tblMaterial.getColumnModel().getColumn(2);
+        typesColumn.setCellEditor(new DefaultCellEditor(comboBoxTypes));
+        
     }
-    
 
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
@@ -59,6 +65,9 @@ public class ModuleSpecialOrder extends javax.swing.JPanel {
         btnSave = new javax.swing.JButton();
         btnCancel = new javax.swing.JButton();
 
+        setPreferredSize(new java.awt.Dimension(600, 600));
+        setVerifyInputWhenFocusTarget(false);
+
         lblHatName.setText("Hattnamn:");
 
         lblPrice.setText("Pris:");
@@ -74,9 +83,6 @@ public class ModuleSpecialOrder extends javax.swing.JPanel {
 
         tblMaterial.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
                 {null, null, null, null}
             },
             new String [] {
@@ -84,7 +90,7 @@ public class ModuleSpecialOrder extends javax.swing.JPanel {
             }
         ) {
             Class[] types = new Class [] {
-                java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.Double.class
+                java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class
             };
 
             public Class getColumnClass(int columnIndex) {
@@ -123,15 +129,14 @@ public class ModuleSpecialOrder extends javax.swing.JPanel {
                             .addComponent(lblHatName)
                             .addComponent(lblDescription))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createSequentialGroup()
                                 .addComponent(txtHatName, javax.swing.GroupLayout.PREFERRED_SIZE, 153, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(18, 18, 18)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                 .addComponent(lblPrice)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(txtPrice, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addComponent(txtDescription))
-                        .addGap(0, 0, Short.MAX_VALUE))
+                                .addGap(18, 18, 18)
+                                .addComponent(txtPrice, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(txtDescription)))
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addGap(0, 0, Short.MAX_VALUE)
@@ -171,6 +176,7 @@ public class ModuleSpecialOrder extends javax.swing.JPanel {
 
     private void btnAddMaterialActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddMaterialActionPerformed
         materialTable.addRow(new Object[]{ "" ,"", "", ""});
+        tblMaterial.setModel(materialTable);
     }//GEN-LAST:event_btnAddMaterialActionPerformed
 
 

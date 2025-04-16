@@ -293,7 +293,6 @@ public class OrderPanel extends javax.swing.JPanel {
         jScrollPane2.setViewportView(tblOrderline);
         if (tblOrderline.getColumnModel().getColumnCount() > 0) {
             tblOrderline.getColumnModel().getColumn(0).setResizable(false);
-            tblOrderline.getColumnModel().getColumn(0).setHeaderValue("Orderrad-ID");
         }
 
         btnRemoveOrderline.setText("Ta bort orderrad");
@@ -438,8 +437,8 @@ public class OrderPanel extends javax.swing.JPanel {
 
     private void btnSpecialOrderActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSpecialOrderActionPerformed
         ModuleWindow moduleWindow = new ModuleWindow();
-        moduleWindow.specialOrder();
         moduleWindow.setVisible(true);
+        moduleWindow.specialOrder();
         moduleWindow.setAlwaysOnTop(true);
     }//GEN-LAST:event_btnSpecialOrderActionPerformed
 
