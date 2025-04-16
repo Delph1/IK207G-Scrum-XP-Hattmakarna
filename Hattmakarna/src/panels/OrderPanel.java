@@ -103,6 +103,7 @@ public class OrderPanel extends javax.swing.JPanel {
         jScrollPane2 = new javax.swing.JScrollPane();
         tblOrderline = new javax.swing.JTable();
         btnRemoveOrderline = new javax.swing.JButton();
+        btnConfirmOrder = new javax.swing.JButton();
 
         setName(""); // NOI18N
 
@@ -282,10 +283,17 @@ public class OrderPanel extends javax.swing.JPanel {
             tblOrderline.getColumnModel().getColumn(0).setHeaderValue("Orderrad-ID");
         }
 
-        btnRemoveOrderline.setText("Ta bort");
+        btnRemoveOrderline.setText("Ta bort orderrad");
         btnRemoveOrderline.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnRemoveOrderlineActionPerformed(evt);
+            }
+        });
+
+        btnConfirmOrder.setText("Bekräfta");
+        btnConfirmOrder.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnConfirmOrderActionPerformed(evt);
             }
         });
 
@@ -294,7 +302,9 @@ public class OrderPanel extends javax.swing.JPanel {
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGap(17, 17, 17)
+                .addComponent(btnConfirmOrder)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(btnSaveOrder)
                 .addGap(25, 25, 25))
             .addGroup(jPanel1Layout.createSequentialGroup()
@@ -312,7 +322,9 @@ public class OrderPanel extends javax.swing.JPanel {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 443, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(btnSaveOrder)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(btnSaveOrder)
+                    .addComponent(btnConfirmOrder))
                 .addGap(30, 30, 30))
         );
 
@@ -407,9 +419,14 @@ public class OrderPanel extends javax.swing.JPanel {
         OrderLine.removeRow(selectedTableRowID);
     }//GEN-LAST:event_btnRemoveOrderlineActionPerformed
 
+    private void btnConfirmOrderActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnConfirmOrderActionPerformed
+        cboxOrderstatus.setSelectedIndex(1);
+    }//GEN-LAST:event_btnConfirmOrderActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAddOrderline;
+    private javax.swing.JButton btnConfirmOrder;
     private javax.swing.JButton btnRemoveOrderline;
     private javax.swing.JButton btnSaveOrder;
     private javax.swing.JCheckBox cboxCustomerApproval;
