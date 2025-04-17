@@ -9,6 +9,7 @@ import javax.swing.table.DefaultTableModel;
 import hattmakarna.Print;
 import java.awt.print.PrinterException;
 import java.io.IOException;
+import utils.DatePicker;
 
 public class MaterialListPanel extends javax.swing.JPanel {
     private MainWindow window;
@@ -18,6 +19,8 @@ public class MaterialListPanel extends javax.swing.JPanel {
         // Vi tar emot och lagrar huvudfönstret som ett fält, då kan vi komma åt metoder som att byta panel
         this.window=window; 
         initComponents();
+        DatePicker.attachToTextField(window, txtStartDate);
+        DatePicker.attachToTextField(window, txtStopDate);
     }
 
     @SuppressWarnings("unchecked")

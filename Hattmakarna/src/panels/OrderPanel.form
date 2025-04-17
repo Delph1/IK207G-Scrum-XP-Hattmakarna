@@ -132,6 +132,9 @@
         </Property>
         <Property name="opaque" type="boolean" value="false"/>
       </Properties>
+      <AccessibilityProperties>
+        <Property name="AccessibleContext.accessibleName" type="java.lang.String" value="Orderinformation"/>
+      </AccessibilityProperties>
 
       <Layout>
         <DimensionLayout dim="0">

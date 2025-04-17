@@ -325,7 +325,9 @@ public class OrderPanel extends javax.swing.JPanel {
             }
         });
 
+
         btnConfirmOrder.setText("Bekräfta order");
+
         btnConfirmOrder.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnConfirmOrderActionPerformed(evt);
@@ -343,7 +345,6 @@ public class OrderPanel extends javax.swing.JPanel {
         jScrollPane2.setViewportView(tblOrderline);
         if (tblOrderline.getColumnModel().getColumnCount() > 0) {
             tblOrderline.getColumnModel().getColumn(0).setResizable(false);
-            tblOrderline.getColumnModel().getColumn(0).setHeaderValue("Orderrad-ID");
         }
 
         btnSaveOrder.setText("Spara");
@@ -421,6 +422,8 @@ public class OrderPanel extends javax.swing.JPanel {
                                     .addComponent(btnSaveOrder))))))
                 .addGap(244, 244, 244))
         );
+
+        pnlNewOrder.getAccessibleContext().setAccessibleName("Orderinformation");
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnAddOrderlineActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddOrderlineActionPerformed
@@ -494,8 +497,8 @@ public class OrderPanel extends javax.swing.JPanel {
 
     private void btnSpecialOrderActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSpecialOrderActionPerformed
         ModuleWindow moduleWindow = new ModuleWindow();
-        moduleWindow.specialOrder();
         moduleWindow.setVisible(true);
+        moduleWindow.specialOrder();
         moduleWindow.setAlwaysOnTop(true);
     }//GEN-LAST:event_btnSpecialOrderActionPerformed
 
