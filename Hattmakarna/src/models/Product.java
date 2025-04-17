@@ -47,7 +47,11 @@ public class Product {
         return price; 
     }
     
-       public void setCopyRightApproved(boolean copyRight) {
+    public void setProductBaseId(int productId) {
+        this.base_product_id = productId;
+    }
+    
+    public void setCopyRightApproved(boolean copyRight) {
         this.copyRight_approved = copyRight; 
     }
     public boolean getcopyRightApproved() {
