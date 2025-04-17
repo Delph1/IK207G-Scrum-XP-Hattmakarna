@@ -16,15 +16,17 @@ public class Component {
     private String color;
     private String unit;
     private String type;
+    private String description;
     
     
-    public Component(double amount, int component_id, String component_name, String color, String unit, String type) {
+    public Component(double amount, int component_id, String component_name, String color, String unit, String type,String description) {
         this.amount = amount;
         this.component_id = component_id;
         this.component_name = component_name;
         this.color = color;
         this.unit = unit;
         this.type = type;
+        this.description=description;
     }
     
     public int getComponentId() {
@@ -49,6 +51,12 @@ public class Component {
     
     public String getType() {
         return type;
+    }
+    public String getDescription() {
+        return description;
+    }
+        public void setDescription(String description) {
+        this.description = description;
     }
     
     public void setComponentId(int component_id ) {
