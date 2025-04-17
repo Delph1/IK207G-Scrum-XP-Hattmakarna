@@ -1,5 +1,6 @@
 package database;
 
+import java.security.MessageDigest;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -20,6 +21,29 @@ public class DatabaseManager {
         }
 
     }
+    
+        public User login(String inputUsername, String inputPassword) {
+        try {
+            String query = "SELECT * FROM users WHERE username = '" + inputUsername + "' AND password = '" + md5(inputPassword) + "' AND active=1";
+            HashMap<String, String> row = db.fetchRow(query);
+
+            if (row.isEmpty()) {
+                return null;
+            }
+            User user = new User(
+                        row.get("user_id") == null ? 0 : Integer.parseInt(row.get("user_id")),
+                    row.get("username"),   
+                    row.get("password"),
+                        ParseBoolean(row.get("active"))
+                );
+                return user;
+            
+
+        } catch (InfException e) {
+            throw new RuntimeException("Fel vid inloggning: " + e.getMessage());
+        }
+    }
+
 
     public Order getOrder(int id) {
         try {
@@ -355,7 +379,8 @@ public class DatabaseManager {
                         ParseBoolean(row.get("copyright_approved")),
                         ParseBoolean(row.get("discontinued")),
                         ParseBoolean(row.get("stock_item")),
-                        Double.parseDouble(row.get("weight"))
+                        Double.parseDouble(row.get("weight")),
+                        row.get("description")
                 );
                 return product;
             } else {
@@ -367,7 +392,7 @@ public class DatabaseManager {
         }
     }
     
-         // Hämtar en objektlista med alla beställningsrader
+         // Hämtar en objektlista med alla produkter
     public ArrayList<Product> getProducts() {
         try {
             ArrayList<Product> products = new ArrayList<>();
@@ -384,7 +409,8 @@ public class DatabaseManager {
                             ParseBoolean(row.get("copyright_approved")),
                             ParseBoolean(row.get("discountinued")),  
                             ParseBoolean(row.get("stock_item")),  
-                            Double.parseDouble(row.get("weight"))
+                            Double.parseDouble(row.get("weight")),
+                            row.get("description")
                             
                     ));
                 }
@@ -461,6 +487,19 @@ public class DatabaseManager {
     private boolean ParseBoolean(String tinyIntString) {
             return "1".equals(tinyIntString);
     }
+    private String md5(String input) {
+    try {
+        MessageDigest md = MessageDigest.getInstance("MD5");
+        byte[] hashBytes = md.digest(input.getBytes());
+        StringBuilder sb = new StringBuilder();
+        for (byte b : hashBytes) {
+            sb.append(String.format("%02x", b));
+        }
+        return sb.toString();
+    } catch (Exception e) {
+        throw new RuntimeException("Kunde inte hash:a lösenord", e);
+    }
+}
     
     //Returnera allt material
     public ArrayList<Component> getComponents() {
