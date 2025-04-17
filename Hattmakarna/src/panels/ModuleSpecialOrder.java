@@ -123,14 +123,14 @@ public class ModuleSpecialOrder extends javax.swing.JPanel {
 
         tblMaterial.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null}
+                {null, null, null, null, null}
             },
             new String [] {
-                "Namn", "Typ", "Färg", "Mängd"
+                "Namn", "Typ", "Färg", "Mängd", "Enhet"
             }
         ) {
             Class[] types = new Class [] {
-                java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class
+                java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class
             };
 
             public Class getColumnClass(int columnIndex) {
@@ -141,7 +141,10 @@ public class ModuleSpecialOrder extends javax.swing.JPanel {
         if (tblMaterial.getColumnModel().getColumnCount() > 0) {
             tblMaterial.getColumnModel().getColumn(0).setPreferredWidth(150);
             tblMaterial.getColumnModel().getColumn(2).setPreferredWidth(50);
+            tblMaterial.getColumnModel().getColumn(3).setResizable(false);
             tblMaterial.getColumnModel().getColumn(3).setPreferredWidth(15);
+            tblMaterial.getColumnModel().getColumn(4).setResizable(false);
+            tblMaterial.getColumnModel().getColumn(4).setPreferredWidth(15);
         }
 
         btnSave.setText("Spara");
@@ -234,7 +237,7 @@ public class ModuleSpecialOrder extends javax.swing.JPanel {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(txtWeight, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(lblWeight))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 15, Short.MAX_VALUE)
+                .addGap(18, 18, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnAddMaterial)
                     .addComponent(btnRemoveRow)
@@ -268,9 +271,9 @@ public class ModuleSpecialOrder extends javax.swing.JPanel {
         newProduct.setStockItem(false);
         newProduct.setCopyRightApproved(false);
         newProduct.setProductBaseId(baseId);
-        
-        
+        newProduct.setDescription(txtDescription.getText());
         newProduct.setWeight(Double.parseDouble(txtWeight.getText()));
+        dbm.updateProduct(newProduct);
         
         //Skapar komponenterna som hör till produkten
         for (int i = 0; i < tblMaterial.getRowCount(); i++) {
@@ -281,7 +284,6 @@ public class ModuleSpecialOrder extends javax.swing.JPanel {
                 newComponent.setAmount(Double.parseDouble(tblMaterial.getValueAt(i, 3).toString()));
                 newComponent.setUnit(tblMaterial.getValueAt(i, 4).toString());
                 dbm.updateComponent(newComponent);
-            );
             
         }
     }//GEN-LAST:event_btnSaveActionPerformed
