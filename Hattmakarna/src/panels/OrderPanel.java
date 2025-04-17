@@ -325,7 +325,9 @@ public class OrderPanel extends javax.swing.JPanel {
             }
         });
 
-        btnConfirmOrder.setText("Bekräfta");
+
+        btnConfirmOrder.setText("Bekräfta order");
+
         btnConfirmOrder.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnConfirmOrderActionPerformed(evt);
