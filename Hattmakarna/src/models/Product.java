@@ -12,7 +12,7 @@ public class Product {
     private double weight; 
     private String description;
     
-    public Product (int base_product_id, int product_id, String product_name, int price, boolean copyRight_approved, boolean discontinued, boolean stock_item,double weight, String description ){
+    public Product (int base_product_id, int product_id, String product_name, int price, boolean copyRight_approved, boolean discontinued, boolean stock_item, double weight, String description ){
         this.base_product_id= base_product_id;
         this.product_id = product_id;
         this.product_name = product_name;
