@@ -355,7 +355,8 @@ public class DatabaseManager {
                         ParseBoolean(row.get("copyright_approved")),
                         ParseBoolean(row.get("discontinued")),
                         ParseBoolean(row.get("stock_item")),
-                        Double.parseDouble(row.get("weight"))
+                        Double.parseDouble(row.get("weight")),
+                        row.get("description")
                 );
                 return product;
             } else {
@@ -367,7 +368,7 @@ public class DatabaseManager {
         }
     }
     
-         // Hämtar en objektlista med alla beställningsrader
+         // Hämtar en objektlista med alla produkter
     public ArrayList<Product> getProducts() {
         try {
             ArrayList<Product> products = new ArrayList<>();
@@ -384,7 +385,8 @@ public class DatabaseManager {
                             ParseBoolean(row.get("copyright_approved")),
                             ParseBoolean(row.get("discountinued")),  
                             ParseBoolean(row.get("stock_item")),  
-                            Double.parseDouble(row.get("weight"))
+                            Double.parseDouble(row.get("weight")),
+                            row.get("description")
                             
                     ));
                 }
