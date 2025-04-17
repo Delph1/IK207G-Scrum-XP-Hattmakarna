@@ -87,4 +87,9 @@ public class Product {
         this.price=newPrice; 
     }
 
+  public void setProductBaseId(int productId) {
+        this.base_product_id = productId;
+    }
+    
+
 }
