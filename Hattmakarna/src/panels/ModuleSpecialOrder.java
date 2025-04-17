@@ -20,9 +20,11 @@ public class ModuleSpecialOrder extends javax.swing.JPanel {
     private DefaultTableModel materialTable;
     private Product product;
     private int baseId;
+    private OrderPanel order;
     
-    public ModuleSpecialOrder(ModuleWindow window) {
+    public ModuleSpecialOrder(ModuleWindow window, OrderPanel order) {
         this.window = window;
+        this.order = order;
         baseId = 0;
         initComponents();
         fillComboBoxes();
@@ -30,11 +32,14 @@ public class ModuleSpecialOrder extends javax.swing.JPanel {
         tblMaterial.setModel(materialTable);
     }
     
-    public ModuleSpecialOrder(ModuleWindow window, Product product) {
+    public ModuleSpecialOrder(ModuleWindow window, Product product, OrderPanel order) {
         this.window = window;
         this.product = product;
+        this.order = order;
         baseId = product.getProductId();
         initComponents();
+        txtWeight.setText(String.valueOf(product.getWeight()));
+        fillComboBoxes();
         txtHatName.setText(product.getProductName() + " (Modifierad)");
         txtPrice.setText(String.valueOf(product.getPrice()));
         txtDescription.setText(product.getDescription());
@@ -47,6 +52,7 @@ public class ModuleSpecialOrder extends javax.swing.JPanel {
         JComboBox comboBoxNames = new JComboBox();
         JComboBox comboBoxColor = new JComboBox();
         JComboBox comboBoxTypes = new JComboBox();
+        JComboBox comboBoxUnits = new JComboBox();
         
         //Använder sets för att bara få in unika värden i listorna
         Set<String> nameSet = new HashSet<>();
@@ -61,6 +67,9 @@ public class ModuleSpecialOrder extends javax.swing.JPanel {
             typeSet.add(component.getType());
         }
         
+        comboBoxUnits.addItem("meter");
+        comboBoxUnits.addItem("styck");
+        
         for(String name : nameSet)comboBoxNames.addItem(name);
         for(String type : typeSet)comboBoxTypes.addItem(type);
         for(String color : colorSet)comboBoxColor.addItem(color);
@@ -74,13 +83,17 @@ public class ModuleSpecialOrder extends javax.swing.JPanel {
         TableColumn colorColumn = tblMaterial.getColumnModel().getColumn(2);
         colorColumn.setCellEditor(new DefaultCellEditor(comboBoxColor));
         
+        TableColumn unitColumn = tblMaterial.getColumnModel().getColumn(4);
+        unitColumn.setCellEditor(new DefaultCellEditor(comboBoxUnits));    
     }
     
     private void insertExistingComponentsIntoTable (int productId) {
+        
+        materialTable.removeRow(0);
         ArrayList<Component> components = dbm.getComponentsForProduct(productId);
 
         for (Component component : components) {
-            materialTable.addRow(new Object[]{ component.getComponentName(), component.getType(), component.getColor(), component.getAmount()}); 
+            materialTable.addRow(new Object[]{ component.getComponentName(), component.getType(), component.getColor(), component.getAmount(), component.getUnit()}); 
         }
     }
 
@@ -104,6 +117,8 @@ public class ModuleSpecialOrder extends javax.swing.JPanel {
         txtDescription = new javax.swing.JTextArea();
         txtWeight = new javax.swing.JTextField();
         lblWeight = new javax.swing.JLabel();
+        cbxResale = new javax.swing.JCheckBox();
+        lblResale = new javax.swing.JLabel();
 
         setPreferredSize(new java.awt.Dimension(600, 600));
         setVerifyInputWhenFocusTarget(false);
@@ -181,6 +196,8 @@ public class ModuleSpecialOrder extends javax.swing.JPanel {
 
         lblWeight.setText("Vikt:");
 
+        lblResale.setText("Får säljas vidare");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
@@ -209,10 +226,14 @@ public class ModuleSpecialOrder extends javax.swing.JPanel {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createSequentialGroup()
-                                .addComponent(txtWeight, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(txtWeight, javax.swing.GroupLayout.PREFERRED_SIZE, 64, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(lblResale)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(cbxResale)
                                 .addGap(0, 0, Short.MAX_VALUE))
                             .addGroup(layout.createSequentialGroup()
-                                .addComponent(txtHatName, javax.swing.GroupLayout.PREFERRED_SIZE, 153, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(txtHatName, javax.swing.GroupLayout.PREFERRED_SIZE, 245, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                 .addComponent(lblPrice)
                                 .addGap(18, 18, 18)
@@ -234,9 +255,13 @@ public class ModuleSpecialOrder extends javax.swing.JPanel {
                     .addComponent(lblDescription)
                     .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 66, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(txtWeight, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(lblWeight))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(txtWeight, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(lblWeight))
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addComponent(cbxResale)
+                        .addComponent(lblResale)))
                 .addGap(18, 18, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnAddMaterial)
@@ -263,6 +288,12 @@ public class ModuleSpecialOrder extends javax.swing.JPanel {
 
     private void btnSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSaveActionPerformed
         
+        if (txtWeight.getText().isEmpty() || txtHatName.getText().isEmpty() || txtPrice.getText().isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Du behöver fylla i alla fält innan du går vidare.");
+            return;
+        }
+        
+        if ( tblMaterial.getCellEditor() != null ) tblMaterial.getCellEditor().stopCellEditing();
         //Skapar produkten
         Product newProduct = dbm.createProduct();
         newProduct.setProductName(txtHatName.getText());
@@ -272,7 +303,7 @@ public class ModuleSpecialOrder extends javax.swing.JPanel {
         newProduct.setCopyRightApproved(false);
         newProduct.setProductBaseId(baseId);
         newProduct.setDescription(txtDescription.getText());
-        newProduct.setWeight(Double.parseDouble(txtWeight.getText()));
+        newProduct.setWeight(Double.parseDouble(txtWeight.getText().replace(",", ".")));
         dbm.updateProduct(newProduct);
         
         //Skapar komponenterna som hör till produkten
@@ -281,11 +312,14 @@ public class ModuleSpecialOrder extends javax.swing.JPanel {
                 newComponent.setComponentName(tblMaterial.getValueAt(i, 0).toString());
                 newComponent.setColor(tblMaterial.getValueAt(i, 2).toString());
                 newComponent.setType(tblMaterial.getValueAt(i, 1).toString());
-                newComponent.setAmount(Double.parseDouble(tblMaterial.getValueAt(i, 3).toString()));
+                newComponent.setAmount(Double.parseDouble(tblMaterial.getValueAt(i, 3).toString().replace(",", ".")));
                 newComponent.setUnit(tblMaterial.getValueAt(i, 4).toString());
                 dbm.updateComponent(newComponent);
-            
+                dbm.setComponentForProduct(newProduct.getProductId(), newComponent.getComponentId(), newComponent.getAmount());
         }
+        Object[] orderline = new Object[]{0, newProduct.getProductId(), newProduct.getPrice(), cbxResale.isSelected(), newProduct.getDescription()};
+        order.addOrderline(orderline);
+        window.dispose();
     }//GEN-LAST:event_btnSaveActionPerformed
 
     private void btnRemoveRowActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRemoveRowActionPerformed
@@ -309,11 +343,13 @@ public class ModuleSpecialOrder extends javax.swing.JPanel {
     private javax.swing.JButton btnCreateMaterial;
     private javax.swing.JButton btnRemoveRow;
     private javax.swing.JButton btnSave;
+    private javax.swing.JCheckBox cbxResale;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JLabel lblDescription;
     private javax.swing.JLabel lblHatName;
     private javax.swing.JLabel lblPrice;
+    private javax.swing.JLabel lblResale;
     private javax.swing.JLabel lblWeight;
     private javax.swing.JTable tblMaterial;
     private javax.swing.JTextArea txtDescription;
