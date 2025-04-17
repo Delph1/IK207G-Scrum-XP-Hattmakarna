@@ -5,6 +5,7 @@ import static hattmakarna.Hattmakarna.dbm;
 import hattmakarna.ModuleWindow;
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.Set;
 import javax.swing.DefaultCellEditor;
 import javax.swing.JComboBox;
 import javax.swing.table.TableColumn;
@@ -30,22 +31,31 @@ public class ModuleSpecialOrder extends javax.swing.JPanel {
         JComboBox comboBoxColor = new JComboBox();
         JComboBox comboBoxTypes = new JComboBox();
         
+        //Använder sets för att bara få in unika värden i listorna
+        Set<String> nameSet = new HashSet<>();
+        Set<String> typeSet = new HashSet<>();
+        Set<String> colorSet = new HashSet<>();
+        
         ArrayList<Component> components = dbm.getComponents();
         
         for (Component component : components) {
-            comboBoxNames.addItem(component.getComponentName());
-            comboBoxColor.addItem(component.getColor());
-            comboBoxTypes.addItem(component.getType());
+            nameSet.add(component.getComponentName());
+            colorSet.add(component.getColor());
+            typeSet.add(component.getType());
         }
+        
+        for(String name : nameSet)comboBoxNames.addItem(name);
+        for(String type : typeSet)comboBoxNames.addItem(type);
+        for(String color : colorSet)comboBoxNames.addItem(color);
 
         TableColumn nameColumn = tblMaterial.getColumnModel().getColumn(0);
         nameColumn.setCellEditor(new DefaultCellEditor(comboBoxNames));
         
-        TableColumn colorColumn = tblMaterial.getColumnModel().getColumn(1);
-        colorColumn.setCellEditor(new DefaultCellEditor(comboBoxNames));
-        
-        TableColumn typesColumn = tblMaterial.getColumnModel().getColumn(2);
+        TableColumn typesColumn = tblMaterial.getColumnModel().getColumn(1);
         typesColumn.setCellEditor(new DefaultCellEditor(comboBoxTypes));
+
+        TableColumn colorColumn = tblMaterial.getColumnModel().getColumn(2);
+        colorColumn.setCellEditor(new DefaultCellEditor(comboBoxColor));
         
     }
 
