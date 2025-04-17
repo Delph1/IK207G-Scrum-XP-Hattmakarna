@@ -325,7 +325,7 @@ public class OrderPanel extends javax.swing.JPanel {
             }
         });
 
-        btnConfirmOrder.setText("Bekräfta");
+        btnConfirmOrder.setText("Bekräfta order");
         btnConfirmOrder.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnConfirmOrderActionPerformed(evt);
@@ -421,8 +421,6 @@ public class OrderPanel extends javax.swing.JPanel {
                                     .addComponent(btnSaveOrder))))))
                 .addGap(244, 244, 244))
         );
-
-        pnlNewOrder.getAccessibleContext().setAccessibleName("Orderinformation");
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnAddOrderlineActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddOrderlineActionPerformed

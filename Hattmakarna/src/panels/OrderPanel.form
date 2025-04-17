@@ -132,9 +132,6 @@
         </Property>
         <Property name="opaque" type="boolean" value="false"/>
       </Properties>
-      <AccessibilityProperties>
-        <Property name="AccessibleContext.accessibleName" type="java.lang.String" value="Orderinformation"/>
-      </AccessibilityProperties>
 
       <Layout>
         <DimensionLayout dim="0">
@@ -436,7 +433,7 @@
     </Component>
     <Component class="javax.swing.JButton" name="btnConfirmOrder">
       <Properties>
-        <Property name="text" type="java.lang.String" value="Bekr&#xe4;fta"/>
+        <Property name="text" type="java.lang.String" value="Bekr&#xe4;fta order"/>
       </Properties>
       <Events>
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnConfirmOrderActionPerformed"/>
