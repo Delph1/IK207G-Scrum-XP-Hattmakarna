@@ -132,9 +132,6 @@
         </Property>
         <Property name="opaque" type="boolean" value="false"/>
       </Properties>
-      <AccessibilityProperties>
-        <Property name="AccessibleContext.accessibleName" type="java.lang.String" value="Orderinformation"/>
-      </AccessibilityProperties>
 
       <Layout>
         <DimensionLayout dim="0">
@@ -158,7 +155,7 @@
                           <Component id="jScrollPane1" min="-2" max="-2" attributes="0"/>
                       </Group>
                       <Group type="102" alignment="1" attributes="0">
-                          <Group type="103" groupAlignment="1" attributes="0">
+                          <Group type="103" groupAlignment="0" attributes="0">
                               <Component id="lblDescription" alignment="0" max="32767" attributes="0"/>
                               <Component id="lblCustomerApproval" alignment="0" max="32767" attributes="0"/>
                               <Component id="lblPrice" alignment="0" max="32767" attributes="0"/>
@@ -168,11 +165,6 @@
                           </Group>
                           <EmptySpace max="-2" attributes="0"/>
                           <Group type="103" groupAlignment="0" attributes="0">
-                              <Group type="102" attributes="0">
-                                  <Component id="btnSpecialOrder" min="-2" max="-2" attributes="0"/>
-                                  <EmptySpace min="-2" pref="21" max="-2" attributes="0"/>
-                                  <Component id="btnAddOrderline" min="-2" pref="85" max="-2" attributes="0"/>
-                              </Group>
                               <Component id="cboxCustomerApproval" min="-2" max="-2" attributes="0"/>
                               <Component id="cboxExpressOrder" alignment="0" min="-2" max="-2" attributes="0"/>
                               <Group type="103" alignment="0" groupAlignment="1" max="-2" attributes="0">
@@ -188,6 +180,14 @@
                                   <Component id="tfShippingCostOrder" alignment="0" max="32767" attributes="0"/>
                               </Group>
                           </Group>
+                      </Group>
+                      <Group type="102" alignment="0" attributes="0">
+                          <EmptySpace min="-2" pref="24" max="-2" attributes="0"/>
+                          <Component id="btnSpecialOrder" min="-2" max="-2" attributes="0"/>
+                          <EmptySpace type="separate" max="-2" attributes="0"/>
+                          <Component id="btnModifyHat" min="-2" max="-2" attributes="0"/>
+                          <EmptySpace type="separate" max="-2" attributes="0"/>
+                          <Component id="btnAddOrderline" min="-2" pref="85" max="-2" attributes="0"/>
                       </Group>
                   </Group>
               </Group>
@@ -257,6 +257,7 @@
                   <Group type="103" groupAlignment="3" attributes="0">
                       <Component id="btnAddOrderline" alignment="3" min="-2" max="-2" attributes="0"/>
                       <Component id="btnSpecialOrder" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="btnModifyHat" alignment="3" min="-2" max="-2" attributes="0"/>
                   </Group>
                   <EmptySpace max="-2" attributes="0"/>
               </Group>
@@ -403,10 +404,18 @@
         </Component>
         <Component class="javax.swing.JButton" name="btnSpecialOrder">
           <Properties>
-            <Property name="text" type="java.lang.String" value="Specialorder"/>
+            <Property name="text" type="java.lang.String" value="Specialhatt"/>
           </Properties>
           <Events>
             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnSpecialOrderActionPerformed"/>
+          </Events>
+        </Component>
+        <Component class="javax.swing.JButton" name="btnModifyHat">
+          <Properties>
+            <Property name="text" type="java.lang.String" value="Modifiera hatt"/>
+          </Properties>
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnModifyHatActionPerformed"/>
           </Events>
         </Component>
       </SubComponents>
