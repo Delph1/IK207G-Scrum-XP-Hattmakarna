@@ -44,16 +44,20 @@
                       <Group type="103" groupAlignment="1" attributes="0">
                           <Component id="lblHatName" min="-2" max="-2" attributes="0"/>
                           <Component id="lblDescription" min="-2" max="-2" attributes="0"/>
-                          <Component id="lblWeight" min="-2" max="-2" attributes="0"/>
+                          <Component id="lblWeight" alignment="1" min="-2" max="-2" attributes="0"/>
                       </Group>
                       <EmptySpace type="unrelated" max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="0" attributes="0">
                           <Group type="102" attributes="0">
-                              <Component id="txtWeight" min="-2" max="-2" attributes="0"/>
+                              <Component id="txtWeight" min="-2" pref="64" max="-2" attributes="0"/>
+                              <EmptySpace max="-2" attributes="0"/>
+                              <Component id="lblResale" min="-2" max="-2" attributes="0"/>
+                              <EmptySpace max="-2" attributes="0"/>
+                              <Component id="cbxResale" min="-2" max="-2" attributes="0"/>
                               <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
                           </Group>
-                          <Group type="102" attributes="0">
-                              <Component id="txtHatName" min="-2" pref="153" max="-2" attributes="0"/>
+                          <Group type="102" alignment="0" attributes="0">
+                              <Component id="txtHatName" min="-2" pref="245" max="-2" attributes="0"/>
                               <EmptySpace max="32767" attributes="0"/>
                               <Component id="lblPrice" min="-2" max="-2" attributes="0"/>
                               <EmptySpace type="separate" max="-2" attributes="0"/>
@@ -83,11 +87,17 @@
                   <Component id="jScrollPane2" min="-2" pref="66" max="-2" attributes="0"/>
               </Group>
               <EmptySpace type="unrelated" max="-2" attributes="0"/>
-              <Group type="103" groupAlignment="3" attributes="0">
-                  <Component id="txtWeight" alignment="3" min="-2" max="-2" attributes="0"/>
-                  <Component id="lblWeight" alignment="3" min="-2" max="-2" attributes="0"/>
+              <Group type="103" groupAlignment="1" attributes="0">
+                  <Group type="103" groupAlignment="3" attributes="0">
+                      <Component id="txtWeight" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="lblWeight" alignment="3" min="-2" max="-2" attributes="0"/>
+                  </Group>
+                  <Group type="103" groupAlignment="0" attributes="0">
+                      <Component id="cbxResale" alignment="0" min="-2" max="-2" attributes="0"/>
+                      <Component id="lblResale" alignment="0" min="-2" max="-2" attributes="0"/>
+                  </Group>
               </Group>
-              <EmptySpace pref="15" max="32767" attributes="0"/>
+              <EmptySpace type="separate" max="32767" attributes="0"/>
               <Group type="103" groupAlignment="3" attributes="0">
                   <Component id="btnAddMaterial" alignment="3" min="-2" max="-2" attributes="0"/>
                   <Component id="btnRemoveRow" alignment="3" min="-2" max="-2" attributes="0"/>
@@ -143,11 +153,12 @@
         <Component class="javax.swing.JTable" name="tblMaterial">
           <Properties>
             <Property name="model" type="javax.swing.table.TableModel" editor="org.netbeans.modules.form.editors2.TableModelEditor">
-              <Table columnCount="4" rowCount="1">
+              <Table columnCount="5" rowCount="1">
                 <Column editable="true" title="Namn" type="java.lang.String"/>
                 <Column editable="true" title="Typ" type="java.lang.String"/>
                 <Column editable="true" title="F&#xe4;rg" type="java.lang.String"/>
                 <Column editable="true" title="M&#xe4;ngd" type="java.lang.String"/>
+                <Column editable="true" title="Enhet" type="java.lang.String"/>
               </Table>
             </Property>
             <Property name="columnModel" type="javax.swing.table.TableColumnModel" editor="org.netbeans.modules.form.editors2.TableColumnModelEditor">
@@ -167,7 +178,12 @@
                   <Editor/>
                   <Renderer/>
                 </Column>
-                <Column maxWidth="-1" minWidth="-1" prefWidth="15" resizable="true">
+                <Column maxWidth="-1" minWidth="-1" prefWidth="15" resizable="false">
+                  <Title/>
+                  <Editor/>
+                  <Renderer/>
+                </Column>
+                <Column maxWidth="-1" minWidth="-1" prefWidth="15" resizable="false">
                   <Title/>
                   <Editor/>
                   <Renderer/>
@@ -233,6 +249,13 @@
     <Component class="javax.swing.JLabel" name="lblWeight">
       <Properties>
         <Property name="text" type="java.lang.String" value="Vikt:"/>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JCheckBox" name="cbxResale">
+    </Component>
+    <Component class="javax.swing.JLabel" name="lblResale">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="F&#xe5;r s&#xe4;ljas vidare"/>
       </Properties>
     </Component>
   </SubComponents>

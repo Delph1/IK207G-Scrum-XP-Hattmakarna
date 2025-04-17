@@ -4,6 +4,7 @@ package hattmakarna;
 import java.awt.BorderLayout;
 import java.awt.Component;
 import javax.swing.JPanel;
+import models.Product;
 import panels.*;
 
 public class ModuleWindow extends javax.swing.JFrame {
@@ -14,8 +15,12 @@ public class ModuleWindow extends javax.swing.JFrame {
         initComponents();
     }
     
-    public void specialOrder() {
-        showPanel(new ModuleSpecialOrder(this));
+    public void specialOrder(OrderPanel order) {
+        showPanel(new ModuleSpecialOrder(this, order));
+    }
+    
+    public void modifyHat(Product product, OrderPanel order) {
+        showPanel(new ModuleSpecialOrder(this, product, order));
     }
     
     // Intern metod för att visa ett panelobjekt i vår panel

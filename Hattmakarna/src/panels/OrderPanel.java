@@ -13,6 +13,7 @@ import javax.swing.event.ListSelectionListener;
 
 import models.Order;
 import models.OrderLine;
+import models.Product;
 
 
 public class OrderPanel extends javax.swing.JPanel {
@@ -81,7 +82,13 @@ public class OrderPanel extends javax.swing.JPanel {
         for(OrderLine orderline : allOrderlines) {
             tableModelOrderline.addRow(new Object[] {orderline.getOrderLineId(), orderline.getProductId(), orderline.getPrice(), orderline.getCustomerApproval(), orderline.getDescription()});
         }
-          }
+    }
+    
+    public void addOrderline(Object[] orderline) {
+        DefaultTableModel tableModelOrderline = (DefaultTableModel) tblOrderline.getModel();
+        tableModelOrderline.addRow(orderline);
+        //Objektet ska se ut: {0, product_id, price, customer_approval, description});
+    }
     
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
@@ -117,6 +124,7 @@ public class OrderPanel extends javax.swing.JPanel {
         tfShippingCostOrder = new javax.swing.JTextField();
         cboxOrderstatus = new javax.swing.JComboBox<>();
         btnSpecialOrder = new javax.swing.JButton();
+        btnModifyHat = new javax.swing.JButton();
         jPanel1 = new javax.swing.JPanel();
         btnRemoveOrderline = new javax.swing.JButton();
         btnConfirmOrder = new javax.swing.JButton();
@@ -198,10 +206,17 @@ public class OrderPanel extends javax.swing.JPanel {
 
         cboxOrderstatus.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Open", "Confirmed", "Ready", "Completed" }));
 
-        btnSpecialOrder.setText("Specialorder");
+        btnSpecialOrder.setText("Specialhatt");
         btnSpecialOrder.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnSpecialOrderActionPerformed(evt);
+            }
+        });
+
+        btnModifyHat.setText("Modifiera hatt");
+        btnModifyHat.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnModifyHatActionPerformed(evt);
             }
         });
 
@@ -225,19 +240,15 @@ public class OrderPanel extends javax.swing.JPanel {
                         .addGap(0, 0, Short.MAX_VALUE)
                         .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnlNewOrderLayout.createSequentialGroup()
-                        .addGroup(pnlNewOrderLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(lblDescription, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(lblCustomerApproval, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(lblPrice, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(lblProductID, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(lblAddOrderline, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(lblOrderlineID, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addGroup(pnlNewOrderLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(lblDescription, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(lblCustomerApproval, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(lblPrice, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(lblProductID, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(lblAddOrderline, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(lblOrderlineID, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(pnlNewOrderLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(pnlNewOrderLayout.createSequentialGroup()
-                                .addComponent(btnSpecialOrder)
-                                .addGap(21, 21, 21)
-                                .addComponent(btnAddOrderline, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addComponent(cboxCustomerApproval)
                             .addComponent(cboxExpressOrder)
                             .addGroup(pnlNewOrderLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
@@ -249,7 +260,14 @@ public class OrderPanel extends javax.swing.JPanel {
                                 .addComponent(tfPrice, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 152, Short.MAX_VALUE)
                                 .addComponent(tfProductID, javax.swing.GroupLayout.Alignment.LEADING)
                                 .addComponent(tfOrderlineID, javax.swing.GroupLayout.Alignment.LEADING)
-                                .addComponent(tfShippingCostOrder, javax.swing.GroupLayout.Alignment.LEADING))))))
+                                .addComponent(tfShippingCostOrder, javax.swing.GroupLayout.Alignment.LEADING))))
+                    .addGroup(pnlNewOrderLayout.createSequentialGroup()
+                        .addGap(24, 24, 24)
+                        .addComponent(btnSpecialOrder)
+                        .addGap(18, 18, 18)
+                        .addComponent(btnModifyHat)
+                        .addGap(18, 18, 18)
+                        .addComponent(btnAddOrderline, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE))))
         );
         pnlNewOrderLayout.setVerticalGroup(
             pnlNewOrderLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -303,7 +321,8 @@ public class OrderPanel extends javax.swing.JPanel {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(pnlNewOrderLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnAddOrderline)
-                    .addComponent(btnSpecialOrder))
+                    .addComponent(btnSpecialOrder)
+                    .addComponent(btnModifyHat))
                 .addContainerGap())
         );
 
@@ -325,9 +344,7 @@ public class OrderPanel extends javax.swing.JPanel {
             }
         });
 
-
         btnConfirmOrder.setText("Bekräfta order");
-
         btnConfirmOrder.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnConfirmOrderActionPerformed(evt);
@@ -345,6 +362,7 @@ public class OrderPanel extends javax.swing.JPanel {
         jScrollPane2.setViewportView(tblOrderline);
         if (tblOrderline.getColumnModel().getColumnCount() > 0) {
             tblOrderline.getColumnModel().getColumn(0).setResizable(false);
+            tblOrderline.getColumnModel().getColumn(0).setHeaderValue("Orderrad-ID");
         }
 
         btnSaveOrder.setText("Spara");
@@ -422,8 +440,6 @@ public class OrderPanel extends javax.swing.JPanel {
                                     .addComponent(btnSaveOrder))))))
                 .addGap(244, 244, 244))
         );
-
-        pnlNewOrder.getAccessibleContext().setAccessibleName("Orderinformation");
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnAddOrderlineActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddOrderlineActionPerformed
@@ -498,14 +514,23 @@ public class OrderPanel extends javax.swing.JPanel {
     private void btnSpecialOrderActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSpecialOrderActionPerformed
         ModuleWindow moduleWindow = new ModuleWindow();
         moduleWindow.setVisible(true);
-        moduleWindow.specialOrder();
+        moduleWindow.specialOrder(this);
         moduleWindow.setAlwaysOnTop(true);
     }//GEN-LAST:event_btnSpecialOrderActionPerformed
+
+    private void btnModifyHatActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnModifyHatActionPerformed
+        ModuleWindow moduleWindow = new ModuleWindow();
+        moduleWindow.setVisible(true);
+        Product newProduct = dbm.getProduct(Integer.parseInt(tfProductID.getText()));
+        moduleWindow.modifyHat(newProduct, this);
+        moduleWindow.setAlwaysOnTop(true);
+    }//GEN-LAST:event_btnModifyHatActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAddOrderline;
     private javax.swing.JButton btnConfirmOrder;
+    private javax.swing.JButton btnModifyHat;
     private javax.swing.JButton btnRemoveOrderline;
     private javax.swing.JButton btnSaveOrder;
     private javax.swing.JButton btnSpecialOrder;
