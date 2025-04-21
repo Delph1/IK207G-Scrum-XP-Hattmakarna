@@ -1,8 +1,8 @@
 
-package panels;
+package panels.modular;
 
 import static hattmakarna.Hattmakarna.dbm;
-import hattmakarna.ModuleWindow;
+import hattmakarna.ModularWindow;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
@@ -13,16 +13,18 @@ import javax.swing.table.TableColumn;
 import models.Component;
 import models.Product;
 import javax.swing.table.DefaultTableModel;
+import panels.OrderPanel;
+import panels.modular.*;
 
-public class ModuleSpecialOrder extends javax.swing.JPanel {
+public class ModularSpecialOrder extends javax.swing.JPanel {
 
-    private ModuleWindow window;
+    private ModularWindow window;
     private DefaultTableModel materialTable;
     private Product product;
     private int baseId;
     private OrderPanel order;
     
-    public ModuleSpecialOrder(ModuleWindow window, OrderPanel order) {
+    public ModularSpecialOrder(ModularWindow window, OrderPanel order) {
         this.window = window;
         this.order = order;
         baseId = 0;
@@ -32,7 +34,7 @@ public class ModuleSpecialOrder extends javax.swing.JPanel {
         tblMaterial.setModel(materialTable);
     }
     
-    public ModuleSpecialOrder(ModuleWindow window, Product product, OrderPanel order) {
+    public ModularSpecialOrder(ModularWindow window, Product product, OrderPanel order) {
         this.window = window;
         this.product = product;
         this.order = order;
@@ -120,7 +122,7 @@ public class ModuleSpecialOrder extends javax.swing.JPanel {
         cbxResale = new javax.swing.JCheckBox();
         lblResale = new javax.swing.JLabel();
 
-        setPreferredSize(new java.awt.Dimension(600, 600));
+        setPreferredSize(new java.awt.Dimension(600, 382));
         setVerifyInputWhenFocusTarget(false);
 
         lblHatName.setText("Hattnamn:");
@@ -269,11 +271,11 @@ public class ModuleSpecialOrder extends javax.swing.JPanel {
                     .addComponent(btnCreateMaterial))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 142, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnSave)
                     .addComponent(btnCancel))
-                .addContainerGap())
+                .addGap(12, 12, 12))
         );
     }// </editor-fold>//GEN-END:initComponents
 
