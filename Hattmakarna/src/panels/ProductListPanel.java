@@ -123,4 +123,5 @@ public class ProductListPanel extends javax.swing.JPanel {
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable tblProdukter;
     // End of variables declaration//GEN-END:variables
+//test
 }
