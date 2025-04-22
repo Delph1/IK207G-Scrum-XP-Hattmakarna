@@ -836,7 +836,7 @@ public boolean updateUser(User user) {
             int newId = (maxIdStr == null || maxIdStr.isEmpty()) ? 1 : Integer.parseInt(maxIdStr) + 1;
 
             String insert = "INSERT INTO images (image_id, product_id, base64) "
-                    + "VALUES (" + newId + ", '0', '')";
+                    + "VALUES (" + newId + ", '1', '')";
             db.insert(insert);
 
             return getImage(newId);
@@ -848,7 +848,7 @@ public boolean updateUser(User user) {
     
     public boolean updateImage(ProductImage image) {
         try {
-            String query = "UPDATE image SET "
+            String query = "UPDATE images SET "
                     + "product_id = '" + image.getProductId() + "', "
                     + "base64 = '" + image.getBase64() + "' "
                     + "WHERE image_id = " + image.getImageId();
