@@ -1,4 +1,3 @@
-
 package panels.modular;
 
 import static hattmakarna.Hattmakarna.dbm;
@@ -121,6 +120,8 @@ public class ModularSpecialOrder extends javax.swing.JPanel {
         lblWeight = new javax.swing.JLabel();
         cbxResale = new javax.swing.JCheckBox();
         lblResale = new javax.swing.JLabel();
+        cbxCopyright = new javax.swing.JCheckBox();
+        lblResale1 = new javax.swing.JLabel();
 
         setPreferredSize(new java.awt.Dimension(600, 382));
         setVerifyInputWhenFocusTarget(false);
@@ -200,6 +201,8 @@ public class ModularSpecialOrder extends javax.swing.JPanel {
 
         lblResale.setText("Får säljas vidare");
 
+        lblResale1.setText("Copyright-skydd");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
@@ -233,6 +236,10 @@ public class ModularSpecialOrder extends javax.swing.JPanel {
                                 .addComponent(lblResale)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(cbxResale)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(lblResale1)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(cbxCopyright)
                                 .addGap(0, 0, Short.MAX_VALUE))
                             .addGroup(layout.createSequentialGroup()
                                 .addComponent(txtHatName, javax.swing.GroupLayout.PREFERRED_SIZE, 245, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -263,7 +270,9 @@ public class ModularSpecialOrder extends javax.swing.JPanel {
                         .addComponent(lblWeight))
                     .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                         .addComponent(cbxResale)
-                        .addComponent(lblResale)))
+                        .addComponent(lblResale)
+                        .addComponent(cbxCopyright)
+                        .addComponent(lblResale1)))
                 .addGap(18, 18, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnAddMaterial)
@@ -284,7 +293,7 @@ public class ModularSpecialOrder extends javax.swing.JPanel {
     }//GEN-LAST:event_btnCancelActionPerformed
 
     private void btnAddMaterialActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddMaterialActionPerformed
-        materialTable.addRow(new Object[]{ "" ,"", "", ""});
+        materialTable.addRow(new Object[]{ "", "", "", "", "" });
         tblMaterial.setModel(materialTable);
     }//GEN-LAST:event_btnAddMaterialActionPerformed
 
@@ -302,7 +311,7 @@ public class ModularSpecialOrder extends javax.swing.JPanel {
         newProduct.setPrice(Integer.parseInt(txtPrice.getText()));
         newProduct.setDiscontinued(false);
         newProduct.setStockItem(false);
-        newProduct.setCopyRightApproved(false);
+        newProduct.setCopyRightApproved(cbxCopyright.isSelected());
         newProduct.setProductBaseId(baseId);
         newProduct.setDescription(txtDescription.getText());
         newProduct.setWeight(Double.parseDouble(txtWeight.getText().replace(",", ".")));
@@ -345,6 +354,7 @@ public class ModularSpecialOrder extends javax.swing.JPanel {
     private javax.swing.JButton btnCreateMaterial;
     private javax.swing.JButton btnRemoveRow;
     private javax.swing.JButton btnSave;
+    private javax.swing.JCheckBox cbxCopyright;
     private javax.swing.JCheckBox cbxResale;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
@@ -352,6 +362,7 @@ public class ModularSpecialOrder extends javax.swing.JPanel {
     private javax.swing.JLabel lblHatName;
     private javax.swing.JLabel lblPrice;
     private javax.swing.JLabel lblResale;
+    private javax.swing.JLabel lblResale1;
     private javax.swing.JLabel lblWeight;
     private javax.swing.JTable tblMaterial;
     private javax.swing.JTextArea txtDescription;
