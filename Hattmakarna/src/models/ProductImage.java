@@ -7,7 +7,7 @@ public class ProductImage {
     private int image_id; 
     private int product_id; 
     
-    public ProductImage (String base64, int image_id, int producr_id){
+    public ProductImage (String base64, int image_id, int product_id){
         this.base64 = base64; 
         this.image_id = image_id;
         this.product_id= product_id; 
