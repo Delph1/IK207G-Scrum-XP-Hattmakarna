@@ -1,4 +1,5 @@
 package hattmakarna;
+import panels.modular.ProductPanel;
 import java.awt.Component;
 import panels.*; // Hämtar alla paneler
 import javax.swing.JPanel;
@@ -303,11 +304,10 @@ this.dispose();
     public void showCustomerListPanel() {
        showPanel(new CustomerListPanel(this));
     }
-    public void showProductPanel() {
-       showPanel(new ProductPanel(this));
-    }
-        public void showProductListPanel() {
-       showPanel(new ProductListPanel(this));
+    public void showProductPanel() {}
+    
+    public void showProductListPanel() {
+    showPanel(new ProductListPanel(this));
     }
 
     // Intern metod för att visa ett panelobjekt i vår mainPanel
