@@ -5,7 +5,6 @@ import hattmakarna.MainWindow;
 import java.util.ArrayList;
 import models.Customer;
 
-
 //Fält
 public class CustomerPanel extends javax.swing.JPanel {
 
@@ -17,7 +16,15 @@ public class CustomerPanel extends javax.swing.JPanel {
         // Vi tar emot och lagrar huvudfönstret som ett fält, då kan vi komma åt metoder som att byta panel
         this.window = window;
         initComponents();
-
+        this.customer = customer;
+        if (this.customer != null) {
+            firstNameTextField.setText(this.customer.getFirstName());
+            lastNameTextField.setText(this.customer.getLastName());
+            streetAddressTextField.setText(this.customer.getStreetName());
+            postalCodeTextField.setText(this.customer.getPostalCode());
+            stateTextField.setText(this.customer.getState());
+            countryTextField.setText(this.customer.getCountry());
+        }
     }
 //Lägger till en kund
 
@@ -31,8 +38,12 @@ public class CustomerPanel extends javax.swing.JPanel {
         String state = stateTextField.getText();
         String country = countryTextField.getText();
 
-        dbm.createCustomer(firstName, lastName, streetAddress, postal_code, postal_city, state, country);
-            }
+        this.customer = dbm.createCustomer(firstName, lastName, streetAddress, postal_code, postal_city, state, country);
+    }
+
+    public void updateCustomer() {
+        dbm.updateCustomer(this.customer);
+    }
 
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
@@ -257,7 +268,13 @@ public class CustomerPanel extends javax.swing.JPanel {
     }// </editor-fold>//GEN-END:initComponents
 
     private void saveCustomerButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_saveCustomerButtonActionPerformed
-    newCustomer(); 
+
+        if (this.customer == null) {
+            newCustomer();
+
+        } else {
+            updateCustomer();
+        }
 
     }//GEN-LAST:event_saveCustomerButtonActionPerformed
 
