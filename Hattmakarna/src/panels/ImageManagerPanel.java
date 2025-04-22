@@ -11,48 +11,37 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.util.Base64;
 import models.ProductImage;
+import utils.ImageManager;
 
 public class ImageManagerPanel extends javax.swing.JPanel {
 
     private JLabel imageLabel;
     private String base64Image;
     private MainWindow window;
+    private ImageManager imageManager;
     
     public ImageManagerPanel(MainWindow window) {
         this.window = window;
+        this.imageManager = new ImageManager(window);
         initComponents();
         
         lblImage.setVerticalAlignment(SwingConstants.CENTER);
     }
 
     private void uploadImage() {
-        JFileChooser fileChooser = new JFileChooser();
-        fileChooser.setDialogTitle("Välj en bild");
-        fileChooser.setFileFilter(new javax.swing.filechooser.FileNameExtensionFilter("Bildfiler", "jpg", "jpeg", "png", "gif"));
+        byte[] imageBytes = imageManager.uploadImage();
+        base64Image = Base64.getEncoder().encodeToString(imageBytes);
 
-        int result = fileChooser.showOpenDialog(this);
-        if (result == JFileChooser.APPROVE_OPTION) {
-            File selectedFile = fileChooser.getSelectedFile();
-
-            try {
-                // Läs filen som byte-array och konvertera till Base64
-                byte[] imageBytes = Files.readAllBytes(selectedFile.toPath());
-                base64Image = Base64.getEncoder().encodeToString(imageBytes);
-
-                // Visa bilden
-                ImageIcon icon = new ImageIcon(imageBytes);
-                Image scaledImage = icon.getImage().getScaledInstance(300, 300, Image.SCALE_SMOOTH);
-                lblImage.setIcon(new ImageIcon(scaledImage));
-                lblImage.setText(null);  // ta bort texten "Ingen bild vald"
-
-            } catch (IOException ex) {
-                ex.printStackTrace();
-                JOptionPane.showMessageDialog(this, "Kunde inte läsa bilden.", "Fel", JOptionPane.ERROR_MESSAGE);
-            }
-        }
+        // Visa bilden
+        ImageIcon icon = new ImageIcon(imageBytes);
+        Image scaledImage = icon.getImage().getScaledInstance(300, 300, Image.SCALE_SMOOTH);
+        lblImage.setIcon(new ImageIcon(scaledImage));
+        lblImage.setText(null);  // ta bort texten "Ingen bild vald"
     }
     
     private void saveImage() {
+        int product_id = Integer.parseInt(txtProductId.getText());
+        imageManager.saveNewImage(base64Image, product_id);
         ProductImage image = dbm.createImage();
         image.setBase64(base64Image);
         dbm.updateImage(image);
@@ -65,6 +54,8 @@ public class ImageManagerPanel extends javax.swing.JPanel {
         lblImage = new javax.swing.JLabel();
         btnUpload = new javax.swing.JButton();
         btnSave = new javax.swing.JButton();
+        txtProductId = new javax.swing.JTextField();
+        jLabel1 = new javax.swing.JLabel();
 
         lblImage.setText("Ladda upp en bild ...");
 
@@ -82,6 +73,8 @@ public class ImageManagerPanel extends javax.swing.JPanel {
             }
         });
 
+        jLabel1.setText("ProduktId:");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
@@ -95,14 +88,22 @@ public class ImageManagerPanel extends javax.swing.JPanel {
                         .addGap(25, 25, 25)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(btnSave)
-                            .addComponent(btnUpload))))
-                .addContainerGap(124, Short.MAX_VALUE))
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(btnUpload)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 91, Short.MAX_VALUE)
+                                .addComponent(jLabel1)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(txtProductId, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))))
+                .addGap(44, 44, 44))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addGap(22, 22, 22)
-                .addComponent(btnUpload)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(btnUpload)
+                    .addComponent(txtProductId, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel1))
                 .addGap(86, 86, 86)
                 .addComponent(lblImage)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 114, Short.MAX_VALUE)
@@ -123,6 +124,8 @@ public class ImageManagerPanel extends javax.swing.JPanel {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnSave;
     private javax.swing.JButton btnUpload;
+    private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel lblImage;
+    private javax.swing.JTextField txtProductId;
     // End of variables declaration//GEN-END:variables
 }
