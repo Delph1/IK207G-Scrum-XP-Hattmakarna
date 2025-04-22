@@ -32,9 +32,8 @@ public class DatabaseManager {
             }
             User user = new User(
                     row.get("user_id") == null ? 0 : Integer.parseInt(row.get("user_id")),
-                      row.get("password"),
                     row.get("username"),
-                  
+                    row.get("password"),
                     ParseBoolean(row.get("active"))
             );
             return user;

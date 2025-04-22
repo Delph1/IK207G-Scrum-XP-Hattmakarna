@@ -12,7 +12,7 @@ public class User {
     private boolean active;
 
 
-    public User(int user_id, String password, String userName, boolean active) {
+    public User(int user_id, String userName, String password, boolean active) {
         this.user_id = user_id;
         this.password = password;
         this.userName = userName;
