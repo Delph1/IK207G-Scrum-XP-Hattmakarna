@@ -1,5 +1,6 @@
 package database;
 
+import java.security.MessageDigest;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -19,6 +20,27 @@ public class DatabaseManager {
             System.exit(1);
         }
 
+    }
+
+    public User login(String inputUsername, String inputPassword) {
+        try {
+            String query = "SELECT * FROM users WHERE username = '" + inputUsername + "' AND password = '" + md5(inputPassword) + "' AND active=1";
+            HashMap<String, String> row = db.fetchRow(query);
+
+            if (row.isEmpty()) {
+                return null;
+            }
+            User user = new User(
+                    row.get("user_id") == null ? 0 : Integer.parseInt(row.get("user_id")),
+                    row.get("username"),
+                    row.get("password"),
+                    ParseBoolean(row.get("active"))
+            );
+            return user;
+
+        } catch (InfException e) {
+            throw new RuntimeException("Fel vid inloggning: " + e.getMessage());
+        }
     }
 
     public Order getOrder(int id) {
@@ -165,7 +187,8 @@ public class DatabaseManager {
         }
 
     }
-     // Hämtar en objektlista med alla beställningsrader
+    // Hämtar en objektlista med alla beställningsrader
+
     public ArrayList<OrderLine> getOrderlines() {
         try {
             ArrayList<OrderLine> orderlines = new ArrayList<>();
@@ -189,8 +212,8 @@ public class DatabaseManager {
         }
 
     }
-    
-        // Hämtar en objektlista med alla beställningsrader för en hattmakare
+
+    // Hämtar en objektlista med alla beställningsrader för en hattmakare
     public ArrayList<OrderLine> getHatmakerOrderlines(int user_id) {
         try {
             ArrayList<OrderLine> orderlines = new ArrayList<>();
@@ -214,12 +237,12 @@ public class DatabaseManager {
         }
 
     }
-    
-     // Hämtar en objektlista med alla beställningsrader som inte tillhör en hattmakare
+
+    // Hämtar en objektlista med alla beställningsrader som inte tillhör en hattmakare
     public ArrayList<OrderLine> getUnassignedOrderlines() {
         try {
             ArrayList<OrderLine> orderlines = new ArrayList<>();
-            String query = "SELECT orderlines.* FROM orderlines, hatmaker WHERE orderlines.orderline_id NOT IN (SELECT orderline_id FROM hatmaker)" ;
+            String query = "SELECT orderlines.* FROM orderlines, hatmaker WHERE orderlines.orderline_id NOT IN (SELECT orderline_id FROM hatmaker)";
             ArrayList<HashMap<String, String>> results = db.fetchRows(query);
             if (results != null) {
                 for (HashMap<String, String> row : results) {
@@ -313,13 +336,51 @@ public class DatabaseManager {
             return null;
         }
     }
+    
+    // Skapar en kund
+    public Customer createCustomer() {
+    try {
+        String maxIdStr = db.fetchColumn("SELECT MAX(customer_id) FROM customers").getFirst();
+        int newId = (maxIdStr == null || maxIdStr.isEmpty()) ? 1 : Integer.parseInt(maxIdStr) + 1;
+
+        String insert = "INSERT INTO customers (customer_id, firstname, lastname, streetname, postal_code, postal_city, state, country) " +
+                        "VALUES (" + newId + ", 'Förnamn', 'Efternamn', '', '', '', '', '')";
+        db.insert(insert);
+
+        return getCustomer(newId);
+    } catch (InfException e) {
+        System.err.println("Kunde inte skapa ny kund: " + e.getMessage());
+        return null;
+    }
+}
+// Uppdaterar en kund
+    public boolean updateCustomer(Customer customer) {
+    try {
+        String query = "UPDATE customers SET "
+                     + "firstname = '" + customer.getFirstName() + "', "
+                     + "lastname = '" + customer.getLastName() + "', "
+                     + "streetname = '" + customer.getStreetName() + "', "
+                     + "postal_code = '" + customer.getPostalCode() + "', "
+                     + "postal_city = '" + customer.getPostalCity() + "', "
+                     + "state = '" + customer.getState() + "', "
+                     + "country = '" + customer.getCountry() + "' "
+                     + "WHERE customer_id = " + customer.getId();
+
+        db.update(query);
+        return true;
+    } catch (InfException e) {
+        System.err.println("Kunde inte uppdatera kund: " + e.getMessage());
+        return false;
+    }
+}
+
 
     //Returnera material som inte beställts mellan två datum
     public ArrayList<Component> getComponentsBetweenDates(String StartDate, String StopDate) {
         System.out.println("GET materials between " + StartDate + " and " + StopDate);
         ArrayList<Component> componentList = new ArrayList<>();
         try {
-            ArrayList<HashMap<String, String>> materials = db.fetchRows("SELECT c.component_id, c.component_name, c.color, SUM(pc.amount) AS total_amount_needed, c.unit FROM orders o JOIN orderlines ol ON o.order_id = ol.order_id JOIN products p ON ol.product_id = p.product_id JOIN product_components pc ON p.product_id = pc.product_id JOIN components c ON pc.component_id = c.component_id WHERE o.order_status = 'confirmed' AND o.order_date BETWEEN '" + StartDate + "' AND '" + StopDate + "' AND p.stock_item = 0 GROUP BY c.component_id, c.component_name, c.unit, c.color ORDER BY c.component_name;");
+            ArrayList<HashMap<String, String>> materials = db.fetchRows("SELECT c.component_id, c.component_name,c.description, c.color, SUM(pc.amount) AS total_amount_needed, c.unit FROM orders o JOIN orderlines ol ON o.order_id = ol.order_id JOIN products p ON ol.product_id = p.product_id JOIN product_components pc ON p.product_id = pc.product_id JOIN components c ON pc.component_id = c.component_id WHERE o.order_status = 'confirmed' AND o.order_date BETWEEN '" + StartDate + "' AND '" + StopDate + "' AND p.stock_item = 0 GROUP BY c.component_id, c.component_name, c.unit, c.color ORDER BY c.component_name;");
             if (materials != null) {
                 for (HashMap<String, String> material : materials) {
                     componentList.add(new Component(
@@ -328,7 +389,8 @@ public class DatabaseManager {
                             material.get("component_name"),
                             material.get("color"),
                             material.get("unit"),
-                            material.get("")
+                            material.get("type"),
+                            material.get("description")
                     ));
                 }
                 return componentList;
@@ -355,7 +417,8 @@ public class DatabaseManager {
                         ParseBoolean(row.get("copyright_approved")),
                         ParseBoolean(row.get("discontinued")),
                         ParseBoolean(row.get("stock_item")),
-                        Double.parseDouble(row.get("weight"))
+                        Double.parseDouble(row.get("weight")),
+                        row.get("description")
                 );
                 return product;
             } else {
@@ -366,8 +429,8 @@ public class DatabaseManager {
             return null;
         }
     }
-    
-         // Hämtar en objektlista med alla beställningsrader
+
+    // Hämtar en objektlista med alla produkter
     public ArrayList<Product> getProducts() {
         try {
             ArrayList<Product> products = new ArrayList<>();
@@ -377,15 +440,15 @@ public class DatabaseManager {
                 for (HashMap<String, String> row : results) {
                     //Product (double weight )
                     products.add(new Product(
-                             row.get("base_product_id") == null ? 0 : Integer.parseInt(row.get("base_product_id")),
+                            row.get("base_product_id") == null ? 0 : Integer.parseInt(row.get("base_product_id")),
                             Integer.parseInt(row.get("product_id")),
-                                row.get("product_name"),
-                           row.get("price") == null ? 0 :  Integer.parseInt(row.get("price")),
+                            row.get("product_name"),
+                            row.get("price") == null ? 0 : Integer.parseInt(row.get("price")),
                             ParseBoolean(row.get("copyright_approved")),
-                            ParseBoolean(row.get("discountinued")),  
-                            ParseBoolean(row.get("stock_item")),  
-                            Double.parseDouble(row.get("weight"))
-                            
+                            ParseBoolean(row.get("discountinued")),
+                            ParseBoolean(row.get("stock_item")),
+                            Double.parseDouble(row.get("weight")),
+                            row.get("description")
                     ));
                 }
             }
@@ -394,6 +457,45 @@ public class DatabaseManager {
             throw new RuntimeException("Fel vid hämtning av produkter: " + e.getMessage());
         }
 
+    }
+
+    // Skapar en pridukt
+    public Product createProduct() {
+        try {
+            String maxIdStr = db.fetchColumn("SELECT MAX(product_id) FROM products").getFirst();
+            int newId = (maxIdStr == null || maxIdStr.isEmpty()) ? 1 : Integer.parseInt(maxIdStr) + 1;
+
+            String insert = "INSERT INTO products (product_id, product_name, copyright_approved, "
+                    + "stock_item, discontinued, base_product_id, weight, price) VALUES ("
+                    + newId + ", 'Ny Produkt', 0, 1, 0, NULL, 0.0, 0)";
+            db.insert(insert);
+
+            return getProduct(newId);
+        } catch (InfException e) {
+            System.err.println("Kunde inte skapa ny produkt: " + e.getMessage());
+            return null;
+        }
+    }
+    // Uppdaterar en produkt
+
+    public boolean updateProduct(Product product) {
+        try {
+            String query = "UPDATE products SET "
+                    + "product_name = '" + product.getProductName() + "', "
+                    + "copyright_approved = " + (product.getcopyRightApproved() ? 1 : 0) + ", "
+                    + "stock_item = " + (product.getStockItem() ? 1 : 0) + ", "
+                    + "discontinued = " + (product.getDiscontinued() ? 1 : 0) + ", "
+                    + "base_product_id = " + (product.getBaseProductId() == 0 ? "NULL" : product.getBaseProductId()) + ", "
+                    + "weight = " + product.getWeight() + ", "
+                    + "price = " + product.getPrice() + " "
+                    + "WHERE product_id = " + product.getProductId();
+
+            db.update(query);
+            return true;
+        } catch (InfException e) {
+            System.err.println("Kunde inte uppdatera produkt: " + e.getMessage());
+            return false;
+        }
     }
 
     // Uppdaterar beställningsstatus mellan två datum
@@ -457,11 +559,86 @@ public class DatabaseManager {
         }
 
     }
-    
+
     private boolean ParseBoolean(String tinyIntString) {
-            return "1".equals(tinyIntString);
+        return "1".equals(tinyIntString);
     }
-    
+
+    private String md5(String input) {
+        try {
+            MessageDigest md = MessageDigest.getInstance("MD5");
+            byte[] hashBytes = md.digest(input.getBytes());
+            StringBuilder sb = new StringBuilder();
+            for (byte b : hashBytes) {
+                sb.append(String.format("%02x", b));
+            }
+            return sb.toString();
+        } catch (Exception e) {
+            throw new RuntimeException("Kunde inte hash:a lösenord", e);
+        }
+    }
+
+    // Hämtar ett material
+    public Component getComponent(int componentId) {
+        try {
+            String query = "SELECT * FROM components WHERE component_id = " + componentId;
+            HashMap<String, String> row = db.fetchRow(query);
+
+            if (row != null && !row.isEmpty()) {
+                return new Component(
+                        0,
+                        Integer.parseInt(row.get("component_id")),
+                        row.get("component_name"),
+                        row.get("color"),
+                        row.get("unit"),
+                        row.get("type"),
+                        row.get("description")
+                );
+            } else {
+                return null;
+            }
+        } catch (InfException e) {
+            System.err.println("Kunde inte hämta komponent: " + e.getMessage());
+            return null;
+        }
+    }
+
+    // Skapar ett material
+    public Component createComponent() {
+        try {
+            String maxIdStr = db.fetchColumn("SELECT MAX(component_id) FROM components").getFirst();
+            int newId = (maxIdStr == null || maxIdStr.isEmpty()) ? 1 : Integer.parseInt(maxIdStr) + 1;
+
+            String insert = "INSERT INTO components (component_id, component_name, type, unit, color, description) "
+                    + "VALUES (" + newId + ", 'Ny komponent', '', '', '', '')";
+            db.insert(insert);
+
+            return getComponent(newId);
+        } catch (InfException e) {
+            System.err.println("Kunde inte skapa komponent: " + e.getMessage());
+            return null;
+        }
+    }
+// Uppdaterar ett material
+
+    public boolean updateComponent(Component component) {
+        try {
+            String query = "UPDATE components SET "
+                    + "component_name = '" + component.getComponentName() + "', "
+                    + "type = '" + component.getType() + "', "
+                    + "unit = '" + component.getUnit() + "', "
+                    + "color = '" + component.getColor() + "', "
+                     + "description = '" + component.getDescription() + "' "
+                    + "WHERE component_id = " + component.getComponentId();
+
+            db.update(query);
+            return true;
+        } catch (InfException e) {
+            System.err.println("Kunde inte uppdatera komponent: " + e.getMessage());
+            return false;
+        }
+    }
+
     //Returnera allt material
     public ArrayList<Component> getComponents() {
         System.out.println("GET materials");
@@ -476,7 +653,8 @@ public class DatabaseManager {
                             material.get("component_name"),
                             material.get("color"),
                             material.get("unit"),
-                            material.get("type")
+                            material.get("type"),
+                              material.get("description")
                     ));
                 }
                 return componentList;
@@ -488,4 +666,60 @@ public class DatabaseManager {
             return null;
         }
     }
+    //Returnera allt material för en produkt
+
+    public ArrayList<Component> getComponentsForProduct(int productId) {
+
+        ArrayList<Component> componentList = new ArrayList<>();
+        try {
+            String query = "SELECT c.component_id, c.component_name, c.color, c.unit, c.type, pc.amount "
+                    + "FROM components c "
+                    + "JOIN product_components pc ON c.component_id = pc.component_id "
+                    + "WHERE pc.product_id = " + productId;
+            ArrayList<HashMap<String, String>> materials = db.fetchRows(query);
+            if (materials != null) {
+                for (HashMap<String, String> material : materials) {
+                    componentList.add(new Component(
+                            Double.parseDouble(material.get("amount")),
+                            Integer.parseInt(material.get("component_id")),
+                            material.get("component_name"),
+                            material.get("color"),
+                            material.get("unit"),
+                            material.get("type"),
+                            material.get("description")
+                    ));
+                }
+                return componentList;
+            } else {
+                return null;
+            }
+        } catch (InfException e) {
+            System.err.println("Det gick inte att hämta material för produkt: " + e.getMessage());
+            return null;
+        }
+    }
+
+    public void setComponentForProduct(int productId, int componentId, double amount) {
+        try {
+            // 1. Kontrollera om rad redan finns
+            String checkQuery = "SELECT * FROM product_components WHERE product_id = " + productId + " AND component_id = " + componentId;
+            HashMap<String, String> existingRow = db.fetchRow(checkQuery);
+
+            if (existingRow != null && !existingRow.isEmpty()) {
+                // 2. Uppdatera amount om den finns
+                String updateQuery = "UPDATE product_components SET amount = " + amount
+                        + " WHERE product_id = " + productId + " AND component_id = " + componentId;
+                db.update(updateQuery);
+            } else {
+                // 3. Finns ej, lägg till
+                String insertQuery = "INSERT INTO product_components (product_id, component_id, amount) VALUES ("
+                        + productId + ", " + componentId + ", " + amount + ")";
+                db.insert(insertQuery);
+            }
+
+        } catch (InfException e) {
+            System.err.println("Kunde inte sätta komponent för produkt: " + e.getMessage());
+        }
+    }
+
 }

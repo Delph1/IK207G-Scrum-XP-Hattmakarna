@@ -1,33 +1,36 @@
 
 package hattmakarna;
 
+import panels.modular.ModularSpecialOrder;
 import java.awt.BorderLayout;
-import java.awt.Component;
+import java.awt.Dimension;
 import javax.swing.JPanel;
+import models.Product;
 import panels.*;
 
-public class ModuleWindow extends javax.swing.JFrame {
-    
+public class ModularWindow extends javax.swing.JDialog {
+
     private JPanel panel;
     
-    public ModuleWindow() {
+    public ModularWindow(java.awt.Frame parent, boolean modal) {
+        super(parent, modal);
         initComponents();
     }
+
+    public void specialOrder(OrderPanel order) {
+        showPanel(new ModularSpecialOrder(this, order));
+    }
     
-    public void specialOrder() {
-        showPanel(new ModuleSpecialOrder(this));
+    public void modifyHat(Product product, OrderPanel order) {
+        showPanel(new ModularSpecialOrder(this, product, order));
     }
     
     // Intern metod för att visa ett panelobjekt i vår panel
     private void showPanel(JPanel newPanel) {
-        // Rensa pnlModule från tidigare tillagda paneler
-        this.panel = newPanel;
-        // Lägg till den nya panelen
-        this.setLayout(new BorderLayout());
-        this.add(newPanel, BorderLayout.CENTER);
-
-        // Målar den nya panelen
-        redrawCurrentPanel();
+        getContentPane().removeAll();
+        getContentPane().setLayout(new BorderLayout());
+        getContentPane().add(newPanel, BorderLayout.CENTER);
+        pack();
     }
     
     // Intern metod för att "måla" en panel
@@ -41,21 +44,21 @@ public class ModuleWindow extends javax.swing.JFrame {
     private void initComponents() {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setSize(new java.awt.Dimension(400, 300));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 612, Short.MAX_VALUE)
+            .addGap(0, 600, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 612, Short.MAX_VALUE)
+            .addGap(0, 600, Short.MAX_VALUE)
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     // End of variables declaration//GEN-END:variables
