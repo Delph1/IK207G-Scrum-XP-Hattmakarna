@@ -270,6 +270,7 @@ public class MainWindow extends javax.swing.JFrame {
         showImageManagerPanel();
     }//GEN-LAST:event_btnImageManagerActionPerformed
 
+   
     // Publik Metod för att skapa start-panelobjekt och anropa den interna metoden för att visa panelen
     public void showStartPanel() {
        showPanel(new StartPanel(this));
