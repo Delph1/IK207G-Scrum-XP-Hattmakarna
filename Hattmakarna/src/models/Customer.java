@@ -4,6 +4,8 @@
  */
 package models;
 
+import java.util.ArrayList;
+
 /**
  *
  * @author Petra Schröder
@@ -18,8 +20,10 @@ public class Customer {
     private String postal_city;
     private String state;
     private String country;
+    private ArrayList<String> phoneNumbers;
+    private ArrayList<String> emails;
 
-    public Customer(int customer_id, String firstName, String lastName, String streetName, String postal_code, String postal_city, String state, String country) {
+    public Customer(int customer_id, String firstName, String lastName, String streetName, String postal_code, String postal_city, String state, String country,ArrayList<String> phoneNumbers,ArrayList<String> emails) {
         this.customer_id = customer_id;
         this.firstName = firstName;
         this.lastName = lastName;
@@ -28,6 +32,8 @@ public class Customer {
         this.postal_city = postal_city;
         this.state = state;
         this.country = country;
+        this.phoneNumbers = phoneNumbers;
+        this.emails = emails;
     }
 
     public int getId() {
@@ -49,7 +55,19 @@ public class Customer {
     public String getLastName() {
         return lastName;
     }
-
+    public void setPhoneNumbers(ArrayList<String> phoneNumbers) {
+        this.phoneNumbers=phoneNumbers;
+    }
+    public void setEmail(ArrayList<String> emails) {
+        this.emails=emails;
+    }
+    public ArrayList<String> getEmails() {
+        return emails;
+    }
+    public ArrayList<String> getPhoneNumbers() {
+        return phoneNumbers;
+    }
+    
     public void setStreetName(String streetname) {
         this.streetName = streetname;
     }

@@ -1,14 +1,11 @@
-
 package panels;
 
 import hattmakarna.MainWindow;
 import java.util.ArrayList;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.JOptionPane;
-
-
-
 import static hattmakarna.Hattmakarna.dbm;
+import hattmakarna.ModularWindow;
 import models.*;
 
 
@@ -16,39 +13,44 @@ public class ProductListPanel extends javax.swing.JPanel {
     private MainWindow window;
 
     public ProductListPanel(MainWindow window) {
-        // Vi tar emot och lagrar huvudfönstret som ett fält, då kan vi komma åt metoder som att byta panel
             this.window = window;
             initComponents();
             fyllProduktTabell();
         }
     
-    private void fyllProduktTabell() {
+private void fyllProduktTabell() {
     try {
         ArrayList<Product> produkter = dbm.getProducts();
+
         DefaultTableModel model = new DefaultTableModel();
         model.addColumn("ID");
         model.addColumn("Namn");
         model.addColumn("Pris");
         model.addColumn("Vikt");
+        model.addColumn("Beskrivning");
+        model.addColumn("Status"); 
 
         for (Product p : produkter) {
             if (p.getStockItem()) {
-                model.addRow(new Object[]{
+            System.out.println(p.getProductName() + " - Status: " + (p.getDiscontinued() ? "Slutsåld" : "I lager"));
+            model.addRow(new Object[]{
                     p.getProductId(),
                     p.getProductName(),
                     p.getPrice(),
-                    p.getWeight()
+                    p.getWeight(),
+                    p.getDescription(),
+                    p.getDiscontinued() ? "Slutsåld" : "I lager" 
                 });
             }
         }
 
-        tblProdukter.setModel(model);
+        tblProdukter.setModel(model);  
+
     } catch (Exception e) {
         e.printStackTrace();
         JOptionPane.showMessageDialog(this, "Kunde inte hämta produkter: " + e.getMessage());
     }
 }
-
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -57,6 +59,7 @@ public class ProductListPanel extends javax.swing.JPanel {
         NewProductBTN = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
         tblProdukter = new javax.swing.JTable();
+        btnSlutsald = new javax.swing.JButton();
 
         setName(""); // NOI18N
 
@@ -83,13 +86,24 @@ public class ProductListPanel extends javax.swing.JPanel {
         ));
         jScrollPane1.setViewportView(tblProdukter);
 
+        btnSlutsald.setText("Ändra lagerstatus");
+        btnSlutsald.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnSlutsaldActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(NewProductBTN)
+                    .addGroup(layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(btnSlutsald)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(NewProductBTN))
                     .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                         .addGroup(layout.createSequentialGroup()
                             .addGap(269, 269, 269)
@@ -105,7 +119,9 @@ public class ProductListPanel extends javax.swing.JPanel {
                 .addContainerGap()
                 .addComponent(jLabel1)
                 .addGap(24, 24, 24)
-                .addComponent(NewProductBTN)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(NewProductBTN)
+                    .addComponent(btnSlutsald))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 340, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(93, Short.MAX_VALUE))
@@ -113,15 +129,38 @@ public class ProductListPanel extends javax.swing.JPanel {
     }// </editor-fold>//GEN-END:initComponents
 
     private void NewProductBTNActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_NewProductBTNActionPerformed
-        window.showProductPanel();
+    ModularWindow modularWindow = new ModularWindow(window, true);
+    modularWindow.newProduct();  
+    modularWindow.setVisible(true);
+    modularWindow.setAlwaysOnTop(true); 
     }//GEN-LAST:event_NewProductBTNActionPerformed
 
+    private void btnSlutsaldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSlutsaldActionPerformed
+    int rad = tblProdukter.getSelectedRow();
+    if (rad == -1) {
+        JOptionPane.showMessageDialog(this, "Välj en produkt först.");
+        return;
+    }
+
+    int produktId = (int) tblProdukter.getValueAt(rad, 0);
+    Product produkt = dbm.getProduct(produktId);
+
+    boolean nyStatus = !produkt.getDiscontinued();  
+    produkt.setDiscontinued(nyStatus);
+    dbm.updateProduct(produkt);
+
+    JOptionPane.showMessageDialog(this, nyStatus ? 
+        "Produkten är nu markerad som slutsåld." : 
+        "Produkten är nu tillgänglig igen.");
+
+    fyllProduktTabell(); 
+    }//GEN-LAST:event_btnSlutsaldActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton NewProductBTN;
+    private javax.swing.JButton btnSlutsald;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable tblProdukter;
     // End of variables declaration//GEN-END:variables
-//test
 }

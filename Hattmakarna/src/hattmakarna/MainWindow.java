@@ -1,4 +1,5 @@
 package hattmakarna;
+import panels.modular.ProductPanel;
 import java.awt.Component;
 import panels.*; // Hämtar alla paneler
 import javax.swing.JPanel;
@@ -33,7 +34,8 @@ public class MainWindow extends javax.swing.JFrame {
         statisticsBTN = new javax.swing.JButton();
         customerListBTN = new javax.swing.JButton();
         ProductListBTN = new javax.swing.JButton();
-        btnImageManager = new javax.swing.JButton();
+        logOut = new javax.swing.JButton();
+        minProfilBTN = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -114,10 +116,17 @@ public class MainWindow extends javax.swing.JFrame {
             }
         });
 
-        btnImageManager.setText("Bildhantering");
-        btnImageManager.addActionListener(new java.awt.event.ActionListener() {
+        logOut.setText("Logga Ut");
+        logOut.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnImageManagerActionPerformed(evt);
+                logOutActionPerformed(evt);
+            }
+        });
+
+        minProfilBTN.setText("Min Profil");
+        minProfilBTN.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                minProfilBTNActionPerformed(evt);
             }
         });
 
@@ -130,6 +139,10 @@ public class MainWindow extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(minProfilBTN)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(logOut)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(btnPrint))
                     .addGroup(layout.createSequentialGroup()
@@ -161,7 +174,10 @@ public class MainWindow extends javax.swing.JFrame {
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnPrint))
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(btnPrint)
+                        .addComponent(logOut))
+                    .addComponent(minProfilBTN))
                 .addGap(4, 4, 4)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(startButton)
@@ -228,13 +244,28 @@ public class MainWindow extends javax.swing.JFrame {
         showProductListPanel();   
     }//GEN-LAST:event_ProductListBTNActionPerformed
 
-    private void btnImageManagerActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnImageManagerActionPerformed
-        showImageManagere();
-    }//GEN-LAST:event_btnImageManagerActionPerformed
+    private void logOutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_logOutActionPerformed
+        Hattmakarna.currentUser = null;
+        LoginWindow window = new LoginWindow();
+        window.setVisible(true);
+        this.dispose();
 
+        // TODO add your handling code here:
+    }//GEN-LAST:event_logOutActionPerformed
+
+    private void minProfilBTNActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_minProfilBTNActionPerformed
+     showMinProfil();
+        // TODO add your handling code here:
+    }//GEN-LAST:event_minProfilBTNActionPerformed
+
+   
     // Publik Metod för att skapa start-panelobjekt och anropa den interna metoden för att visa panelen
     public void showStartPanel() {
        showPanel(new StartPanel(this));
+    }
+    
+    public void showMinProfil(){
+    showPanel(new MinProfil(this));
     }
     
     // Publik Metod för att skapa start-panelobjekt och anropa den interna metoden för att visa panelen
@@ -269,12 +300,10 @@ public class MainWindow extends javax.swing.JFrame {
     public void showCustomerListPanel() {
        showPanel(new CustomerListPanel(this));
     }
+    public void showProductPanel() {}
     
-    public void showProductPanel() {
-       showPanel(new ProductPanel(this));
-    }
-        public void showProductListPanel() {
-       showPanel(new ProductListPanel(this));
+    public void showProductListPanel() {
+    showPanel(new ProductListPanel(this));
     }
         
     private void showImageManagere() {
@@ -310,11 +339,12 @@ public class MainWindow extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JSeparator jSeparator1;
+    private javax.swing.JButton logOut;
     private javax.swing.JPanel mainPanel;
+    private javax.swing.JButton minProfilBTN;
     private javax.swing.JButton ordersButton;
     private javax.swing.JButton schemaButton;
     private javax.swing.JButton startButton;
     private javax.swing.JButton statisticsBTN;
     // End of variables declaration//GEN-END:variables
-
 }

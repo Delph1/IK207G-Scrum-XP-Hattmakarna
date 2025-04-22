@@ -29,6 +29,10 @@
                   <Group type="102" attributes="0">
                       <Component id="jLabel1" max="32767" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
+                      <Component id="minProfilBTN" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace max="-2" attributes="0"/>
+                      <Component id="logOut" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace max="-2" attributes="0"/>
                       <Component id="btnPrint" min="-2" max="-2" attributes="0"/>
                   </Group>
                   <Group type="102" attributes="0">
@@ -65,7 +69,11 @@
               <EmptySpace max="-2" attributes="0"/>
               <Group type="103" groupAlignment="0" attributes="0">
                   <Component id="jLabel1" min="-2" pref="40" max="-2" attributes="0"/>
-                  <Component id="btnPrint" min="-2" max="-2" attributes="0"/>
+                  <Group type="103" groupAlignment="3" attributes="0">
+                      <Component id="btnPrint" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="logOut" alignment="3" min="-2" max="-2" attributes="0"/>
+                  </Group>
+                  <Component id="minProfilBTN" min="-2" max="-2" attributes="0"/>
               </Group>
               <EmptySpace min="-2" pref="4" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="3" attributes="0">
@@ -197,12 +205,20 @@
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="ProductListBTNActionPerformed"/>
       </Events>
     </Component>
-    <Component class="javax.swing.JButton" name="btnImageManager">
+    <Component class="javax.swing.JButton" name="logOut">
       <Properties>
-        <Property name="text" type="java.lang.String" value="Bildhantering"/>
+        <Property name="text" type="java.lang.String" value="Logga Ut"/>
       </Properties>
       <Events>
-        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnImageManagerActionPerformed"/>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="logOutActionPerformed"/>
+      </Events>
+    </Component>
+    <Component class="javax.swing.JButton" name="minProfilBTN">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="Min Profil"/>
+      </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="minProfilBTNActionPerformed"/>
       </Events>
     </Component>
   </SubComponents>
