@@ -11,6 +11,7 @@ public class User {
     private String userName;
     private boolean active;
 
+
     public User(int user_id, String password, String userName, boolean active) {
         this.user_id = user_id;
         this.password = password;
@@ -21,7 +22,7 @@ public class User {
     public int getUserId() {
         return user_id;
     }
-
+    
     public void setPassword(String password) {
         this.password = password;
     }
@@ -50,4 +51,15 @@ public class User {
     public String toString() {
         return userName;
     }
+
+    public Object getUsername() {
+        return userName;
+    }
+
+    public boolean isActive() {
+        return active;
+    }
+    
+
+    
 }
