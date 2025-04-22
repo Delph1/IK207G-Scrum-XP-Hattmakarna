@@ -309,6 +309,10 @@ public class MainWindow extends javax.swing.JFrame {
     private void showImageManagere() {
         showPanel(new ImageManagerPanel(this));
     }
+        
+    private void showImageManagere() {
+        showPanel(new ImageManagerPanel(this));
+    }
 
     // Intern metod för att visa ett panelobjekt i vår mainPanel
     private void showPanel(JPanel newPanel) {
@@ -347,4 +351,5 @@ public class MainWindow extends javax.swing.JFrame {
     private javax.swing.JButton startButton;
     private javax.swing.JButton statisticsBTN;
     // End of variables declaration//GEN-END:variables
+
 }
