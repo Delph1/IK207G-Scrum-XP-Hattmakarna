@@ -1,4 +1,3 @@
-
 package hattmakarna;
 
 import panels.modular.ModularSpecialOrder;
@@ -32,6 +31,10 @@ public class ModularWindow extends javax.swing.JDialog {
         getContentPane().add(newPanel, BorderLayout.CENTER);
         pack();
     }
+    
+    public void newProduct() {
+    showPanel(new panels.modular.ProductPanel(this));
+}
     
     // Intern metod för att "måla" en panel
     private void redrawCurrentPanel() {
