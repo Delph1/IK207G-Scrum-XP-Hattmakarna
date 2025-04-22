@@ -256,8 +256,8 @@ showCustomerListPanel();
         showPanel(new Orderstatistics(this)); 
     }
     
-    public void showCustomerPanel() {
-       showPanel(new CustomerPanel(this));
+    public void showCustomerPanel(Customer customer) {
+       showPanel(new CustomerPanel(this,customer));
     }
     public void showCustomerListPanel() {
        showPanel(new CustomerListPanel(this));

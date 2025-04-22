@@ -338,13 +338,14 @@ public class DatabaseManager {
     }
     
     // Skapar en kund
-    public Customer createCustomer() {
-    try {
+      
+    public Customer createCustomer(String firstName, String lastName, String streetName, String postal_code, String postal_city, String state, String country) {
+        try {
         String maxIdStr = db.fetchColumn("SELECT MAX(customer_id) FROM customers").getFirst();
         int newId = (maxIdStr == null || maxIdStr.isEmpty()) ? 1 : Integer.parseInt(maxIdStr) + 1;
 
         String insert = "INSERT INTO customers (customer_id, firstname, lastname, streetname, postal_code, postal_city, state, country) " +
-                        "VALUES (" + newId + ", 'Förnamn', 'Efternamn', '', '', '', '', '')";
+                        "VALUES (" + newId + ", '" + firstName + "', '" + lastName + "','" + streetName + "','" + postal_code + "', '" + postal_city + "', '" + state + "','" +country + "')";
         db.insert(insert);
 
         return getCustomer(newId);
@@ -352,7 +353,8 @@ public class DatabaseManager {
         System.err.println("Kunde inte skapa ny kund: " + e.getMessage());
         return null;
     }
-}
+        
+    }
 // Uppdaterar en kund
     public boolean updateCustomer(Customer customer) {
     try {

@@ -1,11 +1,10 @@
 package panels;
 
-import hattmakarna.MainWindow;
-
 import static hattmakarna.Hattmakarna.dbm;
-import models.*;
-import database.DatabaseManager;
+import hattmakarna.MainWindow;
 import java.util.ArrayList;
+import models.Customer;
+
 
 //Fält
 public class CustomerPanel extends javax.swing.JPanel {
@@ -14,25 +13,26 @@ public class CustomerPanel extends javax.swing.JPanel {
     private Customer customer;
 
     //Konstruktor 
-    public CustomerPanel(MainWindow window) {
+    public CustomerPanel(MainWindow window, Customer customer) {
         // Vi tar emot och lagrar huvudfönstret som ett fält, då kan vi komma åt metoder som att byta panel
         this.window = window;
         initComponents();
-        customer = dbm.
-       createCustomer(customer);
 
     }
 //Lägger till en kund
-    private void cretatCustomer(customer) {
-        this.customer = customer;
-        firstNameTextField.setText(customer.getFirstName());
-        lastNameTextField.setText(customer.getLastName());
-        streetAddressTextField.setText(customer.getStreetName());
-        postalCodeTextField.setText(customer.getPostalCode());
-        cityTextField.setText(customer.getPostalCity());
-        stateTextField.setText(customer.getState());
-        countryTextField.setText(customer.getCountry());
-    }
+
+    private void newCustomer() {
+
+        String firstName = firstNameTextField.getText();
+        String lastName = lastNameTextField.getText();
+        String streetAddress = streetAddressTextField.getText();
+        String postal_code = postalCodeTextField.getText();
+        String postal_city = cityTextField.getText();
+        String state = stateTextField.getText();
+        String country = countryTextField.getText();
+
+        dbm.createCustomer(firstName, lastName, streetAddress, postal_code, postal_city, state, country);
+            }
 
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
@@ -172,7 +172,7 @@ public class CustomerPanel extends javax.swing.JPanel {
                     .addComponent(jLabel4)
                     .addComponent(lastNameTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(9, 9, 9)
-                .addGroup(customerPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                .addGroup(customerPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(streetAddressTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel5))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
@@ -257,7 +257,8 @@ public class CustomerPanel extends javax.swing.JPanel {
     }// </editor-fold>//GEN-END:initComponents
 
     private void saveCustomerButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_saveCustomerButtonActionPerformed
-        // TODO add your handling code here:
+    newCustomer(); 
+
     }//GEN-LAST:event_saveCustomerButtonActionPerformed
 
 
