@@ -54,6 +54,10 @@
                               <Component id="lblResale" min="-2" max="-2" attributes="0"/>
                               <EmptySpace max="-2" attributes="0"/>
                               <Component id="cbxResale" min="-2" max="-2" attributes="0"/>
+                              <EmptySpace max="-2" attributes="0"/>
+                              <Component id="lblResale1" min="-2" max="-2" attributes="0"/>
+                              <EmptySpace max="-2" attributes="0"/>
+                              <Component id="cbxCopyright" min="-2" max="-2" attributes="0"/>
                               <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
                           </Group>
                           <Group type="102" alignment="0" attributes="0">
@@ -95,6 +99,8 @@
                   <Group type="103" groupAlignment="0" attributes="0">
                       <Component id="cbxResale" alignment="0" min="-2" max="-2" attributes="0"/>
                       <Component id="lblResale" alignment="0" min="-2" max="-2" attributes="0"/>
+                      <Component id="cbxCopyright" alignment="0" min="-2" max="-2" attributes="0"/>
+                      <Component id="lblResale1" alignment="0" min="-2" max="-2" attributes="0"/>
                   </Group>
               </Group>
               <EmptySpace type="separate" max="32767" attributes="0"/>
@@ -256,6 +262,13 @@
     <Component class="javax.swing.JLabel" name="lblResale">
       <Properties>
         <Property name="text" type="java.lang.String" value="F&#xe5;r s&#xe4;ljas vidare"/>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JCheckBox" name="cbxCopyright">
+    </Component>
+    <Component class="javax.swing.JLabel" name="lblResale1">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="Copyright-skydd"/>
       </Properties>
     </Component>
   </SubComponents>
