@@ -731,7 +731,7 @@ public class DatabaseManager {
                     + "VALUES (" + newId + ", '0', '')";
             db.insert(insert);
 
-            return getComponent(newId);
+            return getImage(newId);
         } catch (InfException e) {
             System.err.println("Kunde inte skapa komponent: " + e.getMessage());
             return null;
@@ -752,4 +752,23 @@ public class DatabaseManager {
         }
     }
 
+        public ProductImage getImage(int imageId) {
+        try {
+            String query = "SELECT * FROM images WHERE image_id = " + imageId;
+            HashMap<String, String> row = db.fetchRow(query);
+
+            if (row != null && !row.isEmpty()) {
+                return new ProductImage(
+                        row.get("base64"),
+                        Integer.parseInt(row.get("image_id")),
+                        Integer.parseInt(row.get("product_id"))
+                );
+            } else {
+                return null;
+            }
+        } catch (InfException e) {
+            System.err.println("Kunde inte hämta bilden: " + e.getMessage());
+            return null;
+        }
+    }
 }
