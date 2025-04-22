@@ -42,6 +42,7 @@ public class ImageManagerPanel extends javax.swing.JPanel {
     private void saveImage() {
         int product_id = Integer.parseInt(txtProductId.getText());
         imageManager.saveNewImage(base64Image, product_id);
+
         ProductImage image = dbm.createImage();
         image.setBase64(base64Image);
         dbm.updateImage(image);
@@ -56,6 +57,7 @@ public class ImageManagerPanel extends javax.swing.JPanel {
         btnSave = new javax.swing.JButton();
         txtProductId = new javax.swing.JTextField();
         jLabel1 = new javax.swing.JLabel();
+
 
         lblImage.setText("Ladda upp en bild ...");
 
@@ -104,6 +106,7 @@ public class ImageManagerPanel extends javax.swing.JPanel {
                     .addComponent(btnUpload)
                     .addComponent(txtProductId, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel1))
+
                 .addGap(86, 86, 86)
                 .addComponent(lblImage)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 114, Short.MAX_VALUE)
