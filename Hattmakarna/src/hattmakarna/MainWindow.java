@@ -159,9 +159,7 @@ public class MainWindow extends javax.swing.JFrame {
                         .addComponent(customerListBTN, javax.swing.GroupLayout.PREFERRED_SIZE, 87, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
                         .addComponent(ProductListBTN)
-                        .addGap(18, 18, 18)
-                        .addComponent(btnImageManager)
-                        .addGap(0, 0, Short.MAX_VALUE)))
+                        .addGap(18, 18, 18)))
                 .addContainerGap())
             .addComponent(jSeparator1)
             .addGroup(layout.createSequentialGroup()
@@ -186,8 +184,7 @@ public class MainWindow extends javax.swing.JFrame {
                     .addComponent(btnMaterials)
                     .addComponent(statisticsBTN)
                     .addComponent(customerListBTN)
-                    .addComponent(ProductListBTN)
-                    .addComponent(btnImageManager))
+                    .addComponent(ProductListBTN))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -300,7 +297,6 @@ public class MainWindow extends javax.swing.JFrame {
     public void showCustomerListPanel() {
        showPanel(new CustomerListPanel(this));
     }
-    public void showProductPanel() {}
     
     public void showProductListPanel() {
     showPanel(new ProductListPanel(this));
@@ -332,7 +328,6 @@ public class MainWindow extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton ProductListBTN;
-    private javax.swing.JButton btnImageManager;
     private javax.swing.JButton btnMaterials;
     private javax.swing.JButton btnPrint;
     private javax.swing.JButton customerListBTN;
@@ -347,4 +342,5 @@ public class MainWindow extends javax.swing.JFrame {
     private javax.swing.JButton startButton;
     private javax.swing.JButton statisticsBTN;
     // End of variables declaration//GEN-END:variables
+
 }
