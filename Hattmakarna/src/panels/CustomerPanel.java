@@ -1,8 +1,11 @@
 package panels;
 
+import hattmakarna.Hattmakarna;
 import static hattmakarna.Hattmakarna.dbm;
 import hattmakarna.MainWindow;
 import java.util.ArrayList;
+import javax.swing.DefaultListModel;
+import javax.swing.JOptionPane;
 import models.Customer;
 
 //Fält
@@ -10,12 +13,20 @@ public class CustomerPanel extends javax.swing.JPanel {
 
     private MainWindow window;
     private Customer customer;
+    ArrayList<String> phoneNumbers;
+    ArrayList<String> mails;
+    private DefaultListModel<String> phoneNumberModel;
+    private DefaultListModel<String> mailModel;
 
     //Konstruktor 
     public CustomerPanel(MainWindow window, Customer customer) {
         // Vi tar emot och lagrar huvudfönstret som ett fält, då kan vi komma åt metoder som att byta panel
         this.window = window;
         initComponents();
+        phoneNumberModel = new DefaultListModel(); 
+        phoneNumbers = new ArrayList();
+        mails = new ArrayList(); 
+        mailModel = new DefaultListModel(); 
         this.customer = customer;
         if (this.customer != null) {
             firstNameTextField.setText(this.customer.getFirstName());
@@ -24,10 +35,27 @@ public class CustomerPanel extends javax.swing.JPanel {
             postalCodeTextField.setText(this.customer.getPostalCode());
             stateTextField.setText(this.customer.getState());
             countryTextField.setText(this.customer.getCountry());
-        }
-    }
-//Lägger till en kund
 
+            //Hämtar innehållet till listorna i vyn
+            phoneNumbers = this.customer.getPhoneNumbers();
+            mails = this.customer.getEmails();
+        }
+
+        //Om listan ska korrigeras
+        phoneNumberList.setModel(phoneNumberModel);
+        mailList.setModel(mailModel);
+        populateListModels(); 
+    }
+
+    //Fyller i listmodellerna med datan som finns i ArrayListorna
+    private void populateListModels() {
+        phoneNumberModel.clear();
+        mailModel.clear();
+        phoneNumberModel.addAll(phoneNumbers);
+        mailModel.addAll(mails);
+    }
+
+//Lägger till en kund
     private void newCustomer() {
 
         String firstName = firstNameTextField.getText();
@@ -38,10 +66,12 @@ public class CustomerPanel extends javax.swing.JPanel {
         String state = stateTextField.getText();
         String country = countryTextField.getText();
 
-        this.customer = dbm.createCustomer(firstName, lastName, streetAddress, postal_code, postal_city, state, country);
+        this.customer = dbm.createCustomer(firstName, lastName, streetAddress, postal_code, postal_city, state, country, phoneNumbers, mails);
     }
 
     public void updateCustomer() {
+        this.customer.setEmail(mails);
+        this.customer.setPhoneNumbers(phoneNumbers);
         dbm.updateCustomer(this.customer);
     }
 
@@ -67,14 +97,20 @@ public class CustomerPanel extends javax.swing.JPanel {
         cityTextField = new javax.swing.JTextField();
         stateTextField = new javax.swing.JTextField();
         countryTextField = new javax.swing.JTextField();
-        jLabel10 = new javax.swing.JLabel();
-        phoneNumberTextField = new javax.swing.JTextField();
-        addPhonNumberButton = new javax.swing.JButton();
-        jLabel11 = new javax.swing.JLabel();
-        emailTextField = new javax.swing.JTextField();
-        addEmailButton = new javax.swing.JButton();
         jLabel2 = new javax.swing.JLabel();
         saveCustomerButton = new javax.swing.JButton();
+        jLabel10 = new javax.swing.JLabel();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        phoneNumberList = new javax.swing.JList<>();
+        phoneNumberTextField = new javax.swing.JTextField();
+        addEmailButton = new javax.swing.JButton();
+        jLabel11 = new javax.swing.JLabel();
+        removePhoneNumberButton = new javax.swing.JButton();
+        addPhonNumberButton = new javax.swing.JButton();
+        removeMailButton = new javax.swing.JButton();
+        emailTextField = new javax.swing.JTextField();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        mailList = new javax.swing.JList<>();
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -90,9 +126,11 @@ public class CustomerPanel extends javax.swing.JPanel {
         jLabel12.setText("jLabel12");
 
         setName(""); // NOI18N
+        setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jLabel1.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         jLabel1.setText("Kundformulär");
+        add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(296, 6, -1, -1));
 
         customerPanel.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(102, 102, 102)));
         customerPanel.setToolTipText("");
@@ -112,64 +150,35 @@ public class CustomerPanel extends javax.swing.JPanel {
 
         jLabel9.setText("Land");
 
-        jLabel10.setText("Telefonnummer");
-
-        addPhonNumberButton.setText("Lägg till");
-
-        jLabel11.setText("E-post");
-
-        addEmailButton.setText("Lägg till");
-
         javax.swing.GroupLayout customerPanelLayout = new javax.swing.GroupLayout(customerPanel);
         customerPanel.setLayout(customerPanelLayout);
         customerPanelLayout.setHorizontalGroup(
             customerPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(customerPanelLayout.createSequentialGroup()
-                .addGap(108, 108, 108)
-                .addComponent(addEmailButton)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-            .addGroup(customerPanelLayout.createSequentialGroup()
-                .addGroup(customerPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addContainerGap()
+                .addGroup(customerPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addGroup(customerPanelLayout.createSequentialGroup()
-                        .addContainerGap()
+                        .addComponent(jLabel6)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(postalCodeTextField, javax.swing.GroupLayout.DEFAULT_SIZE, 137, Short.MAX_VALUE))
+                    .addGroup(customerPanelLayout.createSequentialGroup()
                         .addGroup(customerPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(customerPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                .addGroup(customerPanelLayout.createSequentialGroup()
-                                    .addComponent(jLabel6)
-                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                    .addComponent(postalCodeTextField, javax.swing.GroupLayout.DEFAULT_SIZE, 137, Short.MAX_VALUE))
-                                .addGroup(customerPanelLayout.createSequentialGroup()
-                                    .addGroup(customerPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                        .addGroup(customerPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                            .addComponent(jLabel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                            .addComponent(jLabel4, javax.swing.GroupLayout.DEFAULT_SIZE, 68, Short.MAX_VALUE)
-                                            .addComponent(jLabel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                            .addComponent(jLabel7, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                            .addComponent(jLabel8, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                                        .addComponent(jLabel9))
-                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                    .addGroup(customerPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                        .addComponent(firstNameTextField)
-                                        .addComponent(lastNameTextField)
-                                        .addComponent(streetAddressTextField)
-                                        .addComponent(cityTextField)
-                                        .addComponent(stateTextField)
-                                        .addComponent(countryTextField)))
-                                .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, customerPanelLayout.createSequentialGroup()
-                                    .addComponent(jLabel10)
-                                    .addGap(39, 39, 39)))
-                            .addGroup(customerPanelLayout.createSequentialGroup()
-                                .addComponent(phoneNumberTextField, javax.swing.GroupLayout.DEFAULT_SIZE, 196, Short.MAX_VALUE)
-                                .addGap(18, 18, 18)
-                                .addComponent(addPhonNumberButton, javax.swing.GroupLayout.PREFERRED_SIZE, 93, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                    .addGroup(customerPanelLayout.createSequentialGroup()
-                        .addGap(115, 115, 115)
-                        .addComponent(jLabel11)
-                        .addGap(0, 0, Short.MAX_VALUE))
-                    .addGroup(customerPanelLayout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(emailTextField)))
-                .addContainerGap())
+                                .addComponent(jLabel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(jLabel4, javax.swing.GroupLayout.DEFAULT_SIZE, 68, Short.MAX_VALUE)
+                                .addComponent(jLabel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(jLabel7, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(jLabel8, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                            .addComponent(jLabel9))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(customerPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(firstNameTextField)
+                            .addComponent(lastNameTextField)
+                            .addComponent(streetAddressTextField)
+                            .addComponent(cityTextField)
+                            .addComponent(stateTextField)
+                            .addComponent(countryTextField))))
+                .addContainerGap(44, Short.MAX_VALUE))
         );
         customerPanelLayout.setVerticalGroup(
             customerPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -194,31 +203,23 @@ public class CustomerPanel extends javax.swing.JPanel {
                 .addGroup(customerPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel7)
                     .addComponent(cityTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(9, 9, 9)
-                .addGroup(customerPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel8)
-                    .addComponent(stateTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(customerPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel9)
-                    .addComponent(countryTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
-                .addComponent(jLabel10)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGap(12, 12, 12)
                 .addGroup(customerPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(phoneNumberTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(addPhonNumberButton))
+                    .addComponent(stateTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel8))
                 .addGap(18, 18, 18)
-                .addComponent(jLabel11)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(emailTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(addEmailButton)
-                .addContainerGap(8, Short.MAX_VALUE))
+                .addGroup(customerPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(countryTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel9))
+                .addContainerGap(83, Short.MAX_VALUE))
         );
+
+        add(customerPanel, new org.netbeans.lib.awtextra.AbsoluteConstraints(16, 50, -1, -1));
+        customerPanel.getAccessibleContext().setAccessibleName("");
 
         jLabel2.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         jLabel2.setText("Registrera ny kund");
+        add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(16, 28, -1, -1));
 
         saveCustomerButton.setText("Spara kund");
         saveCustomerButton.addActionListener(new java.awt.event.ActionListener() {
@@ -226,57 +227,100 @@ public class CustomerPanel extends javax.swing.JPanel {
                 saveCustomerButtonActionPerformed(evt);
             }
         });
+        add(saveCustomerButton, new org.netbeans.lib.awtextra.AbsoluteConstraints(256, 382, 119, -1));
 
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
-        this.setLayout(layout);
-        layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(269, 269, 269)
-                        .addComponent(jLabel1))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(25, 25, 25)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel2)
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(customerPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 90, Short.MAX_VALUE)
-                                .addComponent(saveCustomerButton, javax.swing.GroupLayout.PREFERRED_SIZE, 119, javax.swing.GroupLayout.PREFERRED_SIZE)))))
-                .addGap(47, 47, 47))
-        );
-        layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jLabel1)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jLabel2)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(2, 2, 2)
-                        .addComponent(customerPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(saveCustomerButton)
-                        .addGap(20, 20, 20))))
-        );
+        jLabel10.setText("Telefonnummer");
+        add(jLabel10, new org.netbeans.lib.awtextra.AbsoluteConstraints(389, 50, -1, -1));
 
-        customerPanel.getAccessibleContext().setAccessibleName("");
+        jScrollPane2.setViewportView(phoneNumberList);
+
+        add(jScrollPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(313, 112, 197, 90));
+
+        phoneNumberTextField.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                phoneNumberTextFieldActionPerformed(evt);
+            }
+        });
+        add(phoneNumberTextField, new org.netbeans.lib.awtextra.AbsoluteConstraints(311, 78, 199, 23));
+
+        addEmailButton.setText("Lägg till");
+        addEmailButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                addEmailButtonActionPerformed(evt);
+            }
+        });
+        add(addEmailButton, new org.netbeans.lib.awtextra.AbsoluteConstraints(520, 250, -1, -1));
+
+        jLabel11.setText("E-post");
+        add(jLabel11, new org.netbeans.lib.awtextra.AbsoluteConstraints(410, 220, -1, -1));
+
+        removePhoneNumberButton.setText("Ta bort");
+        removePhoneNumberButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                removePhoneNumberButtonActionPerformed(evt);
+            }
+        });
+        add(removePhoneNumberButton, new org.netbeans.lib.awtextra.AbsoluteConstraints(517, 112, -1, -1));
+
+        addPhonNumberButton.setText("Lägg till");
+        addPhonNumberButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                addPhonNumberButtonActionPerformed(evt);
+            }
+        });
+        add(addPhonNumberButton, new org.netbeans.lib.awtextra.AbsoluteConstraints(516, 78, -1, -1));
+
+        removeMailButton.setText("Ta bort");
+        removeMailButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                removeMailButtonActionPerformed(evt);
+            }
+        });
+        add(removeMailButton, new org.netbeans.lib.awtextra.AbsoluteConstraints(520, 280, -1, -1));
+        add(emailTextField, new org.netbeans.lib.awtextra.AbsoluteConstraints(320, 250, 197, -1));
+
+        jScrollPane1.setViewportView(mailList);
+
+        add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(320, 280, 195, 90));
     }// </editor-fold>//GEN-END:initComponents
 
     private void saveCustomerButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_saveCustomerButtonActionPerformed
 
         if (this.customer == null) {
             newCustomer();
+            JOptionPane.showMessageDialog(this, "Kunden är sparad"); 
+            
 
         } else {
             updateCustomer();
+            JOptionPane.showMessageDialog(this, "Kunden är uppdaterad"); 
         }
 
     }//GEN-LAST:event_saveCustomerButtonActionPerformed
+
+    private void addPhonNumberButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addPhonNumberButtonActionPerformed
+        phoneNumbers.add(phoneNumberTextField.getText()); 
+        populateListModels(); 
+    }//GEN-LAST:event_addPhonNumberButtonActionPerformed
+
+    private void phoneNumberTextFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_phoneNumberTextFieldActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_phoneNumberTextFieldActionPerformed
+
+    private void addEmailButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addEmailButtonActionPerformed
+       mails.add(emailTextField.getText());
+       populateListModels();
+    }//GEN-LAST:event_addEmailButtonActionPerformed
+
+    private void removePhoneNumberButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_removePhoneNumberButtonActionPerformed
+       phoneNumbers.remove(phoneNumberList.getSelectedIndex());
+       populateListModels(); 
+    }//GEN-LAST:event_removePhoneNumberButtonActionPerformed
+
+    private void removeMailButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_removeMailButtonActionPerformed
+        mails.remove(mailList.getSelectedIndex()); 
+        populateListModels(); 
+    }//GEN-LAST:event_removeMailButtonActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -300,9 +344,15 @@ public class CustomerPanel extends javax.swing.JPanel {
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel1;
+    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JTextField lastNameTextField;
+    private javax.swing.JList<String> mailList;
+    private javax.swing.JList<String> phoneNumberList;
     private javax.swing.JTextField phoneNumberTextField;
     private javax.swing.JTextField postalCodeTextField;
+    private javax.swing.JButton removeMailButton;
+    private javax.swing.JButton removePhoneNumberButton;
     private javax.swing.JButton saveCustomerButton;
     private javax.swing.JTextField stateTextField;
     private javax.swing.JTextField streetAddressTextField;
