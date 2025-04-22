@@ -3,9 +3,10 @@ package panels;
 
 import static hattmakarna.Hattmakarna.dbm;
 import hattmakarna.MainWindow;
-import hattmakarna.ModuleWindow;
+import hattmakarna.ModularWindow;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
@@ -512,18 +513,22 @@ public class OrderPanel extends javax.swing.JPanel {
     }//GEN-LAST:event_btnConfirmOrderActionPerformed
 
     private void btnSpecialOrderActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSpecialOrderActionPerformed
-        ModuleWindow moduleWindow = new ModuleWindow();
-        moduleWindow.setVisible(true);
-        moduleWindow.specialOrder(this);
-        moduleWindow.setAlwaysOnTop(true);
+        ModularWindow modularWindow = new ModularWindow(window, true);
+        modularWindow.specialOrder(this);
+        modularWindow.setVisible(true);
+        modularWindow.setAlwaysOnTop(true);
     }//GEN-LAST:event_btnSpecialOrderActionPerformed
 
     private void btnModifyHatActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnModifyHatActionPerformed
-        ModuleWindow moduleWindow = new ModuleWindow();
-        moduleWindow.setVisible(true);
+        if (tfProductID.getText().isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Ange ett produktnummer i fältet ovan först.");
+            return;
+        }
+        ModularWindow modularWindow = new ModularWindow(window, true);
         Product newProduct = dbm.getProduct(Integer.parseInt(tfProductID.getText()));
-        moduleWindow.modifyHat(newProduct, this);
-        moduleWindow.setAlwaysOnTop(true);
+        modularWindow.modifyHat(newProduct, this);
+        modularWindow.setVisible(true);
+        modularWindow.setAlwaysOnTop(true);
     }//GEN-LAST:event_btnModifyHatActionPerformed
 
 
