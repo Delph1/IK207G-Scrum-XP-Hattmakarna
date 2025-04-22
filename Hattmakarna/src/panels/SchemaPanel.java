@@ -42,7 +42,7 @@ public class SchemaPanel extends javax.swing.JPanel {
         ArrayList<User> users = dbm.getUsers();
         // Skapa en DefaultComboBoxModel för JComboBox
         DefaultComboBoxModel<User> userModel = new DefaultComboBoxModel<>();
-        // Lägg till ett standardalternativ för "Alla avdelningar"
+        // Lägg till ett standardalternativ för användare
         userModel.addElement(new User(0, "", "Alla användare", false));
         userModel.addElement(new User(-1, "", "Ej tilldelade", false));
         // Lägg till varje användare i modellen

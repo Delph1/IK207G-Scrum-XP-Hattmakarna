@@ -290,8 +290,8 @@ public class MainWindow extends javax.swing.JFrame {
         showPanel(new Orderstatistics(this)); 
     }
     
-    public void showCustomerPanel() {
-       showPanel(new CustomerPanel(this));
+    public void showCustomerPanel(Customer customer) {
+       showPanel(new CustomerPanel(this,customer));
     }
     
     public void showCustomerListPanel() {
