@@ -332,6 +332,10 @@ public class MainWindow extends javax.swing.JFrame {
     private void showImageManagerPanel() {
         showPanel(new ImageManagerPanel(this));
     }
+        
+    private void showImageManagere() {
+        showPanel(new ImageManagerPanel(this));
+    }
 
     // Intern metod för att visa ett panelobjekt i vår mainPanel
     private void showPanel(JPanel newPanel) {
