@@ -860,7 +860,7 @@ public boolean updateUser(User user) {
         }
     }
 
-        public ProductImage getImage(int imageId) {
+    public ProductImage getImage(int imageId) {
         try {
             String query = "SELECT * FROM images WHERE image_id = " + imageId;
             HashMap<String, String> row = db.fetchRow(query);
@@ -876,6 +876,29 @@ public boolean updateUser(User user) {
             }
         } catch (InfException e) {
             System.err.println("Kunde inte hämta bilden: " + e.getMessage());
+            return null;
+        }
+    }
+    
+    public ArrayList<ProductImage> getImages() {
+        System.out.println("GET images");
+        ArrayList<ProductImage> imageList = new ArrayList<>();
+        try {
+            ArrayList<HashMap<String, String>> images = db.fetchRows("SELECT * FROM images");
+            if (images != null) {
+                for (HashMap<String, String> image : images) {
+                    imageList.add(new ProductImage(
+                            image.get("base64"),
+                            Integer.parseInt(image.get("image_id")),
+                            Integer.parseInt(image.get("product_id"))
+                    ));
+                }
+                return imageList;
+            } else {
+                return null;
+            }
+        } catch (InfException e) {
+            System.err.println("Det gick inte att hämta bilder: " + e.getMessage());
             return null;
         }
     }
