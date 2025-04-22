@@ -611,12 +611,66 @@ System.out.println("Tar bort telefonnummer");
         }
 
     }
+    public User getUser(int user_id) {
+
+    try {
+        String query = "SELECT * FROM users WHERE user_id = " + user_id;
+        HashMap<String, String> row = db.fetchRow(query);
+        if (row != null) {
+            User user = new User(
+                    Integer.parseInt(row.get("user_id")),
+                    row.get("password"),
+                    row.get("username"),
+                    ParseBoolean(row.get("active"))
+            );
+            return user;
+        } else {
+            return null;
+        }
+    } catch (InfException e) {
+        System.err.println("Det gick inte att hämta användaren: " + e.getMessage());
+        return null;
+    }
+}
+public User createUser() {
+    try {
+        String maxIdStr = db.fetchColumn("SELECT MAX(user_id) FROM users").getFirst();
+        int newId = (maxIdStr == null || maxIdStr.isEmpty()) ? 1 : Integer.parseInt(maxIdStr) + 1;
+
+        String insert = "INSERT INTO users (user_id, username, password, active) VALUES (" +
+                newId + ", '', '', 1)"; 
+
+        db.insert(insert);
+
+        return getUser(newId);
+    } catch (InfException e) {
+        System.err.println("Kunde inte skapa ny användare: " + e.getMessage());
+        return null;
+    }
+}
+
+public boolean updateUser(User user) {
+    try {
+        String query = "UPDATE users SET "
+                + "username = '" + user.getUserName() + "', "
+                + "password = '" + user.getPassword() + "', "
+                + "active = " + (user.getActive() ? 1 : 0) + " "
+                + "WHERE user_id = " + user.getUserId();
+
+        db.update(query);
+        return true;
+    } catch (InfException e) {
+        System.err.println("Kunde inte uppdatera användare: " + e.getMessage());
+        return false;
+    }
+}
+
 
     private boolean ParseBoolean(String tinyIntString) {
         return "1".equals(tinyIntString);
     }
 
-    private String md5(String input) {
+    public String md5(String input) {
         try {
             MessageDigest md = MessageDigest.getInstance("MD5");
             byte[] hashBytes = md.digest(input.getBytes());
