@@ -36,6 +36,7 @@ public class MainWindow extends javax.swing.JFrame {
         ProductListBTN = new javax.swing.JButton();
         logOut = new javax.swing.JButton();
         minProfilBTN = new javax.swing.JButton();
+        btnImageManager = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -130,6 +131,13 @@ public class MainWindow extends javax.swing.JFrame {
             }
         });
 
+        btnImageManager.setText("Bilder");
+        btnImageManager.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnImageManagerActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -159,7 +167,9 @@ public class MainWindow extends javax.swing.JFrame {
                         .addComponent(customerListBTN, javax.swing.GroupLayout.PREFERRED_SIZE, 87, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
                         .addComponent(ProductListBTN)
-                        .addGap(18, 18, 18)))
+                        .addGap(18, 18, 18)
+                        .addComponent(btnImageManager)
+                        .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
             .addComponent(jSeparator1)
             .addGroup(layout.createSequentialGroup()
@@ -184,7 +194,8 @@ public class MainWindow extends javax.swing.JFrame {
                     .addComponent(btnMaterials)
                     .addComponent(statisticsBTN)
                     .addComponent(customerListBTN)
-                    .addComponent(ProductListBTN))
+                    .addComponent(ProductListBTN)
+                    .addComponent(btnImageManager))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -255,6 +266,10 @@ public class MainWindow extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_minProfilBTNActionPerformed
 
+    private void btnImageManagerActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnImageManagerActionPerformed
+        showImageManagerPanel();
+    }//GEN-LAST:event_btnImageManagerActionPerformed
+
    
     // Publik Metod för att skapa start-panelobjekt och anropa den interna metoden för att visa panelen
     public void showStartPanel() {
@@ -299,10 +314,10 @@ public class MainWindow extends javax.swing.JFrame {
     }
     
     public void showProductListPanel() {
-    showPanel(new ProductListPanel(this));
+        showPanel(new ProductListPanel(this));
     }
         
-    private void showImageManagere() {
+    private void showImageManagerPanel() {
         showPanel(new ImageManagerPanel(this));
     }
 
@@ -328,6 +343,7 @@ public class MainWindow extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton ProductListBTN;
+    private javax.swing.JButton btnImageManager;
     private javax.swing.JButton btnMaterials;
     private javax.swing.JButton btnPrint;
     private javax.swing.JButton customerListBTN;
