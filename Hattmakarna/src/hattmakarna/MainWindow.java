@@ -17,7 +17,6 @@ public class MainWindow extends javax.swing.JFrame {
        showStartPanel();
     }
 
-    
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -34,6 +33,7 @@ public class MainWindow extends javax.swing.JFrame {
         statisticsBTN = new javax.swing.JButton();
         customerListBTN = new javax.swing.JButton();
         ProductListBTN = new javax.swing.JButton();
+        btnImageManager = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -114,6 +114,13 @@ public class MainWindow extends javax.swing.JFrame {
             }
         });
 
+        btnImageManager.setText("Bildhantering");
+        btnImageManager.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnImageManagerActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -139,6 +146,8 @@ public class MainWindow extends javax.swing.JFrame {
                         .addComponent(customerListBTN, javax.swing.GroupLayout.PREFERRED_SIZE, 87, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
                         .addComponent(ProductListBTN)
+                        .addGap(18, 18, 18)
+                        .addComponent(btnImageManager)
                         .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
             .addComponent(jSeparator1)
@@ -161,7 +170,8 @@ public class MainWindow extends javax.swing.JFrame {
                     .addComponent(btnMaterials)
                     .addComponent(statisticsBTN)
                     .addComponent(customerListBTN)
-                    .addComponent(ProductListBTN))
+                    .addComponent(ProductListBTN)
+                    .addComponent(btnImageManager))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -195,17 +205,12 @@ public class MainWindow extends javax.swing.JFrame {
         } catch (IOException e) {
             System.err.println(e.getMessage());
         }
-
     }//GEN-LAST:event_btnPrintActionPerformed
 
     private void schemaButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_schemaButtonActionPerformed
        //Visar schemasida 
         showSchemaPanel(); 
     }//GEN-LAST:event_schemaButtonActionPerformed
-
-    
-
-
 
     private void btnMaterialsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMaterialsActionPerformed
         showMaterialListPanel();
@@ -216,14 +221,16 @@ public class MainWindow extends javax.swing.JFrame {
     }//GEN-LAST:event_statisticsBTNActionPerformed
 
     private void customerListBTNActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_customerListBTNActionPerformed
-showCustomerListPanel();        
+        showCustomerListPanel();        
     }//GEN-LAST:event_customerListBTNActionPerformed
 
     private void ProductListBTNActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ProductListBTNActionPerformed
-    showProductListPanel();   
+        showProductListPanel();   
     }//GEN-LAST:event_ProductListBTNActionPerformed
 
-   
+    private void btnImageManagerActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnImageManagerActionPerformed
+        showImageManagere();
+    }//GEN-LAST:event_btnImageManagerActionPerformed
 
     // Publik Metod för att skapa start-panelobjekt och anropa den interna metoden för att visa panelen
     public void showStartPanel() {
@@ -247,7 +254,6 @@ showCustomerListPanel();
         showPanel(new SchemaPanel(this)); 
     }
 
-    
     public void showMaterialListPanel() {
        showPanel(new MaterialListPanel(this));
     }
@@ -259,14 +265,20 @@ showCustomerListPanel();
     public void showCustomerPanel() {
        showPanel(new CustomerPanel(this));
     }
+    
     public void showCustomerListPanel() {
        showPanel(new CustomerListPanel(this));
     }
+    
     public void showProductPanel() {
        showPanel(new ProductPanel(this));
     }
         public void showProductListPanel() {
        showPanel(new ProductListPanel(this));
+    }
+        
+    private void showImageManagere() {
+        showPanel(new ImageManagerPanel(this));
     }
 
     // Intern metod för att visa ett panelobjekt i vår mainPanel
@@ -291,6 +303,7 @@ showCustomerListPanel();
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton ProductListBTN;
+    private javax.swing.JButton btnImageManager;
     private javax.swing.JButton btnMaterials;
     private javax.swing.JButton btnPrint;
     private javax.swing.JButton customerListBTN;
@@ -303,4 +316,5 @@ showCustomerListPanel();
     private javax.swing.JButton startButton;
     private javax.swing.JButton statisticsBTN;
     // End of variables declaration//GEN-END:variables
+
 }

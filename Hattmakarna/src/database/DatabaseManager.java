@@ -721,5 +721,35 @@ public class DatabaseManager {
             System.err.println("Kunde inte sätta komponent för produkt: " + e.getMessage());
         }
     }
+    
+    public ProductImage createImage () {
+        try {
+            String maxIdStr = db.fetchColumn("SELECT MAX(image_id) FROM images").getFirst();
+            int newId = (maxIdStr == null || maxIdStr.isEmpty()) ? 1 : Integer.parseInt(maxIdStr) + 1;
+
+            String insert = "INSERT INTO images (image_id, product_id, base64) "
+                    + "VALUES (" + newId + ", '0', '')";
+            db.insert(insert);
+
+            return getComponent(newId);
+        } catch (InfException e) {
+            System.err.println("Kunde inte skapa komponent: " + e.getMessage());
+            return null;
+        }
+    }
+    
+    public boolean updateImage(ProductImage image) {
+        try {
+            String query = "UPDATE image SET "
+                    + "product_id = '" + image.getProductId() + "', "
+                    + "base64 = '" + image.getBase64() + "' "
+                    + "WHERE image_id = " + image.getImageId();
+            db.update(query);
+            return true;
+        } catch (InfException e) {
+            System.err.println("Kunde inte uppdatera bilden: " + e.getMessage());
+            return false;
+        }
+    }
 
 }
