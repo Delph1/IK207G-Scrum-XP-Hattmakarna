@@ -4,6 +4,7 @@
  */
 package panels;
 
+import hattmakarna.Hattmakarna;
 import static hattmakarna.Hattmakarna.dbm;
 import hattmakarna.MainWindow;
 import models.User;
@@ -211,6 +212,7 @@ public class SchemaPanel extends javax.swing.JPanel {
             allOrderLines = dbm.getUnassignedOrderlines();
         } else {
             allOrderLines = dbm.getHatmakerOrderlines(userId);
+            System.out.println("This number of orderlines are being fetched from getHatmakerOrderlines: " + allOrderLines.size());
         }
         listOrderLines();
     }//GEN-LAST:event_userComboBoxActionPerformed
@@ -223,7 +225,11 @@ public class SchemaPanel extends javax.swing.JPanel {
     }//GEN-LAST:event_orderLineListValueChanged
 
     private void btnAddEmployeeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddEmployeeActionPerformed
-        
+        var orderline = orderLineList.getSelectedValue();
+        var user = Hattmakarna.currentUser;
+        myOrderlinesListModel.addElement(orderline);
+        listModel.removeElement(orderline);
+        dbm.updateHatmakerOrderlines(orderline, user);
     }//GEN-LAST:event_btnAddEmployeeActionPerformed
 
 

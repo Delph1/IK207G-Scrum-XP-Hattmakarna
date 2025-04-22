@@ -237,6 +237,18 @@ public class DatabaseManager {
         }
 
     }
+    
+    public boolean updateHatmakerOrderlines(OrderLine orderline, User user) {
+        try {
+            int orderline_id = orderline.getOrderLineId();
+            int user_id = user.getUserId();
+            String insert_sql = "INSERT INTO hatmaker (orderline_id, hatmaker) VALUES (" + orderline_id + ", " + user_id + ")";
+            db.insert(insert_sql);
+            return true;
+        } catch (InfException e) {
+            throw new RuntimeException("Det gick inte att lägga till orderraden till hatmaker: " + e.getMessage());
+        }
+    }
 
     // Hämtar en objektlista med alla beställningsrader som inte tillhör en hattmakare
     public ArrayList<OrderLine> getUnassignedOrderlines() {
