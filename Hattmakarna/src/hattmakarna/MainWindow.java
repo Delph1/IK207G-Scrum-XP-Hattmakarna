@@ -18,7 +18,6 @@ public class MainWindow extends javax.swing.JFrame {
        showStartPanel();
     }
 
-    
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -35,6 +34,8 @@ public class MainWindow extends javax.swing.JFrame {
         statisticsBTN = new javax.swing.JButton();
         customerListBTN = new javax.swing.JButton();
         ProductListBTN = new javax.swing.JButton();
+        logOut = new javax.swing.JButton();
+        minProfilBTN = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -115,6 +116,20 @@ public class MainWindow extends javax.swing.JFrame {
             }
         });
 
+        logOut.setText("Logga Ut");
+        logOut.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                logOutActionPerformed(evt);
+            }
+        });
+
+        minProfilBTN.setText("Min Profil");
+        minProfilBTN.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                minProfilBTNActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -124,6 +139,10 @@ public class MainWindow extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(minProfilBTN)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(logOut)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(btnPrint))
                     .addGroup(layout.createSequentialGroup()
@@ -140,6 +159,8 @@ public class MainWindow extends javax.swing.JFrame {
                         .addComponent(customerListBTN, javax.swing.GroupLayout.PREFERRED_SIZE, 87, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
                         .addComponent(ProductListBTN)
+                        .addGap(18, 18, 18)
+                        .addComponent(btnImageManager)
                         .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
             .addComponent(jSeparator1)
@@ -153,7 +174,10 @@ public class MainWindow extends javax.swing.JFrame {
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnPrint))
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(btnPrint)
+                        .addComponent(logOut))
+                    .addComponent(minProfilBTN))
                 .addGap(4, 4, 4)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(startButton)
@@ -162,7 +186,8 @@ public class MainWindow extends javax.swing.JFrame {
                     .addComponent(btnMaterials)
                     .addComponent(statisticsBTN)
                     .addComponent(customerListBTN)
-                    .addComponent(ProductListBTN))
+                    .addComponent(ProductListBTN)
+                    .addComponent(btnImageManager))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -196,17 +221,12 @@ public class MainWindow extends javax.swing.JFrame {
         } catch (IOException e) {
             System.err.println(e.getMessage());
         }
-
     }//GEN-LAST:event_btnPrintActionPerformed
 
     private void schemaButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_schemaButtonActionPerformed
        //Visar schemasida 
         showSchemaPanel(); 
     }//GEN-LAST:event_schemaButtonActionPerformed
-
-    
-
-
 
     private void btnMaterialsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMaterialsActionPerformed
         showMaterialListPanel();
@@ -217,18 +237,35 @@ public class MainWindow extends javax.swing.JFrame {
     }//GEN-LAST:event_statisticsBTNActionPerformed
 
     private void customerListBTNActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_customerListBTNActionPerformed
-showCustomerListPanel();        
+        showCustomerListPanel();        
     }//GEN-LAST:event_customerListBTNActionPerformed
 
     private void ProductListBTNActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ProductListBTNActionPerformed
-    showProductListPanel();   
+        showProductListPanel();   
     }//GEN-LAST:event_ProductListBTNActionPerformed
 
-   
+    private void logOutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_logOutActionPerformed
+        Hattmakarna.currentUser = null;
+        LoginWindow window = new LoginWindow();
+        window.setVisible(true);
+        this.dispose();
 
+        // TODO add your handling code here:
+    }//GEN-LAST:event_logOutActionPerformed
+
+    private void minProfilBTNActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_minProfilBTNActionPerformed
+     showMinProfil();
+        // TODO add your handling code here:
+    }//GEN-LAST:event_minProfilBTNActionPerformed
+
+   
     // Publik Metod för att skapa start-panelobjekt och anropa den interna metoden för att visa panelen
     public void showStartPanel() {
        showPanel(new StartPanel(this));
+    }
+    
+    public void showMinProfil(){
+    showPanel(new MinProfil(this));
     }
     
     // Publik Metod för att skapa start-panelobjekt och anropa den interna metoden för att visa panelen
@@ -248,7 +285,6 @@ showCustomerListPanel();
         showPanel(new SchemaPanel(this)); 
     }
 
-    
     public void showMaterialListPanel() {
        showPanel(new MaterialListPanel(this));
     }
@@ -260,6 +296,7 @@ showCustomerListPanel();
     public void showCustomerPanel() {
        showPanel(new CustomerPanel(this));
     }
+    
     public void showCustomerListPanel() {
        showPanel(new CustomerListPanel(this));
     }
@@ -267,6 +304,10 @@ showCustomerListPanel();
     
     public void showProductListPanel() {
     showPanel(new ProductListPanel(this));
+    }
+        
+    private void showImageManagere() {
+        showPanel(new ImageManagerPanel(this));
     }
 
     // Intern metod för att visa ett panelobjekt i vår mainPanel
@@ -291,13 +332,16 @@ showCustomerListPanel();
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton ProductListBTN;
+    private javax.swing.JButton btnImageManager;
     private javax.swing.JButton btnMaterials;
     private javax.swing.JButton btnPrint;
     private javax.swing.JButton customerListBTN;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JSeparator jSeparator1;
+    private javax.swing.JButton logOut;
     private javax.swing.JPanel mainPanel;
+    private javax.swing.JButton minProfilBTN;
     private javax.swing.JButton ordersButton;
     private javax.swing.JButton schemaButton;
     private javax.swing.JButton startButton;

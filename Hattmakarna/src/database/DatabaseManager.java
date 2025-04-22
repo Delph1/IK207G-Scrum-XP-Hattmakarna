@@ -32,8 +32,9 @@ public class DatabaseManager {
             }
             User user = new User(
                     row.get("user_id") == null ? 0 : Integer.parseInt(row.get("user_id")),
+                      row.get("password"),
                     row.get("username"),
-                    row.get("password"),
+                  
                     ParseBoolean(row.get("active"))
             );
             return user;
@@ -311,31 +312,52 @@ public class DatabaseManager {
         }
     }
 
-    public Customer getCustomer(int customer_id) {
-        System.out.println("GET customer " + customer_id);
-        try {
-            String query = "SELECT * FROM customers WHERE customer_id = " + customer_id;
-            HashMap<String, String> row = db.fetchRow(query);
-            if (row != null) {
-                Customer customer = new Customer(
-                        customer_id,
-                        row.get("firstname"),
-                        row.get("lastname"),
-                        row.get("streetname"),
-                        row.get("postal_code"),
-                        row.get("postal_city"),
-                        row.get("state"),
-                        row.get("country")
-                );
-                return customer;
-            } else {
-                return null;
+public Customer getCustomer(int customer_id) {
+    System.out.println("GET customer " + customer_id);
+    try {
+        String query = "SELECT * FROM customers WHERE customer_id = " + customer_id;
+        HashMap<String, String> row = db.fetchRow(query);
+        
+        if (row != null) {
+            // Hämta e-postadresser
+            String emailQuery = "SELECT email_address FROM email_addresses WHERE customer_id = " + customer_id;
+            ArrayList<HashMap<String, String>> emailRows = db.fetchRows(emailQuery);
+            ArrayList<String> emails = new ArrayList<>();
+            for (HashMap<String, String> emailRow : emailRows) {
+                emails.add(emailRow.get("email_address"));
             }
-        } catch (InfException e) {
-            System.err.println("Det gick inte att hämta kunden: " + e.getMessage());
+
+            // Hämta telefonnummer
+            String phoneQuery = "SELECT phone_number FROM phone_numbers WHERE customer_id = " + customer_id;
+            ArrayList<HashMap<String, String>> phoneRows = db.fetchRows(phoneQuery);
+            ArrayList<String> phones = new ArrayList<>();
+            for (HashMap<String, String> phoneRow : phoneRows) {
+                phones.add(phoneRow.get("phone_number"));
+            }
+
+            // Skapa Customer-objektet med alla uppgifter
+            Customer customer = new Customer(
+                customer_id,
+                row.get("firstname"),
+                row.get("lastname"),
+                row.get("streetname"),
+                row.get("postal_code"),
+                row.get("postal_city"),
+                row.get("state"),
+                row.get("country"),
+                phones,
+                emails
+            );
+            return customer;
+        } else {
             return null;
         }
+    } catch (InfException e) {
+        System.err.println("Det gick inte att hämta kunden: " + e.getMessage());
+        return null;
     }
+}
+
     
     // Skapar en kund
     public Customer createCustomer() {
@@ -354,25 +376,54 @@ public class DatabaseManager {
     }
 }
 // Uppdaterar en kund
-    public boolean updateCustomer(Customer customer) {
+public boolean updateCustomer(Customer customer) {
     try {
-        String query = "UPDATE customers SET "
-                     + "firstname = '" + customer.getFirstName() + "', "
-                     + "lastname = '" + customer.getLastName() + "', "
-                     + "streetname = '" + customer.getStreetName() + "', "
-                     + "postal_code = '" + customer.getPostalCode() + "', "
-                     + "postal_city = '" + customer.getPostalCity() + "', "
-                     + "state = '" + customer.getState() + "', "
-                     + "country = '" + customer.getCountry() + "' "
-                     + "WHERE customer_id = " + customer.getId();
+        // 1. Uppdatera kundens grundinformation
+        String updateQuery = "UPDATE customers SET "
+                + "firstname = '" + customer.getFirstName() + "', "
+                + "lastname = '" + customer.getLastName() + "', "
+                + "streetname = '" + customer.getStreetName() + "', "
+                + "postal_code = '" + customer.getPostalCode() + "', "
+                + "postal_city = '" + customer.getPostalCity() + "', "
+                + "state = '" + customer.getState() + "', "
+                + "country = '" + customer.getCountry() + "' "
+                + "WHERE customer_id = " + customer.getId();
+        db.update(updateQuery);
 
-        db.update(query);
+        int customerId = customer.getId();
+
+        System.out.println("Tar bort emails");
+        // 2. Rensa tidigare e-postadresser
+        String deleteEmails = "DELETE FROM email_addresses WHERE customer_id = " + customerId;
+ 
+        db.delete(deleteEmails);
+    System.out.println("Uppdaterar emails");
+        // 3. Lägg till nya e-postadresser
+        for (String email : customer.getEmails()) {
+            String insertEmail = "INSERT INTO email_addresses (customer_id, email_address) VALUES ("
+                    + customerId + ", '" + email + "')";
+            db.insert(insertEmail);
+        }
+System.out.println("Tar bort telefonnummer");
+        // 4. Rensa tidigare telefonnummer
+        String deletePhones = "DELETE FROM phone_numbers WHERE customer_id = " + customerId;
+        db.delete(deletePhones);
+
+        System.out.println("Uppdaterar telefonnummer");
+        // 5. Lägg till nya telefonnummer
+        for (String phone : customer.getPhoneNumbers()) {
+            String insertPhone = "INSERT INTO phone_numbers (customer_id, phone_number) VALUES ("
+                    + customerId + ", '" + phone + "')";
+            db.insert(insertPhone);
+        }
+
         return true;
     } catch (InfException e) {
         System.err.println("Kunde inte uppdatera kund: " + e.getMessage());
         return false;
     }
 }
+
 
 
     //Returnera material som inte beställts mellan två datum
@@ -487,7 +538,8 @@ public class DatabaseManager {
                     + "discontinued = " + (product.getDiscontinued() ? 1 : 0) + ", "
                     + "base_product_id = " + (product.getBaseProductId() == 0 ? "NULL" : product.getBaseProductId()) + ", "
                     + "weight = " + product.getWeight() + ", "
-                    + "price = " + product.getPrice() + " "
+                    + "price = " + product.getPrice() + ", "
+                    + "description = '"+product.getDescription()+"'"
                     + "WHERE product_id = " + product.getProductId();
 
             db.update(query);
@@ -559,12 +611,66 @@ public class DatabaseManager {
         }
 
     }
+    public User getUser(int user_id) {
+
+    try {
+        String query = "SELECT * FROM users WHERE user_id = " + user_id;
+        HashMap<String, String> row = db.fetchRow(query);
+        if (row != null) {
+            User user = new User(
+                    Integer.parseInt(row.get("user_id")),
+                    row.get("password"),
+                    row.get("username"),
+                    ParseBoolean(row.get("active"))
+            );
+            return user;
+        } else {
+            return null;
+        }
+    } catch (InfException e) {
+        System.err.println("Det gick inte att hämta användaren: " + e.getMessage());
+        return null;
+    }
+}
+public User createUser() {
+    try {
+        String maxIdStr = db.fetchColumn("SELECT MAX(user_id) FROM users").getFirst();
+        int newId = (maxIdStr == null || maxIdStr.isEmpty()) ? 1 : Integer.parseInt(maxIdStr) + 1;
+
+        String insert = "INSERT INTO users (user_id, username, password, active) VALUES (" +
+                newId + ", '', '', 1)"; 
+
+        db.insert(insert);
+
+        return getUser(newId);
+    } catch (InfException e) {
+        System.err.println("Kunde inte skapa ny användare: " + e.getMessage());
+        return null;
+    }
+}
+
+public boolean updateUser(User user) {
+    try {
+        String query = "UPDATE users SET "
+                + "username = '" + user.getUserName() + "', "
+                + "password = '" + user.getPassword() + "', "
+                + "active = " + (user.getActive() ? 1 : 0) + " "
+                + "WHERE user_id = " + user.getUserId();
+
+        db.update(query);
+        return true;
+    } catch (InfException e) {
+        System.err.println("Kunde inte uppdatera användare: " + e.getMessage());
+        return false;
+    }
+}
+
 
     private boolean ParseBoolean(String tinyIntString) {
         return "1".equals(tinyIntString);
     }
 
-    private String md5(String input) {
+    public String md5(String input) {
         try {
             MessageDigest md = MessageDigest.getInstance("MD5");
             byte[] hashBytes = md.digest(input.getBytes());
@@ -721,5 +827,54 @@ public class DatabaseManager {
             System.err.println("Kunde inte sätta komponent för produkt: " + e.getMessage());
         }
     }
+    
+    public ProductImage createImage () {
+        try {
+            String maxIdStr = db.fetchColumn("SELECT MAX(image_id) FROM images").getFirst();
+            int newId = (maxIdStr == null || maxIdStr.isEmpty()) ? 1 : Integer.parseInt(maxIdStr) + 1;
 
+            String insert = "INSERT INTO images (image_id, product_id, base64) "
+                    + "VALUES (" + newId + ", '0', '')";
+            db.insert(insert);
+
+            return getImage(newId);
+        } catch (InfException e) {
+            System.err.println("Kunde inte skapa komponent: " + e.getMessage());
+            return null;
+        }
+    }
+    
+    public boolean updateImage(ProductImage image) {
+        try {
+            String query = "UPDATE image SET "
+                    + "product_id = '" + image.getProductId() + "', "
+                    + "base64 = '" + image.getBase64() + "' "
+                    + "WHERE image_id = " + image.getImageId();
+            db.update(query);
+            return true;
+        } catch (InfException e) {
+            System.err.println("Kunde inte uppdatera bilden: " + e.getMessage());
+            return false;
+        }
+    }
+
+        public ProductImage getImage(int imageId) {
+        try {
+            String query = "SELECT * FROM images WHERE image_id = " + imageId;
+            HashMap<String, String> row = db.fetchRow(query);
+
+            if (row != null && !row.isEmpty()) {
+                return new ProductImage(
+                        row.get("base64"),
+                        Integer.parseInt(row.get("image_id")),
+                        Integer.parseInt(row.get("product_id"))
+                );
+            } else {
+                return null;
+            }
+        } catch (InfException e) {
+            System.err.println("Kunde inte hämta bilden: " + e.getMessage());
+            return null;
+        }
+    }
 }
