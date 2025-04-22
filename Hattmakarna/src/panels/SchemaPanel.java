@@ -25,13 +25,15 @@ public class SchemaPanel extends javax.swing.JPanel {
     private MainWindow window;
     private ArrayList<OrderLine> allOrderLines;
     private DefaultListModel<OrderLine> listModel;
-
+    private ArrayList<OrderLine> myOrderlinesList;
+    private DefaultListModel<OrderLine> myOrderlinesListModel;
     /**
      * Konstruktor, Creates new form SchemaPanel
      */
-    public SchemaPanel(MainWindow window) {
+    public SchemaPanel(MainWindow window, int user_id) {
         initComponents();
         this.window = window;
+        User user = dbm.getUser(user_id);
         loadUsers();
         allOrderLines = dbm.getOrderlines();
         listModel = new DefaultListModel<>();
@@ -48,6 +50,10 @@ public class SchemaPanel extends javax.swing.JPanel {
             }
         }
         );
+        myOrderlinesList = dbm.getHatmakerOrderlines(user_id);
+        myOrderlinesListModel = new DefaultListModel<>();
+        jListMyOrderlines.setModel(myOrderlinesListModel);
+        listMyOrderlines(user_id);
     }
     
     private void loadUsers() {
@@ -77,6 +83,14 @@ public class SchemaPanel extends javax.swing.JPanel {
         }
     }
     
+    private void listMyOrderlines(int user_id) {
+        myOrderlinesListModel.clear(); 
+        for(OrderLine myOrderlines : myOrderlinesList) {
+            myOrderlinesListModel.addElement(myOrderlines);
+        }
+        
+    }
+    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -97,6 +111,7 @@ public class SchemaPanel extends javax.swing.JPanel {
         jLabel3 = new javax.swing.JLabel();
         jScrollPane2 = new javax.swing.JScrollPane();
         jListMyOrderlines = new javax.swing.JList<>();
+        jLabel5 = new javax.swing.JLabel();
 
         userComboBox.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -125,6 +140,9 @@ public class SchemaPanel extends javax.swing.JPanel {
         });
 
         jScrollPane2.setViewportView(jListMyOrderlines);
+
+        jLabel5.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        jLabel5.setText("Mina orderrader");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
@@ -155,7 +173,9 @@ public class SchemaPanel extends javax.swing.JPanel {
                                 .addComponent(btnAddEmployee))
                             .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.LEADING))
                         .addGap(37, 37, 37)
-                        .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 380, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 380, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 117, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
         );
         layout.setVerticalGroup(
@@ -169,7 +189,8 @@ public class SchemaPanel extends javax.swing.JPanel {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel1)
                     .addComponent(userComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnAddEmployee))
+                    .addComponent(btnAddEmployee)
+                    .addComponent(jLabel5))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 220, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -203,7 +224,6 @@ public class SchemaPanel extends javax.swing.JPanel {
 
     private void btnAddEmployeeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddEmployeeActionPerformed
         
-
     }//GEN-LAST:event_btnAddEmployeeActionPerformed
 
 
@@ -213,7 +233,8 @@ public class SchemaPanel extends javax.swing.JPanel {
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
-    private javax.swing.JList<String> jListMyOrderlines;
+    private javax.swing.JLabel jLabel5;
+    private javax.swing.JList<OrderLine> jListMyOrderlines;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JList<OrderLine> orderLineList;
