@@ -827,5 +827,54 @@ public boolean updateUser(User user) {
             System.err.println("Kunde inte sätta komponent för produkt: " + e.getMessage());
         }
     }
+    
+    public ProductImage createImage () {
+        try {
+            String maxIdStr = db.fetchColumn("SELECT MAX(image_id) FROM images").getFirst();
+            int newId = (maxIdStr == null || maxIdStr.isEmpty()) ? 1 : Integer.parseInt(maxIdStr) + 1;
 
+            String insert = "INSERT INTO images (image_id, product_id, base64) "
+                    + "VALUES (" + newId + ", '0', '')";
+            db.insert(insert);
+
+            return getImage(newId);
+        } catch (InfException e) {
+            System.err.println("Kunde inte skapa komponent: " + e.getMessage());
+            return null;
+        }
+    }
+    
+    public boolean updateImage(ProductImage image) {
+        try {
+            String query = "UPDATE image SET "
+                    + "product_id = '" + image.getProductId() + "', "
+                    + "base64 = '" + image.getBase64() + "' "
+                    + "WHERE image_id = " + image.getImageId();
+            db.update(query);
+            return true;
+        } catch (InfException e) {
+            System.err.println("Kunde inte uppdatera bilden: " + e.getMessage());
+            return false;
+        }
+    }
+
+        public ProductImage getImage(int imageId) {
+        try {
+            String query = "SELECT * FROM images WHERE image_id = " + imageId;
+            HashMap<String, String> row = db.fetchRow(query);
+
+            if (row != null && !row.isEmpty()) {
+                return new ProductImage(
+                        row.get("base64"),
+                        Integer.parseInt(row.get("image_id")),
+                        Integer.parseInt(row.get("product_id"))
+                );
+            } else {
+                return null;
+            }
+        } catch (InfException e) {
+            System.err.println("Kunde inte hämta bilden: " + e.getMessage());
+            return null;
+        }
+    }
 }
