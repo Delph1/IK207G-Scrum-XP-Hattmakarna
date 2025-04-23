@@ -97,6 +97,7 @@ public class ProductListPanel extends javax.swing.JPanel {
         tblProdukter = new javax.swing.JTable();
         btnSlutsald = new javax.swing.JButton();
         lblImage = new javax.swing.JLabel();
+        btnEditProduct = new javax.swing.JButton();
 
         setName(""); // NOI18N
 
@@ -130,24 +131,34 @@ public class ProductListPanel extends javax.swing.JPanel {
             }
         });
 
+        btnEditProduct.setText("Ändra produkt");
+        btnEditProduct.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnEditProductActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addGroup(layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(btnSlutsald)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(NewProductBTN))
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addGroup(layout.createSequentialGroup()
-                            .addGap(269, 269, 269)
-                            .addComponent(jLabel1))
-                        .addGroup(layout.createSequentialGroup()
-                            .addGap(40, 40, 40)
-                            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 520, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                        .addGap(40, 40, 40)
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 520, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(269, 269, 269)
+                                .addComponent(jLabel1))
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(btnSlutsald)
+                                .addGap(18, 18, 18)
+                                .addComponent(btnEditProduct)))
+                        .addGap(18, 18, 18)
+                        .addComponent(NewProductBTN)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 47, Short.MAX_VALUE)
                 .addComponent(lblImage, javax.swing.GroupLayout.PREFERRED_SIZE, 239, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(21, 21, 21))
@@ -160,7 +171,8 @@ public class ProductListPanel extends javax.swing.JPanel {
                 .addGap(24, 24, 24)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(NewProductBTN)
-                    .addComponent(btnSlutsald))
+                    .addComponent(btnSlutsald)
+                    .addComponent(btnEditProduct))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 340, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -170,35 +182,53 @@ public class ProductListPanel extends javax.swing.JPanel {
     }// </editor-fold>//GEN-END:initComponents
 
     private void NewProductBTNActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_NewProductBTNActionPerformed
-    ModularWindow modularWindow = new ModularWindow(window, true);
-    modularWindow.newProduct();  
-    modularWindow.setVisible(true);
-    modularWindow.setAlwaysOnTop(true); 
+        ModularWindow modularWindow = new ModularWindow(window, true);
+        modularWindow.newProduct();  
+        modularWindow.setVisible(true);
+        modularWindow.setAlwaysOnTop(true); 
     }//GEN-LAST:event_NewProductBTNActionPerformed
 
     private void btnSlutsaldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSlutsaldActionPerformed
-    int rad = tblProdukter.getSelectedRow();
-    if (rad == -1) {
-        JOptionPane.showMessageDialog(this, "Välj en produkt först.");
-        return;
-    }
+        int rad = tblProdukter.getSelectedRow();
+        if (rad == -1) {
+            JOptionPane.showMessageDialog(this, "Välj en produkt först.");
+            return;
+        }
 
-    int produktId = (int) tblProdukter.getValueAt(rad, 0);
-    Product produkt = dbm.getProduct(produktId);
+        int produktId = (int) tblProdukter.getValueAt(rad, 0);
+        Product produkt = dbm.getProduct(produktId);
 
-    boolean nyStatus = !produkt.getDiscontinued();  
-    produkt.setDiscontinued(nyStatus);
-    dbm.updateProduct(produkt);
+        boolean nyStatus = !produkt.getDiscontinued();  
+        produkt.setDiscontinued(nyStatus);
+        dbm.updateProduct(produkt);
 
-    JOptionPane.showMessageDialog(this, nyStatus ? 
-        "Produkten är nu markerad som slutsåld." : 
-        "Produkten är nu tillgänglig igen.");
+        JOptionPane.showMessageDialog(this, nyStatus ? 
+            "Produkten är nu markerad som slutsåld." : 
+            "Produkten är nu tillgänglig igen.");
 
-    fyllProduktTabell(); 
+        fyllProduktTabell(); 
     }//GEN-LAST:event_btnSlutsaldActionPerformed
+
+    private void btnEditProductActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditProductActionPerformed
+        int rad = tblProdukter.getSelectedRow();
+        if (rad == -1) {
+            JOptionPane.showMessageDialog(this, "Välj en produkt först.");
+            return;
+        }
+
+        int produktId = (int) tblProdukter.getValueAt(rad, 0);
+        Product produkt = dbm.getProduct(produktId);
+
+        ModularWindow modularWindow = new ModularWindow(window, true);
+        modularWindow.editProduct(produkt);  
+        modularWindow.setVisible(true);
+        modularWindow.setAlwaysOnTop(true); 
+
+    }//GEN-LAST:event_btnEditProductActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton NewProductBTN;
+    private javax.swing.JButton btnEditProduct;
     private javax.swing.JButton btnSlutsald;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JScrollPane jScrollPane1;
