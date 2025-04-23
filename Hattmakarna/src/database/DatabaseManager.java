@@ -32,9 +32,8 @@ public class DatabaseManager {
             }
             User user = new User(
                     row.get("user_id") == null ? 0 : Integer.parseInt(row.get("user_id")),
-                      row.get("password"),
                     row.get("username"),
-                  
+                    row.get("password"),
                     ParseBoolean(row.get("active"))
             );
             return user;
@@ -237,6 +236,18 @@ public class DatabaseManager {
             throw new RuntimeException("Fel vid hämtning av beställningar: " + e.getMessage());
         }
 
+    }
+    
+    public boolean updateHatmakerOrderlines(OrderLine orderline, User user) {
+        try {
+            int orderline_id = orderline.getOrderLineId();
+            int user_id = user.getUserId();
+            String insert_sql = "INSERT INTO hatmaker (orderline_id, hatmaker) VALUES (" + orderline_id + ", " + user_id + ")";
+            db.insert(insert_sql);
+            return true;
+        } catch (InfException e) {
+            throw new RuntimeException("Det gick inte att lägga till orderraden till hatmaker: " + e.getMessage());
+        }
     }
 
     // Hämtar en objektlista med alla beställningsrader som inte tillhör en hattmakare
