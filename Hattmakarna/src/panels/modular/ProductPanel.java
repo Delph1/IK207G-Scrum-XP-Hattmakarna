@@ -101,7 +101,45 @@ public class ProductPanel extends javax.swing.JPanel {
             materialTable.addRow(new Object[]{ component.getComponentId(), component.getComponentName(), component.getType(), component.getColor(), component.getAmount(), component.getUnit()}); 
         }
     }
+    
+    private void fillComboBoxes() {
+        JComboBox comboBoxNames = new JComboBox();
+        JComboBox comboBoxColor = new JComboBox();
+        JComboBox comboBoxTypes = new JComboBox();
+        JComboBox comboBoxUnits = new JComboBox();
+        
+        //Använder sets för att bara få in unika värden i listorna
+        Set<String> nameSet = new HashSet<>();
+        Set<String> typeSet = new HashSet<>();
+        Set<String> colorSet = new HashSet<>();
+        
+        ArrayList<Component> components = dbm.getComponents();
+        
+        for (Component component : components) {
+            nameSet.add(component.getComponentName());
+            colorSet.add(component.getColor());
+            typeSet.add(component.getType());
+        }
+        
+        comboBoxUnits.addItem("meter");
+        comboBoxUnits.addItem("styck");
+        
+        for(String name : nameSet)comboBoxNames.addItem(name);
+        for(String type : typeSet)comboBoxTypes.addItem(type);
+        for(String color : colorSet)comboBoxColor.addItem(color);
 
+        TableColumn nameColumn = tblMaterial.getColumnModel().getColumn(0);
+        nameColumn.setCellEditor(new DefaultCellEditor(comboBoxNames));
+        
+        TableColumn typesColumn = tblMaterial.getColumnModel().getColumn(1);
+        typesColumn.setCellEditor(new DefaultCellEditor(comboBoxTypes));
+
+        TableColumn colorColumn = tblMaterial.getColumnModel().getColumn(2);
+        colorColumn.setCellEditor(new DefaultCellEditor(comboBoxColor));
+        
+        TableColumn unitColumn = tblMaterial.getColumnModel().getColumn(4);
+        unitColumn.setCellEditor(new DefaultCellEditor(comboBoxUnits));    
+    }
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
