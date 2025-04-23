@@ -136,6 +136,9 @@ public class ModularSpecialOrder extends javax.swing.JPanel {
         lblResale1 = new javax.swing.JLabel();
         lblImage = new javax.swing.JLabel();
         btnUploadImage = new javax.swing.JButton();
+        jScrollPane3 = new javax.swing.JScrollPane();
+        tblBlueprint = new javax.swing.JTable();
+        lblBlueprint = new javax.swing.JLabel();
 
         setPreferredSize(new java.awt.Dimension(600, 382));
         setVerifyInputWhenFocusTarget(false);
@@ -226,6 +229,33 @@ public class ModularSpecialOrder extends javax.swing.JPanel {
             }
         });
 
+        tblBlueprint.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null},
+                {null, null},
+                {null, null},
+                {null, null}
+            },
+            new String [] {
+                "Title 1", "Title 2"
+            }
+        ) {
+            Class[] types = new Class [] {
+                java.lang.Integer.class, java.lang.String.class
+            };
+
+            public Class getColumnClass(int columnIndex) {
+                return types [columnIndex];
+            }
+        });
+        jScrollPane3.setViewportView(tblBlueprint);
+        if (tblBlueprint.getColumnModel().getColumnCount() > 0) {
+            tblBlueprint.getColumnModel().getColumn(0).setPreferredWidth(15);
+            tblBlueprint.getColumnModel().getColumn(1).setPreferredWidth(100);
+        }
+
+        lblBlueprint.setText("Välj en ritning i listan");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
@@ -233,19 +263,6 @@ public class ModularSpecialOrder extends javax.swing.JPanel {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(6, 6, 6)
-                        .addComponent(btnAddMaterial)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(btnRemoveRow)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(btnCreateMaterial))
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 588, Short.MAX_VALUE)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addGap(0, 0, Short.MAX_VALUE)
-                        .addComponent(btnCancel)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(btnSave))
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addComponent(lblHatName)
@@ -276,8 +293,26 @@ public class ModularSpecialOrder extends javax.swing.JPanel {
                                 .addComponent(lblImage, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                             .addGroup(layout.createSequentialGroup()
                                 .addGap(32, 32, 32)
-                                .addComponent(btnUploadImage, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))))
+                                .addComponent(btnUploadImage, javax.swing.GroupLayout.DEFAULT_SIZE, 130, Short.MAX_VALUE))))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addComponent(btnCancel)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(btnSave)))
                 .addContainerGap())
+            .addGroup(layout.createSequentialGroup()
+                .addGap(6, 6, 6)
+                .addComponent(btnAddMaterial)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(btnRemoveRow)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(btnCreateMaterial))
+            .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.TRAILING)
+            .addGroup(layout.createSequentialGroup()
+                .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 395, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(lblBlueprint, javax.swing.GroupLayout.PREFERRED_SIZE, 179, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(19, 19, 19))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -308,14 +343,18 @@ public class ModularSpecialOrder extends javax.swing.JPanel {
                         .addComponent(cbxCopyright)
                         .addComponent(lblResale1)
                         .addComponent(btnUploadImage)))
-                .addGap(18, 18, Short.MAX_VALUE)
+                .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnAddMaterial)
                     .addComponent(btnRemoveRow)
                     .addComponent(btnCreateMaterial))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 142, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGap(18, 18, 18)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(lblBlueprint, javax.swing.GroupLayout.DEFAULT_SIZE, 126, Short.MAX_VALUE)
+                    .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 20, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnSave)
                     .addComponent(btnCancel))
@@ -354,7 +393,7 @@ public class ModularSpecialOrder extends javax.swing.JPanel {
         
         //Sparar bilden om det finns någon
         if (base64Image != null) {
-            imageManager.saveNewImage(base64Image, newProduct.getProductId());
+            imageManager.saveNewImage(base64Image, newProduct.getProductId(), "product_image", "");
         }
         
         //Skapar komponenterna som hör till produkten
@@ -410,6 +449,8 @@ public class ModularSpecialOrder extends javax.swing.JPanel {
     private javax.swing.JCheckBox cbxResale;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JScrollPane jScrollPane3;
+    private javax.swing.JLabel lblBlueprint;
     private javax.swing.JLabel lblDescription;
     private javax.swing.JLabel lblHatName;
     private javax.swing.JLabel lblImage;
@@ -417,6 +458,7 @@ public class ModularSpecialOrder extends javax.swing.JPanel {
     private javax.swing.JLabel lblResale;
     private javax.swing.JLabel lblResale1;
     private javax.swing.JLabel lblWeight;
+    private javax.swing.JTable tblBlueprint;
     private javax.swing.JTable tblMaterial;
     private javax.swing.JTextArea txtDescription;
     private javax.swing.JTextField txtHatName;
