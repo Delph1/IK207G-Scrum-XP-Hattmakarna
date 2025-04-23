@@ -40,14 +40,18 @@
                               <EmptySpace max="-2" attributes="0"/>
                               <Component id="userComboBox" min="-2" pref="141" max="-2" attributes="0"/>
                               <EmptySpace pref="103" max="32767" attributes="0"/>
-                              <Component id="btnAddEmployee" min="-2" max="-2" attributes="0"/>
+                              <Component id="btnAddOrderlineToUser" min="-2" max="-2" attributes="0"/>
                           </Group>
                           <Component id="jScrollPane1" alignment="0" max="32767" attributes="0"/>
                       </Group>
                       <EmptySpace min="-2" pref="37" max="-2" attributes="0"/>
-                      <Group type="103" groupAlignment="0" attributes="0">
+                      <Group type="103" groupAlignment="0" max="-2" attributes="0">
                           <Component id="jScrollPane2" min="-2" pref="380" max="-2" attributes="0"/>
-                          <Component id="jLabel5" min="-2" pref="117" max="-2" attributes="0"/>
+                          <Group type="102" attributes="0">
+                              <Component id="jLabel5" min="-2" pref="117" max="-2" attributes="0"/>
+                              <EmptySpace max="32767" attributes="0"/>
+                              <Component id="btnRemoveOrderlineFromUser" min="-2" max="-2" attributes="0"/>
+                          </Group>
                       </Group>
                       <EmptySpace max="32767" attributes="0"/>
                   </Group>
@@ -67,8 +71,9 @@
               <Group type="103" groupAlignment="3" attributes="0">
                   <Component id="jLabel1" alignment="3" min="-2" max="-2" attributes="0"/>
                   <Component id="userComboBox" alignment="3" min="-2" max="-2" attributes="0"/>
-                  <Component id="btnAddEmployee" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="btnAddOrderlineToUser" alignment="3" min="-2" max="-2" attributes="0"/>
                   <Component id="jLabel5" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="btnRemoveOrderlineFromUser" alignment="3" min="-2" max="-2" attributes="0"/>
               </Group>
               <EmptySpace type="unrelated" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="0" attributes="0">
@@ -135,12 +140,12 @@
     </Component>
     <Component class="javax.swing.JLabel" name="orderStatusLabel">
     </Component>
-    <Component class="javax.swing.JButton" name="btnAddEmployee">
+    <Component class="javax.swing.JButton" name="btnAddOrderlineToUser">
       <Properties>
         <Property name="text" type="java.lang.String" value="L&#xe4;gg till"/>
       </Properties>
       <Events>
-        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnAddEmployeeActionPerformed"/>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnAddOrderlineToUserActionPerformed"/>
       </Events>
     </Component>
     <Component class="javax.swing.JLabel" name="jLabel3">
@@ -166,6 +171,14 @@
         </Property>
         <Property name="text" type="java.lang.String" value="Mina orderrader"/>
       </Properties>
+    </Component>
+    <Component class="javax.swing.JButton" name="btnRemoveOrderlineFromUser">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="Ta bort"/>
+      </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnRemoveOrderlineFromUserActionPerformed"/>
+      </Events>
     </Component>
   </SubComponents>
 </Form>

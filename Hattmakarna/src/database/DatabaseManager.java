@@ -249,6 +249,18 @@ public class DatabaseManager {
             throw new RuntimeException("Det gick inte att lägga till orderraden till hatmaker: " + e.getMessage());
         }
     }
+    
+    public boolean removeHatmakerOrderlines(OrderLine orderline, User user) {
+        try {
+            int orderline_id = orderline.getOrderLineId();
+            int user_id = user.getUserId();
+            String delete_sql = "DELETE FROM hatmaker WHERE orderline_id = " + orderline_id + " AND hatmaker = " + user_id + ""; 
+            db.delete(delete_sql);
+            return true; 
+        } catch (InfException e) {
+            throw new RuntimeException("Det gick inte att ta bort orderraden från hatmaker: " + e.getMessage()); 
+        }
+    }
 
     // Hämtar en objektlista med alla beställningsrader som inte tillhör en hattmakare
     public ArrayList<OrderLine> getUnassignedOrderlines() {
