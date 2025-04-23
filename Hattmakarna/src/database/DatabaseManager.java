@@ -926,4 +926,14 @@ public boolean updateUser(User user) {
             return null;
         }
     }
+    
+    public boolean deleteImage(int image_id) {
+        try {
+            db.delete("DELETE FROM images where image_id = " + image_id);
+            return true;
+        } catch (InfException e) {
+            System.err.println("Det gick inte att ta bort bilden: " + e.getMessage());
+            return false;
+        }
+    }
 }
