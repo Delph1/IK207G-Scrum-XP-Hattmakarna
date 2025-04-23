@@ -853,8 +853,8 @@ public boolean updateUser(User user) {
             String maxIdStr = db.fetchColumn("SELECT MAX(image_id) FROM images").getFirst();
             int newId = (maxIdStr == null || maxIdStr.isEmpty()) ? 1 : Integer.parseInt(maxIdStr) + 1;
 
-            String insert = "INSERT INTO images (image_id, product_id, base64) "
-                    + "VALUES (" + newId + ", '1', '')";
+            String insert = "INSERT INTO images (image_id, product_id, base64, type, description) "
+                    + "VALUES (" + newId + ", '1', '', '', '')";
             db.insert(insert);
 
             return getImage(newId);
@@ -869,6 +869,8 @@ public boolean updateUser(User user) {
             String query = "UPDATE images SET "
                     + "product_id = '" + image.getProductId() + "', "
                     + "base64 = '" + image.getBase64() + "' "
+                    + "type = '" + image.getType() + "' "
+                    + "description = '" + image.getDescription() + "' "
                     + "WHERE image_id = " + image.getImageId();
             db.update(query);
             return true;
@@ -887,7 +889,9 @@ public boolean updateUser(User user) {
                 return new ProductImage(
                         row.get("base64"),
                         Integer.parseInt(row.get("image_id")),
-                        Integer.parseInt(row.get("product_id"))
+                        Integer.parseInt(row.get("product_id")),
+                        row.get("type"),
+                        row.get("description")
                 );
             } else {
                 return null;
@@ -908,7 +912,9 @@ public boolean updateUser(User user) {
                     imageList.add(new ProductImage(
                             image.get("base64"),
                             Integer.parseInt(image.get("image_id")),
-                            Integer.parseInt(image.get("product_id"))
+                            Integer.parseInt(image.get("product_id")),
+                            image.get("type"),
+                            image.get("description")
                     ));
                 }
                 return imageList;
