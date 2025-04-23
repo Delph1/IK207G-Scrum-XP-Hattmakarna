@@ -37,10 +37,11 @@ public class ImageManagerPanel extends javax.swing.JPanel {
         imageTable.addColumn("Produkt ID");
         imageTable.addColumn("Produkt");
         imageTable.addColumn("Bild ID");
+        imageTable.addColumn("Typ");
         
         for (ProductImage image : images ) {
             Product imageProduct = dbm.getProduct(image.getProductId());
-            imageTable.addRow(new Object[] {image.getProductId(), imageProduct.getProductName(), image.getImageId()});
+            imageTable.addRow(new Object[] {image.getProductId(), imageProduct.getProductName(), image.getImageId(), image.getType()});
         }
         tblImages.setModel(imageTable);
     }
