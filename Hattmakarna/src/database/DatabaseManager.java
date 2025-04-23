@@ -910,8 +910,8 @@ public class DatabaseManager {
         try {
             String query = "UPDATE images SET "
                     + "product_id = '" + image.getProductId() + "', "
-                    + "base64 = '" + image.getBase64() + "' "
-                    + "type = '" + image.getType() + "' "
+                    + "base64 = '" + image.getBase64() + "', "
+                    + "type = '" + image.getType() + "', "
                     + "description = '" + image.getDescription() + "' "
                     + "WHERE image_id = " + image.getImageId();
             db.update(query);

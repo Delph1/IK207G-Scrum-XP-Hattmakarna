@@ -37,12 +37,19 @@ public class ImageManagerPanel extends javax.swing.JPanel {
         imageTable.addColumn("Produkt ID");
         imageTable.addColumn("Produkt");
         imageTable.addColumn("Bild ID");
+        imageTable.addColumn("Typ");
+        imageTable.addColumn("base64");
         
         for (ProductImage image : images ) {
             Product imageProduct = dbm.getProduct(image.getProductId());
-            imageTable.addRow(new Object[] {image.getProductId(), imageProduct.getProductName(), image.getImageId()});
+            imageTable.addRow(new Object[] {image.getProductId(), imageProduct.getProductName(), image.getImageId(), image.getType(), image.getBase64()});
         }
         tblImages.setModel(imageTable);
+        //gömmer femte kolumnen        
+        tblImages.getColumnModel().getColumn(4).setMinWidth(0);
+        tblImages.getColumnModel().getColumn(4).setMaxWidth(0);
+        tblImages.getColumnModel().getColumn(4).setWidth(0);
+
     }
     
     private void createListener() {
@@ -74,6 +81,30 @@ public class ImageManagerPanel extends javax.swing.JPanel {
         }
     }
     
+       
+    public void showImageInBigWindow(String base64Image) {
+        try {
+            // Dekoda Base64 → byte[]
+            byte[] bildBytes = Base64.getDecoder().decode(base64Image);
+
+            // Skapa ImageIcon
+            ImageIcon ikon = new ImageIcon(bildBytes);
+
+            // Visa i ny ruta
+            JLabel bildLabel = new JLabel(ikon);
+            JScrollPane scroll = new JScrollPane(bildLabel);
+
+            JFrame imageWindow = new JFrame("Storbild");
+            imageWindow.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+            imageWindow.add(scroll);
+            imageWindow.pack(); 
+            imageWindow.setVisible(true);
+        } catch (IllegalArgumentException ex) {
+            JOptionPane.showMessageDialog(null, "Fel vid avkodning av bild.", "Fel", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+
+
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -82,6 +113,7 @@ public class ImageManagerPanel extends javax.swing.JPanel {
         jScrollPane1 = new javax.swing.JScrollPane();
         tblImages = new javax.swing.JTable();
         btnDeleteImage = new javax.swing.JButton();
+        btnShowPicture = new javax.swing.JButton();
 
         lblImage.setText("Ingen bild hittades");
 
@@ -102,6 +134,13 @@ public class ImageManagerPanel extends javax.swing.JPanel {
             }
         });
 
+        btnShowPicture.setText("Originalbild");
+        btnShowPicture.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnShowPictureActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
@@ -116,8 +155,10 @@ public class ImageManagerPanel extends javax.swing.JPanel {
                         .addContainerGap())
                     .addGroup(layout.createSequentialGroup()
                         .addGap(18, 18, 18)
-                        .addComponent(btnDeleteImage)
-                        .addContainerGap(80, Short.MAX_VALUE))))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(btnShowPicture)
+                            .addComponent(btnDeleteImage))
+                        .addContainerGap(79, Short.MAX_VALUE))))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -127,6 +168,8 @@ public class ImageManagerPanel extends javax.swing.JPanel {
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(lblImage)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(btnShowPicture)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(btnDeleteImage))
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 275, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
@@ -145,9 +188,17 @@ public class ImageManagerPanel extends javax.swing.JPanel {
         }
     }//GEN-LAST:event_btnDeleteImageActionPerformed
 
-
+    private void btnShowPictureActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnShowPictureActionPerformed
+        int rad = tblImages.getSelectedRow();
+        if (rad != -1) {
+            String base64Sträng = (String) tblImages.getValueAt(rad, 4);
+            showImageInBigWindow(base64Sträng);
+        }
+    }//GEN-LAST:event_btnShowPictureActionPerformed
+ 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnDeleteImage;
+    private javax.swing.JButton btnShowPicture;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JLabel lblImage;
     private javax.swing.JTable tblImages;
