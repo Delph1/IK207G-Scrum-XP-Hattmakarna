@@ -334,6 +334,13 @@ public class MainWindow extends javax.swing.JFrame {
         redrawCurrentPanel();
     }
     
+    public void showandraLosen() {
+        showPanel(new andraLosen(this));
+
+    }
+    
+    
+    
     // Intern metod för att "måla" en panel efter mainPanel's storlek
     private void redrawCurrentPanel() {
         Component currentPanel = mainPanel.getComponent(0);
@@ -359,5 +366,7 @@ public class MainWindow extends javax.swing.JFrame {
     private javax.swing.JButton startButton;
     private javax.swing.JButton statisticsBTN;
     // End of variables declaration//GEN-END:variables
+
+    
 
 }
