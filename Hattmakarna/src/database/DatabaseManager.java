@@ -217,7 +217,7 @@ public class DatabaseManager {
     public ArrayList<OrderLine> getHatmakerOrderlines(int user_id) {
         try {
             ArrayList<OrderLine> orderlines = new ArrayList<>();
-            String query = "SELECT orderlines.* FROM orderlines, hatmaker WHERE orderlines.orderline_id IN (SELECT orderline_id FROM hatmaker WHERE hatmaker.hatmaker = " + user_id + ")";
+            String query = "SELECT DISTINCT orderlines.* FROM orderlines, hatmaker WHERE orderlines.orderline_id IN (SELECT orderline_id FROM hatmaker WHERE hatmaker.hatmaker = " + user_id + ")";
             ArrayList<HashMap<String, String>> results = db.fetchRows(query);
             if (results != null) {
                 for (HashMap<String, String> row : results) {
@@ -249,12 +249,24 @@ public class DatabaseManager {
             throw new RuntimeException("Det gick inte att lägga till orderraden till hatmaker: " + e.getMessage());
         }
     }
+    
+    public boolean removeHatmakerOrderlines(OrderLine orderline, User user) {
+        try {
+            int orderline_id = orderline.getOrderLineId();
+            int user_id = user.getUserId();
+            String delete_sql = "DELETE FROM hatmaker WHERE orderline_id = " + orderline_id + " AND hatmaker = " + user_id + ""; 
+            db.delete(delete_sql);
+            return true; 
+        } catch (InfException e) {
+            throw new RuntimeException("Det gick inte att ta bort orderraden från hatmaker: " + e.getMessage()); 
+        }
+    }
 
     // Hämtar en objektlista med alla beställningsrader som inte tillhör en hattmakare
     public ArrayList<OrderLine> getUnassignedOrderlines() {
         try {
             ArrayList<OrderLine> orderlines = new ArrayList<>();
-            String query = "SELECT orderlines.* FROM orderlines, hatmaker WHERE orderlines.orderline_id NOT IN (SELECT orderline_id FROM hatmaker)";
+            String query = "SELECT DISTINCT orderlines.* FROM orderlines, hatmaker WHERE orderlines.orderline_id NOT IN (SELECT orderline_id FROM hatmaker)";
             ArrayList<HashMap<String, String>> results = db.fetchRows(query);
             if (results != null) {
                 for (HashMap<String, String> row : results) {
@@ -853,8 +865,8 @@ public boolean updateUser(User user) {
             String maxIdStr = db.fetchColumn("SELECT MAX(image_id) FROM images").getFirst();
             int newId = (maxIdStr == null || maxIdStr.isEmpty()) ? 1 : Integer.parseInt(maxIdStr) + 1;
 
-            String insert = "INSERT INTO images (image_id, product_id, base64) "
-                    + "VALUES (" + newId + ", '1', '')";
+            String insert = "INSERT INTO images (image_id, product_id, base64, type, description) "
+                    + "VALUES (" + newId + ", '1', '', '', '')";
             db.insert(insert);
 
             return getImage(newId);
@@ -869,6 +881,8 @@ public boolean updateUser(User user) {
             String query = "UPDATE images SET "
                     + "product_id = '" + image.getProductId() + "', "
                     + "base64 = '" + image.getBase64() + "' "
+                    + "type = '" + image.getType() + "' "
+                    + "description = '" + image.getDescription() + "' "
                     + "WHERE image_id = " + image.getImageId();
             db.update(query);
             return true;
@@ -887,7 +901,9 @@ public boolean updateUser(User user) {
                 return new ProductImage(
                         row.get("base64"),
                         Integer.parseInt(row.get("image_id")),
-                        Integer.parseInt(row.get("product_id"))
+                        Integer.parseInt(row.get("product_id")),
+                        row.get("type"),
+                        row.get("description")
                 );
             } else {
                 return null;
@@ -908,7 +924,9 @@ public boolean updateUser(User user) {
                     imageList.add(new ProductImage(
                             image.get("base64"),
                             Integer.parseInt(image.get("image_id")),
-                            Integer.parseInt(image.get("product_id"))
+                            Integer.parseInt(image.get("product_id")),
+                            image.get("type"),
+                            image.get("description")
                     ));
                 }
                 return imageList;
@@ -918,6 +936,16 @@ public boolean updateUser(User user) {
         } catch (InfException e) {
             System.err.println("Det gick inte att hämta bilder: " + e.getMessage());
             return null;
+        }
+    }
+    
+    public boolean deleteImage(int image_id) {
+        try {
+            db.delete("DELETE FROM images where image_id = " + image_id);
+            return true;
+        } catch (InfException e) {
+            System.err.println("Det gick inte att ta bort bilden: " + e.getMessage());
+            return false;
         }
     }
 }

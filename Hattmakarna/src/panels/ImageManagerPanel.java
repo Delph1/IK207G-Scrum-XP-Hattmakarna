@@ -5,130 +5,151 @@ import static hattmakarna.Hattmakarna.dbm;
 import hattmakarna.MainWindow;
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.io.File;
-import java.io.IOException;
-import java.nio.file.Files;
+import java.util.ArrayList;
+
 import java.util.Base64;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
+import javax.swing.table.DefaultTableModel;
+import models.Product;
 import models.ProductImage;
 import utils.ImageManager;
 
 public class ImageManagerPanel extends javax.swing.JPanel {
 
-    private JLabel imageLabel;
     private String base64Image;
     private MainWindow window;
     private ImageManager imageManager;
+    private DefaultTableModel imageTable;
     
     public ImageManagerPanel(MainWindow window) {
         this.window = window;
         this.imageManager = new ImageManager(window);
+        this.imageTable = new DefaultTableModel(); 
         initComponents();
         
-        lblImage.setVerticalAlignment(SwingConstants.CENTER);
-    }
-
-    private void uploadImage() {
-        byte[] imageBytes = imageManager.uploadImage();
-        base64Image = Base64.getEncoder().encodeToString(imageBytes);
-
-        // Visa bilden
-        ImageIcon icon = new ImageIcon(imageBytes);
-        Image scaledImage = icon.getImage().getScaledInstance(300, 300, Image.SCALE_SMOOTH);
-        lblImage.setIcon(new ImageIcon(scaledImage));
-        lblImage.setText(null);  // ta bort texten "Ingen bild vald"
+        fillImageTable();
+        createListener();
     }
     
-    private void saveImage() {
-        int product_id = Integer.parseInt(txtProductId.getText());
-        imageManager.saveNewImage(base64Image, product_id);
-
-        ProductImage image = dbm.createImage();
-        image.setBase64(base64Image);
-        dbm.updateImage(image);
+    private void fillImageTable() {
+        ArrayList<ProductImage> images = dbm.getImages();
+        imageTable.addColumn("Produkt ID");
+        imageTable.addColumn("Produkt");
+        imageTable.addColumn("Bild ID");
+        
+        for (ProductImage image : images ) {
+            Product imageProduct = dbm.getProduct(image.getProductId());
+            imageTable.addRow(new Object[] {image.getProductId(), imageProduct.getProductName(), image.getImageId()});
+        }
+        tblImages.setModel(imageTable);
+    }
+    
+    private void createListener() {
+        tblImages.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
+            @Override
+            public void valueChanged(ListSelectionEvent e) {
+                if (!e.getValueIsAdjusting()) {
+                    int markeradRad = tblImages.getSelectedRow();
+                    if (markeradRad != -1) {
+                        updateImage(markeradRad);
+                    }
+                }
+            }
+        });
     }
 
+    private void updateImage(int rad) {
+        ProductImage image = dbm.getImage(Integer.parseInt(tblImages.getValueAt(rad, 2).toString()));
+        
+        if (image != null) {
+            byte[] imageBytes = Base64.getDecoder().decode(image.getBase64());
+            ImageIcon icon = new ImageIcon(imageBytes);
+            Image scaledImage = icon.getImage().getScaledInstance(300, 300, Image.SCALE_SMOOTH);
+            lblImage.setIcon(new ImageIcon(scaledImage));
+            lblImage.setText(null);
+        } else {
+            lblImage.setIcon(null);
+            lblImage.setText("Ingen bild hittades");
+        }
+    }
+    
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
         lblImage = new javax.swing.JLabel();
-        btnUpload = new javax.swing.JButton();
-        btnSave = new javax.swing.JButton();
-        txtProductId = new javax.swing.JTextField();
-        jLabel1 = new javax.swing.JLabel();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        tblImages = new javax.swing.JTable();
+        btnDeleteImage = new javax.swing.JButton();
 
+        lblImage.setText("Ingen bild hittades");
 
-        lblImage.setText("Ladda upp en bild ...");
+        tblImages.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
 
-        btnUpload.setText("Ladda upp bild");
-        btnUpload.addActionListener(new java.awt.event.ActionListener() {
+            },
+            new String [] {
+
+            }
+        ));
+        jScrollPane1.setViewportView(tblImages);
+
+        btnDeleteImage.setText("Radera bild");
+        btnDeleteImage.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnUploadActionPerformed(evt);
+                btnDeleteImageActionPerformed(evt);
             }
         });
-
-        btnSave.setText("Spara bild");
-        btnSave.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnSaveActionPerformed(evt);
-            }
-        });
-
-        jLabel1.setText("ProduktId:");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 375, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(169, 169, 169)
-                        .addComponent(lblImage))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(lblImage)
+                        .addContainerGap())
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(25, 25, 25)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(btnSave)
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(btnUpload)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 91, Short.MAX_VALUE)
-                                .addComponent(jLabel1)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(txtProductId, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))))
-                .addGap(44, 44, 44))
+                        .addGap(18, 18, 18)
+                        .addComponent(btnDeleteImage)
+                        .addContainerGap(80, Short.MAX_VALUE))))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(22, 22, 22)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btnUpload)
-                    .addComponent(txtProductId, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel1))
-
-                .addGap(86, 86, 86)
-                .addComponent(lblImage)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 114, Short.MAX_VALUE)
-                .addComponent(btnSave)
-                .addGap(16, 16, 16))
+                .addContainerGap()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(lblImage)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(btnDeleteImage))
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 275, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
 
-    private void btnUploadActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUploadActionPerformed
-        uploadImage();
-    }//GEN-LAST:event_btnUploadActionPerformed
-
-    private void btnSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSaveActionPerformed
-        saveImage();
-    }//GEN-LAST:event_btnSaveActionPerformed
+    private void btnDeleteImageActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteImageActionPerformed
+        int rad = tblImages.getSelectedRow();
+        if (rad != -1) {
+            int imageId = Integer.parseInt(tblImages.getValueAt(rad, 2).toString());
+            dbm.deleteImage(imageId);
+            imageTable.removeRow(rad);
+            lblImage.setIcon(null);
+        } else {
+            JOptionPane.showMessageDialog(this, "Ingen rad är markerad.");
+        }
+    }//GEN-LAST:event_btnDeleteImageActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton btnSave;
-    private javax.swing.JButton btnUpload;
-    private javax.swing.JLabel jLabel1;
+    private javax.swing.JButton btnDeleteImage;
+    private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JLabel lblImage;
-    private javax.swing.JTextField txtProductId;
+    private javax.swing.JTable tblImages;
     // End of variables declaration//GEN-END:variables
 }
