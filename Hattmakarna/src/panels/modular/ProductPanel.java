@@ -22,15 +22,31 @@ public class ProductPanel extends javax.swing.JPanel {
     private ModularWindow window;
     private ImageManager imageManager;
     private String base64Image;
-    private DefaultTableModel materialTable; 
+    private DefaultTableModel materialTable;
+    private Product product;
     
     public ProductPanel(ModularWindow window) {
-        this.window=window; 
+        initComponents();
+        this.window = window; 
         this.imageManager = new ImageManager(window, true);
         materialTable = (DefaultTableModel) tblMaterial.getModel();
-        tblMaterial.setModel(materialTable);
         fillComboBoxes();
-        initComponents();        
+        tblMaterial.setModel(materialTable);
+    }
+    
+    public ProductPanel (ModularWindow window, Product product) {
+        initComponents();
+        this.window = window; 
+        this.product = product;
+        txtVikt.setText(String.valueOf(product.getWeight()));
+        txtProduktnamn.setText(product.getProductName() + " (Modifierad)");
+        txtPris.setText(String.valueOf(product.getPrice()));
+        txtBeskrivning.setText(product.getDescription());
+        this.imageManager = new ImageManager(window, true);
+        materialTable = (DefaultTableModel) tblMaterial.getModel();
+        insertExistingComponentsIntoTable(product.getProductId());
+        fillComboBoxes();
+        tblMaterial.setModel(materialTable);
     }
     
     private void fillComboBoxes() {
@@ -59,18 +75,33 @@ public class ProductPanel extends javax.swing.JPanel {
         for(String type : typeSet)comboBoxTypes.addItem(type);
         for(String color : colorSet)comboBoxColor.addItem(color);
 
-        TableColumn nameColumn = tblMaterial.getColumnModel().getColumn(0);
+        TableColumn nameColumn = tblMaterial.getColumnModel().getColumn(1);
         nameColumn.setCellEditor(new DefaultCellEditor(comboBoxNames));
         
-        TableColumn typesColumn = tblMaterial.getColumnModel().getColumn(1);
+        TableColumn typesColumn = tblMaterial.getColumnModel().getColumn(2);
         typesColumn.setCellEditor(new DefaultCellEditor(comboBoxTypes));
 
-        TableColumn colorColumn = tblMaterial.getColumnModel().getColumn(2);
+        TableColumn colorColumn = tblMaterial.getColumnModel().getColumn(3);
         colorColumn.setCellEditor(new DefaultCellEditor(comboBoxColor));
         
-        TableColumn unitColumn = tblMaterial.getColumnModel().getColumn(4);
+        TableColumn unitColumn = tblMaterial.getColumnModel().getColumn(5);
         unitColumn.setCellEditor(new DefaultCellEditor(comboBoxUnits));    
+        //gömmer första kolumnen
+        tblMaterial.getColumnModel().getColumn(0).setMinWidth(0);
+        tblMaterial.getColumnModel().getColumn(0).setMaxWidth(0);
+        tblMaterial.getColumnModel().getColumn(0).setWidth(0);                
     }
+    
+    private void insertExistingComponentsIntoTable (int productId) {
+        
+        materialTable.removeRow(0);
+        ArrayList<Component> components = dbm.getComponentsForProduct(productId);
+
+        for (Component component : components) {
+            materialTable.addRow(new Object[]{ component.getComponentId(), component.getComponentName(), component.getType(), component.getColor(), component.getAmount(), component.getUnit()}); 
+        }
+    }
+
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -111,7 +142,7 @@ public class ProductPanel extends javax.swing.JPanel {
         chkLagerfor.setSelected(true);
         chkLagerfor.setText("Lagerförd");
 
-        btnLaggTillProdukt.setText("Lägg till hatt");
+        btnLaggTillProdukt.setText("Spara hatt");
         btnLaggTillProdukt.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnLaggTillProduktActionPerformed(evt);
@@ -133,14 +164,14 @@ public class ProductPanel extends javax.swing.JPanel {
 
         tblMaterial.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null, null}
+                {null, null, null, null, null, null}
             },
             new String [] {
-                "Namn", "Typ", "Färg", "Mängd", "Enhet"
+                "ID", "Namn", "Typ", "Färg", "Mängd", "Enhet"
             }
         ) {
             Class[] types = new Class [] {
-                java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class
+                java.lang.Object.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class
             };
 
             public Class getColumnClass(int columnIndex) {
@@ -268,30 +299,57 @@ public class ProductPanel extends javax.swing.JPanel {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnLaggTillProduktActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLaggTillProduktActionPerformed
+        tblMaterial.selectAll();
+        if ( tblMaterial.getCellEditor() != null ) tblMaterial.getCellEditor().stopCellEditing();
+        Product saveProduct = new Product (0,0,"",0,false,false,false,0,"");
         try {
-            Product nyProdukt = dbm.createProduct();
-            nyProdukt.setProductName(txtProduktnamn.getText());
-            nyProdukt.setPrice(Integer.parseInt(txtPris.getText()));
-            nyProdukt.setWeight(Double.parseDouble(txtVikt.getText()));
-            nyProdukt.setDescription(txtBeskrivning.getText());
-            nyProdukt.setStockItem(true);
-            nyProdukt.setDiscontinued(false);
-            nyProdukt.setCopyRightApproved(false);
-            nyProdukt.setProductBaseId(0);  
+            
+            if (product != null) {
+                 saveProduct = product;
+            } else {
+                saveProduct = dbm.createProduct();                
+            }
+            
+            saveProduct.setProductName(txtProduktnamn.getText());
+            saveProduct.setPrice(Integer.parseInt(txtPris.getText()));
+            saveProduct.setWeight(Double.parseDouble(txtVikt.getText()));
+            saveProduct.setDescription(txtBeskrivning.getText());
+            saveProduct.setStockItem(true);
+            saveProduct.setDiscontinued(false);
+            saveProduct.setCopyRightApproved(false);
+            saveProduct.setProductBaseId(0);  
 
-            dbm.updateProduct(nyProdukt);
+            dbm.updateProduct(saveProduct);
 
             if (base64Image != null) {
-                imageManager.saveNewImage(base64Image, nyProdukt.getProductId(), "Produktbild", "");
+                imageManager.saveNewImage(base64Image, saveProduct.getProductId(), "Produktbild", "");
             }
 
-            javax.swing.JOptionPane.showMessageDialog(this, "Ny hatt tillagd!");
+            //Sparar komponenterna som hör till produkten
+            String description = "";
+            for (int i = 0; i < tblMaterial.getRowCount(); i++) {
+                Component component = new Component(
+                    Double.parseDouble(tblMaterial.getValueAt(i, 4).toString().replace(",", ".")),
+                    tblMaterial.getValueAt(i, 0) == null || tblMaterial.getValueAt(i, 0).toString().length() == 0 ? 0 : Integer.parseInt(tblMaterial.getValueAt(i,0).toString()),
+                    tblMaterial.getValueAt(i, 1).toString(),
+                    tblMaterial.getValueAt(i, 3).toString(),
+                    tblMaterial.getValueAt(i, 5).toString(),
+                    tblMaterial.getValueAt(i, 2).toString(),
+                    description
+                );
 
-            txtProduktnamn.setText("");
-            txtPris.setText("");
-            txtVikt.setText("");
-            txtBeskrivning.setText("");
-            chkLagerfor.setSelected(true);
+                if (component.getComponentId() != 0) {
+                    dbm.updateComponent(component);
+                } else {
+                    Component newComponent = dbm.createComponent();
+                    component.setComponentId(newComponent.getComponentId());
+                    dbm.updateComponent(component);
+                    dbm.setComponentForProduct(saveProduct.getProductId(), newComponent.getComponentId(), component.getAmount());
+                }
+            }
+
+            
+            javax.swing.JOptionPane.showMessageDialog(this, "Hatten är sparad!");
 
         }   catch (Exception e) {
             javax.swing.JOptionPane.showMessageDialog(this, "Fel: " + e.getMessage());
@@ -324,6 +382,9 @@ public class ProductPanel extends javax.swing.JPanel {
         if (selectedRowId == -1) {
             JOptionPane.showMessageDialog(this, "Du måste markera en rad i tabellen först.");
             return;
+        }
+        if (tblMaterial.getValueAt(selectedRowId, 0) != null && tblMaterial.getValueAt(selectedRowId, 0).toString().length() != 0) {
+            dbm.deleteComponentForProduct(product.getProductId(), Integer.parseInt(tblMaterial.getValueAt(selectedRowId, 0).toString()));            
         }
         materialTable.removeRow(selectedRowId);
         tblMaterial.setModel(materialTable);
