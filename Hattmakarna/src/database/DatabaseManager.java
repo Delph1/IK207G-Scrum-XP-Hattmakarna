@@ -266,7 +266,7 @@ public class DatabaseManager {
     public ArrayList<OrderLine> getUnassignedOrderlines() {
         try {
             ArrayList<OrderLine> orderlines = new ArrayList<>();
-            String query = "SELECT DISTINCT orderlines.* FROM orderlines, hatmaker WHERE orderlines.orderline_id NOT IN (SELECT orderline_id FROM hatmaker)";
+            String query = "SELECT DISTINCT orderlines.* FROM orderlines WHERE orderlines.orderline_id NOT IN (SELECT orderline_id FROM hatmaker)";
             ArrayList<HashMap<String, String>> results = db.fetchRows(query);
             if (results != null) {
                 for (HashMap<String, String> row : results) {
