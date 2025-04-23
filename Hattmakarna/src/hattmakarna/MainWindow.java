@@ -233,7 +233,9 @@ public class MainWindow extends javax.swing.JFrame {
 
     private void schemaButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_schemaButtonActionPerformed
        //Visar schemasida 
-        showSchemaPanel(); 
+       User user = Hattmakarna.currentUser;
+       int user_id = user.getUserId();
+       showSchemaPanel(user_id); 
     }//GEN-LAST:event_schemaButtonActionPerformed
 
     private void btnMaterialsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMaterialsActionPerformed
@@ -292,8 +294,8 @@ public class MainWindow extends javax.swing.JFrame {
        showPanel(new OrderPanel(this));
     }
 
-    public void showSchemaPanel() {
-        showPanel(new SchemaPanel(this)); 
+    public void showSchemaPanel(int user_id) {
+        showPanel(new SchemaPanel(this, user_id)); 
     }
 
     public void showMaterialListPanel() {

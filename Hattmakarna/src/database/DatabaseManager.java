@@ -32,9 +32,8 @@ public class DatabaseManager {
             }
             User user = new User(
                     row.get("user_id") == null ? 0 : Integer.parseInt(row.get("user_id")),
-                      row.get("password"),
                     row.get("username"),
-                  
+                    row.get("password"),
                     ParseBoolean(row.get("active"))
             );
             return user;
@@ -238,6 +237,18 @@ public class DatabaseManager {
         }
 
     }
+    
+    public boolean updateHatmakerOrderlines(OrderLine orderline, User user) {
+        try {
+            int orderline_id = orderline.getOrderLineId();
+            int user_id = user.getUserId();
+            String insert_sql = "INSERT INTO hatmaker (orderline_id, hatmaker) VALUES (" + orderline_id + ", " + user_id + ")";
+            db.insert(insert_sql);
+            return true;
+        } catch (InfException e) {
+            throw new RuntimeException("Det gick inte att lägga till orderraden till hatmaker: " + e.getMessage());
+        }
+    }
 
     // Hämtar en objektlista med alla beställningsrader som inte tillhör en hattmakare
     public ArrayList<OrderLine> getUnassignedOrderlines() {
@@ -361,7 +372,7 @@ public Customer getCustomer(int customer_id) {
     
     // Skapar en kund
       
-    public Customer createCustomer(String firstName, String lastName, String streetName, String postal_code, String postal_city, String state, String country) {
+    public Customer createCustomer(String firstName, String lastName, String streetName, String postal_code, String postal_city, String state, String country, ArrayList<String> phoneNumbers, ArrayList<String> mails) {
         try {
         String maxIdStr = db.fetchColumn("SELECT MAX(customer_id) FROM customers").getFirst();
         int newId = (maxIdStr == null || maxIdStr.isEmpty()) ? 1 : Integer.parseInt(maxIdStr) + 1;
@@ -369,8 +380,15 @@ public Customer getCustomer(int customer_id) {
         String insert = "INSERT INTO customers (customer_id, firstname, lastname, streetname, postal_code, postal_city, state, country) " +
                         "VALUES (" + newId + ", '" + firstName + "', '" + lastName + "','" + streetName + "','" + postal_code + "', '" + postal_city + "', '" + state + "','" +country + "')";
         db.insert(insert);
+        
+        Customer customer = getCustomer(newId);
+        
+        customer.setPhoneNumbers(phoneNumbers);
+        customer.setEmail(mails);
+        
+        updateCustomer(customer);
 
-        return getCustomer(newId);
+        return customer;
     } catch (InfException e) {
         System.err.println("Kunde inte skapa ny kund: " + e.getMessage());
         return null;

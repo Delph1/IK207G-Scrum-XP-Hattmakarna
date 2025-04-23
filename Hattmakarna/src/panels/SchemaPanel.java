@@ -4,12 +4,15 @@
  */
 package panels;
 
+import hattmakarna.Hattmakarna;
 import static hattmakarna.Hattmakarna.dbm;
 import hattmakarna.MainWindow;
 import models.User;
 import java.util.ArrayList;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.DefaultListModel;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 import models.Order;
 import models.OrderLine;
 
@@ -23,38 +26,56 @@ public class SchemaPanel extends javax.swing.JPanel {
     private MainWindow window;
     private ArrayList<OrderLine> allOrderLines;
     private DefaultListModel<OrderLine> listModel;
-
+    private ArrayList<OrderLine> myOrderlinesList;
+    private DefaultListModel<OrderLine> myOrderlinesListModel;
     /**
      * Konstruktor, Creates new form SchemaPanel
      */
-    public SchemaPanel(MainWindow window) {
+    public SchemaPanel(MainWindow window, int user_id) {
         initComponents();
         this.window = window;
+        User user = dbm.getUser(user_id);
         loadUsers();
         allOrderLines = dbm.getOrderlines();
         listModel = new DefaultListModel<>();
         orderLineList.setModel(listModel);
         listOrderLines();
+        btnAddEmployee.setEnabled(false);
+        orderLineList.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
+            public void valueChanged(ListSelectionEvent event) {
+                if (orderLineList.getSelectedIndex() < 0) {
+                    btnAddEmployee.setEnabled(false);
+                } else {
+                    btnAddEmployee.setEnabled(true);
+                }
+            }
+        }
+        );
+        myOrderlinesList = dbm.getHatmakerOrderlines(user_id);
+        myOrderlinesListModel = new DefaultListModel<>();
+        jListMyOrderlines.setModel(myOrderlinesListModel);
+        listMyOrderlines(user_id);
     }
-
+    
     private void loadUsers() {
         //Hämtar alla users från databasen via DatabaseManager
         ArrayList<User> users = dbm.getUsers();
         // Skapa en DefaultComboBoxModel för JComboBox
         DefaultComboBoxModel<User> userModel = new DefaultComboBoxModel<>();
         // Lägg till ett standardalternativ för användare
-        userModel.addElement(new User(0, "", "Alla användare", false));
-        userModel.addElement(new User(-1, "", "Ej tilldelade", false));
+        userModel.addElement(new User(0, "Alla användare", "", false));
+        userModel.addElement(new User(-1, "Ej tilldelade", "", false));
         // Lägg till varje användare i modellen
         if (users != null) {
             for (User user : users) {
                 userModel.addElement(user);
+                System.out.println("This is the user being added " + user);
             }
         }
         // Sätt modellen 
         userComboBox.setModel(userModel);
     }
-
+    
     private void listOrderLines() {
         listModel.clear(); // Rensa befintliga poster i modellen
 
@@ -62,7 +83,15 @@ public class SchemaPanel extends javax.swing.JPanel {
             listModel.addElement(orderLine);
         }
     }
-
+    
+    private void listMyOrderlines(int user_id) {
+        myOrderlinesListModel.clear(); 
+        for(OrderLine myOrderlines : myOrderlinesList) {
+            myOrderlinesListModel.addElement(myOrderlines);
+        }
+        
+    }
+    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -79,6 +108,11 @@ public class SchemaPanel extends javax.swing.JPanel {
         orderLineList = new javax.swing.JList<>();
         jLabel4 = new javax.swing.JLabel();
         orderStatusLabel = new javax.swing.JLabel();
+        btnAddEmployee = new javax.swing.JButton();
+        jLabel3 = new javax.swing.JLabel();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        jListMyOrderlines = new javax.swing.JList<>();
+        jLabel5 = new javax.swing.JLabel();
 
         userComboBox.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -99,46 +133,74 @@ public class SchemaPanel extends javax.swing.JPanel {
 
         jLabel4.setText("Status:");
 
+        btnAddEmployee.setText("Lägg till");
+        btnAddEmployee.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAddEmployeeActionPerformed(evt);
+            }
+        });
+
+        jScrollPane2.setViewportView(jListMyOrderlines);
+
+        jLabel5.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        jLabel5.setText("Mina orderrader");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
+                .addGap(38, 38, 38)
+                .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(orderStatusLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 136, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addGroup(layout.createSequentialGroup()
+                .addGap(22, 22, 22)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(34, 34, 34)
-                        .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 135, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(12, 12, 12)
+                        .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 135, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(389, 389, 389)
+                        .addComponent(jLabel3, javax.swing.GroupLayout.DEFAULT_SIZE, 147, Short.MAX_VALUE)
+                        .addContainerGap(157, Short.MAX_VALUE))
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(22, 22, 22)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 667, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                             .addGroup(layout.createSequentialGroup()
                                 .addComponent(jLabel1)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(userComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, 141, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(38, 38, 38)
-                        .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(orderStatusLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 136, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(18, Short.MAX_VALUE))
+                                .addComponent(userComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, 141, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 103, Short.MAX_VALUE)
+                                .addComponent(btnAddEmployee))
+                            .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.LEADING))
+                        .addGap(37, 37, 37)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 380, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 117, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addGap(11, 11, 11)
-                .addComponent(jLabel2)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel2)
+                    .addComponent(jLabel3))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel1)
-                    .addComponent(userComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(userComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnAddEmployee)
+                    .addComponent(jLabel5))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 220, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 220, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 220, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(jLabel4, javax.swing.GroupLayout.DEFAULT_SIZE, 24, Short.MAX_VALUE)
                     .addComponent(orderStatusLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addContainerGap(219, Short.MAX_VALUE))
+                .addContainerGap(232, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
 
@@ -150,6 +212,7 @@ public class SchemaPanel extends javax.swing.JPanel {
             allOrderLines = dbm.getUnassignedOrderlines();
         } else {
             allOrderLines = dbm.getHatmakerOrderlines(userId);
+            System.out.println("This number of orderlines are being fetched from getHatmakerOrderlines: " + allOrderLines.size());
         }
         listOrderLines();
     }//GEN-LAST:event_userComboBoxActionPerformed
@@ -161,12 +224,25 @@ public class SchemaPanel extends javax.swing.JPanel {
         }
     }//GEN-LAST:event_orderLineListValueChanged
 
+    private void btnAddEmployeeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddEmployeeActionPerformed
+        var orderline = orderLineList.getSelectedValue();
+        var user = Hattmakarna.currentUser;
+        myOrderlinesListModel.addElement(orderline);
+        listModel.removeElement(orderline);
+        dbm.updateHatmakerOrderlines(orderline, user);
+    }//GEN-LAST:event_btnAddEmployeeActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnAddEmployee;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
+    private javax.swing.JList<OrderLine> jListMyOrderlines;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JList<OrderLine> orderLineList;
     private javax.swing.JLabel orderStatusLabel;
     private javax.swing.JComboBox<User> userComboBox;
