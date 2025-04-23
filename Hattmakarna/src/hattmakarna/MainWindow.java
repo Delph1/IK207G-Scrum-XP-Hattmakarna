@@ -1,4 +1,5 @@
 package hattmakarna;
+import panels.modular.ProductPanel;
 import java.awt.Component;
 import panels.*; // Hämtar alla paneler
 import javax.swing.JPanel;
@@ -17,7 +18,6 @@ public class MainWindow extends javax.swing.JFrame {
        showStartPanel();
     }
 
-    
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -36,6 +36,7 @@ public class MainWindow extends javax.swing.JFrame {
         ProductListBTN = new javax.swing.JButton();
         logOut = new javax.swing.JButton();
         minProfilBTN = new javax.swing.JButton();
+        btnImageManager = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -130,6 +131,13 @@ public class MainWindow extends javax.swing.JFrame {
             }
         });
 
+        btnImageManager.setText("Bilder");
+        btnImageManager.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnImageManagerActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -159,6 +167,8 @@ public class MainWindow extends javax.swing.JFrame {
                         .addComponent(customerListBTN, javax.swing.GroupLayout.PREFERRED_SIZE, 87, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
                         .addComponent(ProductListBTN)
+                        .addGap(18, 18, 18)
+                        .addComponent(btnImageManager)
                         .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
             .addComponent(jSeparator1)
@@ -184,7 +194,8 @@ public class MainWindow extends javax.swing.JFrame {
                     .addComponent(btnMaterials)
                     .addComponent(statisticsBTN)
                     .addComponent(customerListBTN)
-                    .addComponent(ProductListBTN))
+                    .addComponent(ProductListBTN)
+                    .addComponent(btnImageManager))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -218,17 +229,14 @@ public class MainWindow extends javax.swing.JFrame {
         } catch (IOException e) {
             System.err.println(e.getMessage());
         }
-
     }//GEN-LAST:event_btnPrintActionPerformed
 
     private void schemaButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_schemaButtonActionPerformed
        //Visar schemasida 
-        showSchemaPanel(); 
+       User user = Hattmakarna.currentUser;
+       int user_id = user.getUserId();
+       showSchemaPanel(user_id); 
     }//GEN-LAST:event_schemaButtonActionPerformed
-
-    
-
-
 
     private void btnMaterialsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMaterialsActionPerformed
         showMaterialListPanel();
@@ -239,18 +247,18 @@ public class MainWindow extends javax.swing.JFrame {
     }//GEN-LAST:event_statisticsBTNActionPerformed
 
     private void customerListBTNActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_customerListBTNActionPerformed
-showCustomerListPanel();        
+        showCustomerListPanel();        
     }//GEN-LAST:event_customerListBTNActionPerformed
 
     private void ProductListBTNActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ProductListBTNActionPerformed
-    showProductListPanel();   
+        showProductListPanel();   
     }//GEN-LAST:event_ProductListBTNActionPerformed
 
     private void logOutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_logOutActionPerformed
-Hattmakarna.currentUser = null;
-LoginWindow window = new LoginWindow();
+        Hattmakarna.currentUser = null;
+        LoginWindow window = new LoginWindow();
         window.setVisible(true);
-this.dispose();
+        this.dispose();
 
         // TODO add your handling code here:
     }//GEN-LAST:event_logOutActionPerformed
@@ -260,7 +268,9 @@ this.dispose();
         // TODO add your handling code here:
     }//GEN-LAST:event_minProfilBTNActionPerformed
 
-   
+    private void btnImageManagerActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnImageManagerActionPerformed
+        showImageManagerPanel();
+    }//GEN-LAST:event_btnImageManagerActionPerformed
 
     // Publik Metod för att skapa start-panelobjekt och anropa den interna metoden för att visa panelen
     public void showStartPanel() {
@@ -269,7 +279,7 @@ this.dispose();
     
     public void showMinProfil(){
     showPanel(new MinProfil(this));
-}
+    }
     
     // Publik Metod för att skapa start-panelobjekt och anropa den interna metoden för att visa panelen
     public void showOrderlistPanel() {
@@ -284,11 +294,10 @@ this.dispose();
        showPanel(new OrderPanel(this));
     }
 
-    public void showSchemaPanel() {
-        showPanel(new SchemaPanel(this)); 
+    public void showSchemaPanel(int user_id) {
+        showPanel(new SchemaPanel(this, user_id)); 
     }
 
-    
     public void showMaterialListPanel() {
        showPanel(new MaterialListPanel(this));
     }
@@ -297,17 +306,20 @@ this.dispose();
         showPanel(new Orderstatistics(this)); 
     }
     
-    public void showCustomerPanel() {
-       showPanel(new CustomerPanel(this));
+    public void showCustomerPanel(Customer customer) {
+       showPanel(new CustomerPanel(this,customer));
     }
+    
     public void showCustomerListPanel() {
        showPanel(new CustomerListPanel(this));
     }
-    public void showProductPanel() {
-       showPanel(new ProductPanel(this));
+    
+    public void showProductListPanel() {
+        showPanel(new ProductListPanel(this));
     }
-        public void showProductListPanel() {
-       showPanel(new ProductListPanel(this));
+        
+    private void showImageManagerPanel() {
+        showPanel(new ImageManagerPanel(this));
     }
 
     // Intern metod för att visa ett panelobjekt i vår mainPanel
@@ -332,6 +344,7 @@ this.dispose();
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton ProductListBTN;
+    private javax.swing.JButton btnImageManager;
     private javax.swing.JButton btnMaterials;
     private javax.swing.JButton btnPrint;
     private javax.swing.JButton customerListBTN;
@@ -347,5 +360,4 @@ this.dispose();
     private javax.swing.JButton statisticsBTN;
     // End of variables declaration//GEN-END:variables
 
-    
 }

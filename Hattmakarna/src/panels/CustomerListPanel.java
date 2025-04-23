@@ -61,7 +61,7 @@ public class CustomerListPanel extends javax.swing.JPanel {
     }// </editor-fold>//GEN-END:initComponents
 
     private void NewCustomerBTNActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_NewCustomerBTNActionPerformed
-        window.showCustomerPanel();
+        window.showCustomerPanel(null);
     }//GEN-LAST:event_NewCustomerBTNActionPerformed
 
 

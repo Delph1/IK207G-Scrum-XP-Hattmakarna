@@ -32,9 +32,8 @@ public class DatabaseManager {
             }
             User user = new User(
                     row.get("user_id") == null ? 0 : Integer.parseInt(row.get("user_id")),
-                      row.get("password"),
                     row.get("username"),
-                  
+                    row.get("password"),
                     ParseBoolean(row.get("active"))
             );
             return user;
@@ -238,6 +237,18 @@ public class DatabaseManager {
         }
 
     }
+    
+    public boolean updateHatmakerOrderlines(OrderLine orderline, User user) {
+        try {
+            int orderline_id = orderline.getOrderLineId();
+            int user_id = user.getUserId();
+            String insert_sql = "INSERT INTO hatmaker (orderline_id, hatmaker) VALUES (" + orderline_id + ", " + user_id + ")";
+            db.insert(insert_sql);
+            return true;
+        } catch (InfException e) {
+            throw new RuntimeException("Det gick inte att lägga till orderraden till hatmaker: " + e.getMessage());
+        }
+    }
 
     // Hämtar en objektlista med alla beställningsrader som inte tillhör en hattmakare
     public ArrayList<OrderLine> getUnassignedOrderlines() {
@@ -360,21 +371,30 @@ public Customer getCustomer(int customer_id) {
 
     
     // Skapar en kund
-    public Customer createCustomer() {
-    try {
+      
+    public Customer createCustomer(String firstName, String lastName, String streetName, String postal_code, String postal_city, String state, String country, ArrayList<String> phoneNumbers, ArrayList<String> mails) {
+        try {
         String maxIdStr = db.fetchColumn("SELECT MAX(customer_id) FROM customers").getFirst();
         int newId = (maxIdStr == null || maxIdStr.isEmpty()) ? 1 : Integer.parseInt(maxIdStr) + 1;
 
         String insert = "INSERT INTO customers (customer_id, firstname, lastname, streetname, postal_code, postal_city, state, country) " +
-                        "VALUES (" + newId + ", 'Förnamn', 'Efternamn', '', '', '', '', '')";
+                        "VALUES (" + newId + ", '" + firstName + "', '" + lastName + "','" + streetName + "','" + postal_code + "', '" + postal_city + "', '" + state + "','" +country + "')";
         db.insert(insert);
+        
+        Customer customer = getCustomer(newId);
+        
+        customer.setPhoneNumbers(phoneNumbers);
+        customer.setEmail(mails);
+        
+        updateCustomer(customer);
 
-        return getCustomer(newId);
+        return customer;
     } catch (InfException e) {
         System.err.println("Kunde inte skapa ny kund: " + e.getMessage());
         return null;
     }
-}
+        
+    }
 // Uppdaterar en kund
 public boolean updateCustomer(Customer customer) {
     try {
@@ -827,5 +847,77 @@ public boolean updateUser(User user) {
             System.err.println("Kunde inte sätta komponent för produkt: " + e.getMessage());
         }
     }
+    
+    public ProductImage createImage () {
+        try {
+            String maxIdStr = db.fetchColumn("SELECT MAX(image_id) FROM images").getFirst();
+            int newId = (maxIdStr == null || maxIdStr.isEmpty()) ? 1 : Integer.parseInt(maxIdStr) + 1;
 
+            String insert = "INSERT INTO images (image_id, product_id, base64) "
+                    + "VALUES (" + newId + ", '1', '')";
+            db.insert(insert);
+
+            return getImage(newId);
+        } catch (InfException e) {
+            System.err.println("Kunde inte skapa komponent: " + e.getMessage());
+            return null;
+        }
+    }
+    
+    public boolean updateImage(ProductImage image) {
+        try {
+            String query = "UPDATE images SET "
+                    + "product_id = '" + image.getProductId() + "', "
+                    + "base64 = '" + image.getBase64() + "' "
+                    + "WHERE image_id = " + image.getImageId();
+            db.update(query);
+            return true;
+        } catch (InfException e) {
+            System.err.println("Kunde inte uppdatera bilden: " + e.getMessage());
+            return false;
+        }
+    }
+
+    public ProductImage getImage(int imageId) {
+        try {
+            String query = "SELECT * FROM images WHERE image_id = " + imageId;
+            HashMap<String, String> row = db.fetchRow(query);
+
+            if (row != null && !row.isEmpty()) {
+                return new ProductImage(
+                        row.get("base64"),
+                        Integer.parseInt(row.get("image_id")),
+                        Integer.parseInt(row.get("product_id"))
+                );
+            } else {
+                return null;
+            }
+        } catch (InfException e) {
+            System.err.println("Kunde inte hämta bilden: " + e.getMessage());
+            return null;
+        }
+    }
+    
+    public ArrayList<ProductImage> getImages() {
+        System.out.println("GET images");
+        ArrayList<ProductImage> imageList = new ArrayList<>();
+        try {
+            ArrayList<HashMap<String, String>> images = db.fetchRows("SELECT * FROM images");
+            if (images != null) {
+                for (HashMap<String, String> image : images) {
+                    imageList.add(new ProductImage(
+                            image.get("base64"),
+                            Integer.parseInt(image.get("image_id")),
+                            Integer.parseInt(image.get("product_id"))
+                    ));
+                }
+                return imageList;
+            } else {
+                return null;
+            }
+        } catch (InfException e) {
+            System.err.println("Det gick inte att hämta bilder: " + e.getMessage());
+            return null;
+        }
+    }
 }
