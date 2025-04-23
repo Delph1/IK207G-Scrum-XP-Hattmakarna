@@ -40,13 +40,13 @@ public class SchemaPanel extends javax.swing.JPanel {
         listModel = new DefaultListModel<>();
         orderLineList.setModel(listModel);
         listOrderLines();
-        btnAddEmployee.setEnabled(false);
+        btnAddOrderlineToUser.setEnabled(false);
         orderLineList.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
             public void valueChanged(ListSelectionEvent event) {
                 if (orderLineList.getSelectedIndex() < 0) {
-                    btnAddEmployee.setEnabled(false);
+                    btnAddOrderlineToUser.setEnabled(false);
                 } else {
-                    btnAddEmployee.setEnabled(true);
+                    btnAddOrderlineToUser.setEnabled(true);
                 }
             }
         }
@@ -55,6 +55,16 @@ public class SchemaPanel extends javax.swing.JPanel {
         myOrderlinesListModel = new DefaultListModel<>();
         jListMyOrderlines.setModel(myOrderlinesListModel);
         listMyOrderlines(user_id);
+        btnRemoveOrderlineFromUser.setEnabled(false);
+        jListMyOrderlines.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
+            public void valueChanged(ListSelectionEvent event) {
+                if(jListMyOrderlines.getSelectedIndex() < 0) {
+                    btnRemoveOrderlineFromUser.setEnabled(false);
+                } else {
+                    btnRemoveOrderlineFromUser.setEnabled(true);
+                }
+            }
+        });
     }
     
     private void loadUsers() {
@@ -108,11 +118,12 @@ public class SchemaPanel extends javax.swing.JPanel {
         orderLineList = new javax.swing.JList<>();
         jLabel4 = new javax.swing.JLabel();
         orderStatusLabel = new javax.swing.JLabel();
-        btnAddEmployee = new javax.swing.JButton();
+        btnAddOrderlineToUser = new javax.swing.JButton();
         jLabel3 = new javax.swing.JLabel();
         jScrollPane2 = new javax.swing.JScrollPane();
         jListMyOrderlines = new javax.swing.JList<>();
         jLabel5 = new javax.swing.JLabel();
+        btnRemoveOrderlineFromUser = new javax.swing.JButton();
 
         userComboBox.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -133,10 +144,10 @@ public class SchemaPanel extends javax.swing.JPanel {
 
         jLabel4.setText("Status:");
 
-        btnAddEmployee.setText("Lägg till");
-        btnAddEmployee.addActionListener(new java.awt.event.ActionListener() {
+        btnAddOrderlineToUser.setText("Lägg till");
+        btnAddOrderlineToUser.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnAddEmployeeActionPerformed(evt);
+                btnAddOrderlineToUserActionPerformed(evt);
             }
         });
 
@@ -144,6 +155,13 @@ public class SchemaPanel extends javax.swing.JPanel {
 
         jLabel5.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         jLabel5.setText("Mina orderrader");
+
+        btnRemoveOrderlineFromUser.setText("Ta bort");
+        btnRemoveOrderlineFromUser.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnRemoveOrderlineFromUserActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
@@ -171,12 +189,15 @@ public class SchemaPanel extends javax.swing.JPanel {
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(userComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, 141, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 103, Short.MAX_VALUE)
-                                .addComponent(btnAddEmployee))
+                                .addComponent(btnAddOrderlineToUser))
                             .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.LEADING))
                         .addGap(37, 37, 37)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 380, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 117, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 117, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(btnRemoveOrderlineFromUser)))
                         .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
         );
         layout.setVerticalGroup(
@@ -190,8 +211,9 @@ public class SchemaPanel extends javax.swing.JPanel {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel1)
                     .addComponent(userComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnAddEmployee)
-                    .addComponent(jLabel5))
+                    .addComponent(btnAddOrderlineToUser)
+                    .addComponent(jLabel5)
+                    .addComponent(btnRemoveOrderlineFromUser))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 220, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -224,17 +246,25 @@ public class SchemaPanel extends javax.swing.JPanel {
         }
     }//GEN-LAST:event_orderLineListValueChanged
 
-    private void btnAddEmployeeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddEmployeeActionPerformed
+    private void btnAddOrderlineToUserActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddOrderlineToUserActionPerformed
         var orderline = orderLineList.getSelectedValue();
         var user = Hattmakarna.currentUser;
         myOrderlinesListModel.addElement(orderline);
         listModel.removeElement(orderline);
         dbm.updateHatmakerOrderlines(orderline, user);
-    }//GEN-LAST:event_btnAddEmployeeActionPerformed
+    }//GEN-LAST:event_btnAddOrderlineToUserActionPerformed
+
+    private void btnRemoveOrderlineFromUserActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRemoveOrderlineFromUserActionPerformed
+        var orderline = jListMyOrderlines.getSelectedValue();
+        var user = Hattmakarna.currentUser;
+        myOrderlinesListModel.removeElement(orderline);
+        dbm.removeHatmakerOrderlines(orderline, user);
+    }//GEN-LAST:event_btnRemoveOrderlineFromUserActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton btnAddEmployee;
+    private javax.swing.JButton btnAddOrderlineToUser;
+    private javax.swing.JButton btnRemoveOrderlineFromUser;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;

@@ -217,7 +217,7 @@ public class DatabaseManager {
     public ArrayList<OrderLine> getHatmakerOrderlines(int user_id) {
         try {
             ArrayList<OrderLine> orderlines = new ArrayList<>();
-            String query = "SELECT orderlines.* FROM orderlines, hatmaker WHERE orderlines.orderline_id IN (SELECT orderline_id FROM hatmaker WHERE hatmaker.hatmaker = " + user_id + ")";
+            String query = "SELECT DISTINCT orderlines.* FROM orderlines, hatmaker WHERE orderlines.orderline_id IN (SELECT orderline_id FROM hatmaker WHERE hatmaker.hatmaker = " + user_id + ")";
             ArrayList<HashMap<String, String>> results = db.fetchRows(query);
             if (results != null) {
                 for (HashMap<String, String> row : results) {
@@ -249,12 +249,24 @@ public class DatabaseManager {
             throw new RuntimeException("Det gick inte att lägga till orderraden till hatmaker: " + e.getMessage());
         }
     }
+    
+    public boolean removeHatmakerOrderlines(OrderLine orderline, User user) {
+        try {
+            int orderline_id = orderline.getOrderLineId();
+            int user_id = user.getUserId();
+            String delete_sql = "DELETE FROM hatmaker WHERE orderline_id = " + orderline_id + " AND hatmaker = " + user_id + ""; 
+            db.delete(delete_sql);
+            return true; 
+        } catch (InfException e) {
+            throw new RuntimeException("Det gick inte att ta bort orderraden från hatmaker: " + e.getMessage()); 
+        }
+    }
 
     // Hämtar en objektlista med alla beställningsrader som inte tillhör en hattmakare
     public ArrayList<OrderLine> getUnassignedOrderlines() {
         try {
             ArrayList<OrderLine> orderlines = new ArrayList<>();
-            String query = "SELECT orderlines.* FROM orderlines, hatmaker WHERE orderlines.orderline_id NOT IN (SELECT orderline_id FROM hatmaker)";
+            String query = "SELECT DISTINCT orderlines.* FROM orderlines, hatmaker WHERE orderlines.orderline_id NOT IN (SELECT orderline_id FROM hatmaker)";
             ArrayList<HashMap<String, String>> results = db.fetchRows(query);
             if (results != null) {
                 for (HashMap<String, String> row : results) {
