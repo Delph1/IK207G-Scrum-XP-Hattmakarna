@@ -6,6 +6,11 @@ import javax.swing.table.DefaultTableModel;
 import javax.swing.JOptionPane;
 import static hattmakarna.Hattmakarna.dbm;
 import hattmakarna.ModularWindow;
+import java.awt.Image;
+import java.util.Base64;
+import javax.swing.ImageIcon;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 import models.*;
 
 
@@ -16,41 +21,72 @@ public class ProductListPanel extends javax.swing.JPanel {
             this.window = window;
             initComponents();
             fyllProduktTabell();
+            skapaListener();
         }
     
-private void fyllProduktTabell() {
-    try {
-        ArrayList<Product> produkter = dbm.getProducts();
-
-        DefaultTableModel model = new DefaultTableModel();
-        model.addColumn("ID");
-        model.addColumn("Namn");
-        model.addColumn("Pris");
-        model.addColumn("Vikt");
-        model.addColumn("Beskrivning");
-        model.addColumn("Status"); 
-
-        for (Product p : produkter) {
-            if (p.getStockItem()) {
-            System.out.println(p.getProductName() + " - Status: " + (p.getDiscontinued() ? "Slutsåld" : "I lager"));
-            model.addRow(new Object[]{
-                    p.getProductId(),
-                    p.getProductName(),
-                    p.getPrice(),
-                    p.getWeight(),
-                    p.getDescription(),
-                    p.getDiscontinued() ? "Slutsåld" : "I lager" 
-                });
+    private void skapaListener() {
+        tblProdukter.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
+            @Override
+            public void valueChanged(ListSelectionEvent e) {
+                if (!e.getValueIsAdjusting()) {
+                    int markeradRad = tblProdukter.getSelectedRow();
+                    if (markeradRad != -1) {
+                        updateImage(markeradRad);
+                    }
+                }
             }
-        }
-
-        tblProdukter.setModel(model);  
-
-    } catch (Exception e) {
-        e.printStackTrace();
-        JOptionPane.showMessageDialog(this, "Kunde inte hämta produkter: " + e.getMessage());
+        });
     }
-}
+    
+    private void updateImage(int rad) {
+        Object product_id = tblProdukter.getValueAt(rad, 0);
+        ProductImage image = dbm.getImage(Integer.parseInt(product_id.toString()));
+        
+        if (image != null) {
+            byte[] imageBytes = Base64.getDecoder().decode(image.getBase64());
+            ImageIcon icon = new ImageIcon(imageBytes);
+            Image scaledImage = icon.getImage().getScaledInstance(300, 300, Image.SCALE_SMOOTH);
+            lblImage.setIcon(new ImageIcon(scaledImage));
+            lblImage.setText(null);
+        } else {
+            lblImage.setIcon(null);
+            lblImage.setText("Ingen bild hittades");
+        }
+    }
+    
+    private void fyllProduktTabell() {
+        try {
+            ArrayList<Product> produkter = dbm.getProducts();
+
+            DefaultTableModel model = new DefaultTableModel();
+            model.addColumn("ID");
+            model.addColumn("Namn");
+            model.addColumn("Pris");
+            model.addColumn("Vikt");
+            model.addColumn("Beskrivning");
+            model.addColumn("Status"); 
+
+            for (Product p : produkter) {
+                if (p.getStockItem()) {
+                System.out.println(p.getProductName() + " - Status: " + (p.getDiscontinued() ? "Slutsåld" : "I lager"));
+                model.addRow(new Object[]{
+                        p.getProductId(),
+                        p.getProductName(),
+                        p.getPrice(),
+                        p.getWeight(),
+                        p.getDescription(),
+                        p.getDiscontinued() ? "Slutsåld" : "I lager" 
+                    });
+                }
+            }
+
+            tblProdukter.setModel(model);  
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(this, "Kunde inte hämta produkter: " + e.getMessage());
+        }
+    }
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -60,6 +96,7 @@ private void fyllProduktTabell() {
         jScrollPane1 = new javax.swing.JScrollPane();
         tblProdukter = new javax.swing.JTable();
         btnSlutsald = new javax.swing.JButton();
+        lblImage = new javax.swing.JLabel();
 
         setName(""); // NOI18N
 
@@ -111,7 +148,9 @@ private void fyllProduktTabell() {
                         .addGroup(layout.createSequentialGroup()
                             .addGap(40, 40, 40)
                             .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 520, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                .addContainerGap(40, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 47, Short.MAX_VALUE)
+                .addComponent(lblImage, javax.swing.GroupLayout.PREFERRED_SIZE, 239, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(21, 21, 21))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -123,7 +162,9 @@ private void fyllProduktTabell() {
                     .addComponent(NewProductBTN)
                     .addComponent(btnSlutsald))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 340, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 340, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(lblImage, javax.swing.GroupLayout.PREFERRED_SIZE, 190, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(93, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
@@ -161,6 +202,7 @@ private void fyllProduktTabell() {
     private javax.swing.JButton btnSlutsald;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JLabel lblImage;
     private javax.swing.JTable tblProdukter;
     // End of variables declaration//GEN-END:variables
 }

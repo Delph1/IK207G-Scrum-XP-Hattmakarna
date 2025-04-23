@@ -372,7 +372,7 @@ public Customer getCustomer(int customer_id) {
     
     // Skapar en kund
       
-    public Customer createCustomer(String firstName, String lastName, String streetName, String postal_code, String postal_city, String state, String country) {
+    public Customer createCustomer(String firstName, String lastName, String streetName, String postal_code, String postal_city, String state, String country, ArrayList<String> phoneNumbers, ArrayList<String> mails) {
         try {
         String maxIdStr = db.fetchColumn("SELECT MAX(customer_id) FROM customers").getFirst();
         int newId = (maxIdStr == null || maxIdStr.isEmpty()) ? 1 : Integer.parseInt(maxIdStr) + 1;
@@ -380,8 +380,15 @@ public Customer getCustomer(int customer_id) {
         String insert = "INSERT INTO customers (customer_id, firstname, lastname, streetname, postal_code, postal_city, state, country) " +
                         "VALUES (" + newId + ", '" + firstName + "', '" + lastName + "','" + streetName + "','" + postal_code + "', '" + postal_city + "', '" + state + "','" +country + "')";
         db.insert(insert);
+        
+        Customer customer = getCustomer(newId);
+        
+        customer.setPhoneNumbers(phoneNumbers);
+        customer.setEmail(mails);
+        
+        updateCustomer(customer);
 
-        return getCustomer(newId);
+        return customer;
     } catch (InfException e) {
         System.err.println("Kunde inte skapa ny kund: " + e.getMessage());
         return null;
@@ -847,7 +854,7 @@ public boolean updateUser(User user) {
             int newId = (maxIdStr == null || maxIdStr.isEmpty()) ? 1 : Integer.parseInt(maxIdStr) + 1;
 
             String insert = "INSERT INTO images (image_id, product_id, base64) "
-                    + "VALUES (" + newId + ", '0', '')";
+                    + "VALUES (" + newId + ", '1', '')";
             db.insert(insert);
 
             return getImage(newId);
@@ -859,7 +866,7 @@ public boolean updateUser(User user) {
     
     public boolean updateImage(ProductImage image) {
         try {
-            String query = "UPDATE image SET "
+            String query = "UPDATE images SET "
                     + "product_id = '" + image.getProductId() + "', "
                     + "base64 = '" + image.getBase64() + "' "
                     + "WHERE image_id = " + image.getImageId();
@@ -871,7 +878,7 @@ public boolean updateUser(User user) {
         }
     }
 
-        public ProductImage getImage(int imageId) {
+    public ProductImage getImage(int imageId) {
         try {
             String query = "SELECT * FROM images WHERE image_id = " + imageId;
             HashMap<String, String> row = db.fetchRow(query);
@@ -887,6 +894,29 @@ public boolean updateUser(User user) {
             }
         } catch (InfException e) {
             System.err.println("Kunde inte hämta bilden: " + e.getMessage());
+            return null;
+        }
+    }
+    
+    public ArrayList<ProductImage> getImages() {
+        System.out.println("GET images");
+        ArrayList<ProductImage> imageList = new ArrayList<>();
+        try {
+            ArrayList<HashMap<String, String>> images = db.fetchRows("SELECT * FROM images");
+            if (images != null) {
+                for (HashMap<String, String> image : images) {
+                    imageList.add(new ProductImage(
+                            image.get("base64"),
+                            Integer.parseInt(image.get("image_id")),
+                            Integer.parseInt(image.get("product_id"))
+                    ));
+                }
+                return imageList;
+            } else {
+                return null;
+            }
+        } catch (InfException e) {
+            System.err.println("Det gick inte att hämta bilder: " + e.getMessage());
             return null;
         }
     }
