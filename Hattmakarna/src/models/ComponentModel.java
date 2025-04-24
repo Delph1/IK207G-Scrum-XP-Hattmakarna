@@ -1,7 +1,14 @@
-
+/*
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
+ */
 package models;
 
-public class Component {
+/**
+ *
+ * @author andre
+ */
+public class ComponentModel {
     
     private double amount;
     private int component_id;
@@ -12,7 +19,7 @@ public class Component {
     private String description;
     
     
-    public Component(double amount, int component_id, String component_name, String color, String unit, String type, String description) {
+    public ComponentModel(double amount, int component_id, String component_name, String color, String unit, String type,String description) {
         this.amount = amount;
         this.component_id = component_id;
         this.component_name = component_name;
