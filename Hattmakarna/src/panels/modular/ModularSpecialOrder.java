@@ -7,14 +7,19 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Base64;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
+import java.util.TreeSet;
 import javax.swing.DefaultCellEditor;
 import javax.swing.ImageIcon;
 import javax.swing.JComboBox;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
+import javax.swing.JTable;
+import javax.swing.ListSelectionModel;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.table.TableColumn;
@@ -43,7 +48,8 @@ public class ModularSpecialOrder extends javax.swing.JPanel {
         this.imageManager = new ImageManager(window, true);
         baseId = 0;
         initComponents();
-        fillComboBoxes();
+        smarterComboBoxes();
+//        fillComboBoxes();
         materialTable = (DefaultTableModel) tblMaterial.getModel();
         blueprintTable = (DefaultTableModel) tblBlueprint.getModel();
         tblMaterial.setModel(materialTable);
@@ -65,7 +71,8 @@ public class ModularSpecialOrder extends javax.swing.JPanel {
         baseId = product.getProductId();
         initComponents();
         txtWeight.setText(String.valueOf(product.getWeight()));
-        fillComboBoxes();
+        smarterComboBoxes();
+//        fillComboBoxes();
         txtHatName.setText(product.getProductName() + " (Modifierad)");
         txtPrice.setText(String.valueOf(product.getPrice()));
         txtDescription.setText(product.getDescription());
@@ -126,6 +133,80 @@ public class ModularSpecialOrder extends javax.swing.JPanel {
         }
     }
     
+        private void smarterComboBoxes() {
+        
+        tblMaterial.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+
+        tblMaterial.getSelectionModel().addListSelectionListener(e -> {
+            if (!e.getValueIsAdjusting()) {
+                int rad = tblMaterial.getSelectedRow();
+                if (rad != -1) {
+                    uppdateraCellEditorsFörRad(tblMaterial, rad);
+                }
+            }
+        });
+        
+        JComboBox comboBoxNames = new JComboBox();
+        ArrayList<ComponentModel> components = dbm.getComponents();
+        Set<String> nameSet = new HashSet<>();
+
+        for (ComponentModel component : components) {
+            nameSet.add(component.getComponentName());
+        }
+        for(String name : nameSet)comboBoxNames.addItem(name);
+        tblMaterial.getColumnModel().getColumn(1).setCellEditor(new DefaultCellEditor(comboBoxNames));
+        
+        Set<String> colors = new TreeSet<>(Arrays.asList(
+            "Aprikos", "Aubergine", "Azurblå", "Beige", "Blå", "Blågrå", "Blåsvart",
+            "Brun", "Burgundy", "Cerise", "Cyan", "Denim", "Gammelrosa", "Grå", "Gråblå",
+            "Grön", "Grönblå", "Gul", "Guld", "Indigo", "Kaki", "Koppar", "Korall",
+            "Kornblå", "Kräm", "Laxrosa", "Lavendel", "Lila", "Ljusblå", "Ljusgrå",
+            "Ljusgrön", "Ljusrosa", "Magenta", "Marinblå", "Mörkblå", "Mörkgrå",
+            "Mörkgrön", "Mörklila", "Mörkröd", "Nougat", "Olivgrön", "Orange",
+            "Petrol", "Rosa", "Rost", "Röd", "Rödbrun", "Safirblå", "Senapsgul",
+            "Silver", "Skogsgrön", "Svart", "Turkos", "Vit", "Vinröd", "Äppelgrön", "Äggskal"
+        ));
+        JComboBox<String> comboBoxColors = new JComboBox<>(colors.toArray(new String[0]));
+        tblMaterial.getColumnModel().getColumn(3).setCellEditor(new DefaultCellEditor(comboBoxColors));
+        
+        //gömmer första kolumnen
+        tblMaterial.getColumnModel().getColumn(0).setMinWidth(0);
+        tblMaterial.getColumnModel().getColumn(0).setMaxWidth(0);
+        tblMaterial.getColumnModel().getColumn(0).setWidth(0);          
+    }
+
+    private void uppdateraCellEditorsFörRad(JTable table, int row) {
+        // Exempel: få tillgång till val från rad för att påverka comboBoxar
+
+        if (table.isEditing()) {
+            table.getCellEditor().stopCellEditing();
+        }
+        String valdTyp = (String) table.getValueAt(row, 2);
+        String valdEnhet = (String) table.getValueAt(row, 5);
+
+        String componentName = table.getValueAt(row, 1).toString();
+        Map<String, Set<String>> material = dbm.getComponentAttributesFromName(componentName);
+
+        JComboBox<String> comboBoxTypes = new JComboBox<>();
+        Set<String> types = material.get("types");
+        for (String type : types) {
+            comboBoxTypes.addItem(type);
+        }
+
+        JComboBox<String> comboBoxUnits = new JComboBox<>();
+        Set<String> units = material.get("units");
+        for (String unit : units) {
+            comboBoxUnits.addItem(unit);
+        }
+
+        // Kombobox för Typ
+        comboBoxTypes.setSelectedItem(table.getValueAt(row, 2));
+        table.getColumnModel().getColumn(2).setCellEditor(new DefaultCellEditor(comboBoxTypes));
+
+        // Kombobox för Enhet
+        comboBoxUnits.setSelectedItem(table.getValueAt(row, 5)); // kolumn "Enhet"
+        table.getColumnModel().getColumn(5).setCellEditor(new DefaultCellEditor(comboBoxUnits));
+    }
     private void createBlueprintListener() {
         tblBlueprint.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
             @Override
