@@ -152,7 +152,8 @@ public class DatabaseManager {
                         ParseBoolean(row.get("customer_approval")),
                         row.get("description"),
                         row.get("price") == null ? 0 : Integer.parseInt(row.get("price")),
-                        row.get("product_id") == null ? 0 : Integer.parseInt(row.get("product_id"))
+                        row.get("product_id") == null ? 0 : Integer.parseInt(row.get("product_id")),
+                        LocalDate.parse("1111-11-11")
                 );
                 return orderLine;
             } else {
@@ -178,7 +179,8 @@ public class DatabaseManager {
                             ParseBoolean(row.get("customer_approval")),
                             row.get("description"),
                             Integer.parseInt(row.get("price")),
-                            Integer.parseInt(row.get("product_id"))
+                            Integer.parseInt(row.get("product_id")),
+                            LocalDate.parse("1111-11-11")
                     ));
                 }
             }
@@ -203,7 +205,8 @@ public class DatabaseManager {
                             ParseBoolean(row.get("customer_approval")),
                             row.get("description"),
                             Integer.parseInt(row.get("price")),
-                            Integer.parseInt(row.get("product_id"))
+                            Integer.parseInt(row.get("product_id")),
+                            LocalDate.parse("1111-11-11")
                     ));
                 }
             }
@@ -228,7 +231,8 @@ public class DatabaseManager {
                             ParseBoolean(row.get("customer_approval")),
                             row.get("description"),
                             Integer.parseInt(row.get("price")),
-                            Integer.parseInt(row.get("product_id"))
+                            Integer.parseInt(row.get("product_id")),
+                            LocalDate.parse("1111-11-11")
                     ));
                 }
             }
@@ -239,11 +243,14 @@ public class DatabaseManager {
 
     }
 
-    public boolean updateHatmakerOrderlines(OrderLine orderline, User user) {
+    public boolean createHatmakerOrderlines(OrderLine orderline, User user, LocalDate delivery_date) {
         try {
             int orderline_id = orderline.getOrderLineId();
             int user_id = user.getUserId();
-            String insert_sql = "INSERT INTO hatmaker (orderline_id, hatmaker) VALUES (" + orderline_id + ", " + user_id + ")";
+            //String date = delivery_date.toString();
+            //System.out.println("This is the date from db manager " + date);
+            System.out.println("This is the delivery date from dbmanager " + delivery_date);
+            String insert_sql = "INSERT INTO hatmaker (orderline_id, hatmaker, delivery_date) VALUES (" + orderline_id + ", " + user_id + ", " + delivery_date + ")";
             db.insert(insert_sql);
             return true;
         } catch (InfException e) {
@@ -251,11 +258,11 @@ public class DatabaseManager {
         }
     }
 
-    public boolean removeHatmakerOrderlines(OrderLine orderline, User user) {
+    public boolean removeHatmakerOrderlines(OrderLine orderline, User user, LocalDate delivery_date) {
         try {
             int orderline_id = orderline.getOrderLineId();
             int user_id = user.getUserId();
-            String delete_sql = "DELETE FROM hatmaker WHERE orderline_id = " + orderline_id + " AND hatmaker = " + user_id + "";
+            String delete_sql = "DELETE FROM hatmaker WHERE orderline_id = " + orderline_id + " AND hatmaker = " + user_id + " AND delivery_date = " + delivery_date + "";
             db.delete(delete_sql);
             return true;
         } catch (InfException e) {
@@ -277,7 +284,8 @@ public class DatabaseManager {
                             ParseBoolean(row.get("customer_approval")),
                             row.get("description"),
                             Integer.parseInt(row.get("price")),
-                            Integer.parseInt(row.get("product_id"))
+                            Integer.parseInt(row.get("product_id")),
+                            LocalDate.parse("1111-11-11")
                     ));
                 }
             }
