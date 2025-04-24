@@ -155,7 +155,8 @@ public class DatabaseManager {
                         row.get("description"),
                         row.get("price") == null ? 0 : Integer.parseInt(row.get("price")),
                         row.get("product_id") == null ? 0 : Integer.parseInt(row.get("product_id")),
-                        "1111-11-11"
+                        "1111-11-11",
+                        row.get("hat_status")
                 );
                 return orderLine;
             } else {
@@ -182,7 +183,8 @@ public class DatabaseManager {
                             row.get("description"),
                             Integer.parseInt(row.get("price")),
                             Integer.parseInt(row.get("product_id")),
-                            "1111-11-11"
+                            "1111-11-11",
+                            row.get("hat_status")
                     ));
                 }
             }
@@ -208,7 +210,8 @@ public class DatabaseManager {
                             row.get("description"),
                             Integer.parseInt(row.get("price")),
                             Integer.parseInt(row.get("product_id")),
-                            "1111-11-11"
+                            "1111-11-11",
+                            row.get("hat_status")
                     ));
                 }
             }
@@ -234,7 +237,8 @@ public class DatabaseManager {
                             row.get("description"),
                             Integer.parseInt(row.get("price")),
                             Integer.parseInt(row.get("product_id")),
-                            "1111-11-11"
+                            "1111-11-11",
+                            row.get("hat_status")
                     ));
                 }
             }
@@ -287,7 +291,8 @@ public class DatabaseManager {
                             row.get("description"),
                             Integer.parseInt(row.get("price")),
                             Integer.parseInt(row.get("product_id")),
-                            "1111-11-11"
+                            "1111-11-11",
+                            row.get("hat_status")
                     ));
                 }
             }
@@ -323,7 +328,8 @@ public class DatabaseManager {
                     + "product_id = " + orderLine.getProductId() + ", "
                     + "price = " + orderLine.getPrice() + ", "
                     + "customer_approval = " + orderLine.getCustomerApproval() + ", "
-                    + "description = '" + orderLine.getDescription() + "' "
+                    + "description = '" + orderLine.getDescription() + "', "
+                    + "hat_status = '" + orderLine.getHatStatus() + "' "
                     + "WHERE orderline_id = " + orderLine.getOrderLineId();
             System.out.println(query);
             db.update(query);
