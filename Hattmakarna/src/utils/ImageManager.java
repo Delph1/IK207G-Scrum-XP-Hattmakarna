@@ -50,10 +50,12 @@ public class ImageManager {
         return imageBytes;
     }
     
-    public void saveNewImage(String base64, int product_id) {
+    public void saveNewImage(String base64, int product_id, String type, String description) {
         ProductImage image = dbm.createImage();
         image.setBase64(base64);
         image.setProductId(product_id);
+        image.setType(type);
+        image.setDescription(description);
         dbm.updateImage(image);
     }
 }

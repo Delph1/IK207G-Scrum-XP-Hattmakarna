@@ -267,7 +267,7 @@ public class DatabaseManager {
     public ArrayList<OrderLine> getUnassignedOrderlines() {
         try {
             ArrayList<OrderLine> orderlines = new ArrayList<>();
-            String query = "SELECT DISTINCT orderlines.* FROM orderlines, hatmaker WHERE orderlines.orderline_id NOT IN (SELECT orderline_id FROM hatmaker)";
+            String query = "SELECT DISTINCT orderlines.* FROM orderlines WHERE orderlines.orderline_id NOT IN (SELECT orderline_id FROM hatmaker)";
             ArrayList<HashMap<String, String>> results = db.fetchRows(query);
             if (results != null) {
                 for (HashMap<String, String> row : results) {
@@ -910,8 +910,8 @@ public class DatabaseManager {
         try {
             String query = "UPDATE images SET "
                     + "product_id = '" + image.getProductId() + "', "
-                    + "base64 = '" + image.getBase64() + "' "
-                    + "type = '" + image.getType() + "' "
+                    + "base64 = '" + image.getBase64() + "', "
+                    + "type = '" + image.getType() + "', "
                     + "description = '" + image.getDescription() + "' "
                     + "WHERE image_id = " + image.getImageId();
             db.update(query);

@@ -9,7 +9,7 @@ public class ProductImage {
     private String type;
     private String description;
     
-    public ProductImage (String base64, int image_id, int producr_id, String type, String description){
+    public ProductImage (String base64, int image_id, int product_id, String type, String description){
         this.base64 = base64; 
         this.image_id = image_id;
         this.product_id= product_id;

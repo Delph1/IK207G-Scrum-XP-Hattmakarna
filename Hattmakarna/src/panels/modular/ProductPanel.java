@@ -164,6 +164,10 @@ public class ProductPanel extends javax.swing.JPanel {
 
         dbm.updateProduct(nyProdukt);
 
+        if (base64Image != null) {
+            imageManager.saveNewImage(base64Image, nyProdukt.getProductId(), "Produktbild", "");
+        }
+        
         javax.swing.JOptionPane.showMessageDialog(this, "Ny hatt tillagd!");
 
         txtProduktnamn.setText("");

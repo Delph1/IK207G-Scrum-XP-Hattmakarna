@@ -15,6 +15,8 @@ import javax.swing.ImageIcon;
 import javax.swing.JComboBox;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 import javax.swing.table.TableColumn;
 import models.Component;
 import models.Product;
@@ -28,6 +30,7 @@ public class ModularSpecialOrder extends javax.swing.JPanel {
 
     private ModularWindow window;
     private DefaultTableModel materialTable;
+    private DefaultTableModel blueprintTable;
     private Product product;
     private int baseId;
     private OrderPanel order;
@@ -42,13 +45,23 @@ public class ModularSpecialOrder extends javax.swing.JPanel {
         initComponents();
         fillComboBoxes();
         materialTable = (DefaultTableModel) tblMaterial.getModel();
+        blueprintTable = (DefaultTableModel) tblBlueprint.getModel();
         tblMaterial.setModel(materialTable);
+        tblBlueprint.setModel(blueprintTable);
+        createBlueprintListener();
+        
+        //gömmer tredje kolumnen
+        tblBlueprint.getColumnModel().getColumn(2).setMinWidth(0);
+        tblBlueprint.getColumnModel().getColumn(2).setMaxWidth(0);
+        tblBlueprint.getColumnModel().getColumn(2).setWidth(0);
+        
     }
     
     public ModularSpecialOrder(ModularWindow window, Product product, OrderPanel order) {
         this.window = window;
         this.product = product;
         this.order = order;
+        this.imageManager = new ImageManager(window, true);
         baseId = product.getProductId();
         initComponents();
         txtWeight.setText(String.valueOf(product.getWeight()));
@@ -57,8 +70,11 @@ public class ModularSpecialOrder extends javax.swing.JPanel {
         txtPrice.setText(String.valueOf(product.getPrice()));
         txtDescription.setText(product.getDescription());
         materialTable = (DefaultTableModel) tblMaterial.getModel();
+        blueprintTable = (DefaultTableModel) tblBlueprint.getModel();
         insertExistingComponentsIntoTable(product.getProductId());
         tblMaterial.setModel(materialTable);
+        tblBlueprint.setModel(blueprintTable);
+        createBlueprintListener();
     }
 
     private void fillComboBoxes() {
@@ -109,6 +125,35 @@ public class ModularSpecialOrder extends javax.swing.JPanel {
             materialTable.addRow(new Object[]{ component.getComponentName(), component.getType(), component.getColor(), component.getAmount(), component.getUnit()}); 
         }
     }
+    
+    private void createBlueprintListener() {
+        tblBlueprint.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
+            @Override
+            public void valueChanged(ListSelectionEvent e) {
+                if (!e.getValueIsAdjusting()) {
+                    int markeradRad = tblBlueprint.getSelectedRow();
+                    if (markeradRad != -1) {
+                        updateImage(markeradRad);
+                    }
+                }
+            }
+        });
+    }
+    
+    private void updateImage(int rad) {
+        base64Image = tblBlueprint.getValueAt(rad, 2).toString();
+        
+        if (base64Image != null && !base64Image.isEmpty()) {
+            byte[] imageBytes = Base64.getDecoder().decode(base64Image);
+            ImageIcon icon = new ImageIcon(imageBytes);
+            Image scaledImage = icon.getImage().getScaledInstance(200, 200, Image.SCALE_SMOOTH);
+            lblBlueprint.setIcon(new ImageIcon(scaledImage));
+            lblBlueprint.setText(null);
+        } else {
+            lblBlueprint.setIcon(null);
+            lblBlueprint.setText("Ingen bild hittades");
+        }
+    }
 
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
@@ -136,8 +181,12 @@ public class ModularSpecialOrder extends javax.swing.JPanel {
         lblResale1 = new javax.swing.JLabel();
         lblImage = new javax.swing.JLabel();
         btnUploadImage = new javax.swing.JButton();
+        jScrollPane3 = new javax.swing.JScrollPane();
+        tblBlueprint = new javax.swing.JTable();
+        lblBlueprint = new javax.swing.JLabel();
+        btnUploadBlueprint = new javax.swing.JButton();
 
-        setPreferredSize(new java.awt.Dimension(600, 382));
+        setPreferredSize(new java.awt.Dimension(620, 535));
         setVerifyInputWhenFocusTarget(false);
 
         lblHatName.setText("Hattnamn:");
@@ -226,6 +275,37 @@ public class ModularSpecialOrder extends javax.swing.JPanel {
             }
         });
 
+        tblBlueprint.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+
+            },
+            new String [] {
+                "ID", "Beskrivning", "Base64"
+            }
+        ) {
+            Class[] types = new Class [] {
+                java.lang.Integer.class, java.lang.String.class, java.lang.String.class
+            };
+
+            public Class getColumnClass(int columnIndex) {
+                return types [columnIndex];
+            }
+        });
+        jScrollPane3.setViewportView(tblBlueprint);
+        if (tblBlueprint.getColumnModel().getColumnCount() > 0) {
+            tblBlueprint.getColumnModel().getColumn(0).setPreferredWidth(15);
+            tblBlueprint.getColumnModel().getColumn(1).setPreferredWidth(100);
+        }
+
+        lblBlueprint.setText("Välj en ritning i listan");
+
+        btnUploadBlueprint.setText("Ladda upp ritning");
+        btnUploadBlueprint.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnUploadBlueprintActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
@@ -233,19 +313,6 @@ public class ModularSpecialOrder extends javax.swing.JPanel {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(6, 6, 6)
-                        .addComponent(btnAddMaterial)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(btnRemoveRow)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(btnCreateMaterial))
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 588, Short.MAX_VALUE)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addGap(0, 0, Short.MAX_VALUE)
-                        .addComponent(btnCancel)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(btnSave))
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addComponent(lblHatName)
@@ -276,8 +343,27 @@ public class ModularSpecialOrder extends javax.swing.JPanel {
                                 .addComponent(lblImage, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                             .addGroup(layout.createSequentialGroup()
                                 .addGap(32, 32, 32)
-                                .addComponent(btnUploadImage, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))))
+                                .addComponent(btnUploadImage, javax.swing.GroupLayout.DEFAULT_SIZE, 130, Short.MAX_VALUE))))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addComponent(btnUploadBlueprint)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(btnCancel)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(btnSave)))
                 .addContainerGap())
+            .addGroup(layout.createSequentialGroup()
+                .addGap(6, 6, 6)
+                .addComponent(btnAddMaterial)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(btnRemoveRow)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(btnCreateMaterial))
+            .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.TRAILING)
+            .addGroup(layout.createSequentialGroup()
+                .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 395, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(lblBlueprint, javax.swing.GroupLayout.PREFERRED_SIZE, 179, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(19, 19, 19))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -308,17 +394,22 @@ public class ModularSpecialOrder extends javax.swing.JPanel {
                         .addComponent(cbxCopyright)
                         .addComponent(lblResale1)
                         .addComponent(btnUploadImage)))
-                .addGap(18, 18, Short.MAX_VALUE)
+                .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnAddMaterial)
                     .addComponent(btnRemoveRow)
                     .addComponent(btnCreateMaterial))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 142, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGap(18, 18, 18)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(lblBlueprint, javax.swing.GroupLayout.DEFAULT_SIZE, 126, Short.MAX_VALUE)
+                    .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 20, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnSave)
-                    .addComponent(btnCancel))
+                    .addComponent(btnCancel)
+                    .addComponent(btnUploadBlueprint))
                 .addGap(12, 12, 12))
         );
     }// </editor-fold>//GEN-END:initComponents
@@ -354,7 +445,18 @@ public class ModularSpecialOrder extends javax.swing.JPanel {
         
         //Sparar bilden om det finns någon
         if (base64Image != null) {
-            imageManager.saveNewImage(base64Image, newProduct.getProductId());
+            imageManager.saveNewImage(base64Image, newProduct.getProductId(), "Produktbild", "");
+        }
+        
+        if (tblBlueprint.getRowCount() > 0) {
+            for (int i = 0; i < tblBlueprint.getRowCount(); i++){
+                ProductImage newBlueprint = dbm.createImage();
+                newBlueprint.setProductId(newProduct.getProductId());
+                newBlueprint.setType("Ritning");
+                newBlueprint.setDescription(tblBlueprint.getValueAt(i, 1).toString());
+                newBlueprint.setBase64(tblBlueprint.getValueAt(i, 2).toString());
+                dbm.updateImage(newBlueprint);
+            }
         }
         
         //Skapar komponenterna som hör till produkten
@@ -398,6 +500,19 @@ public class ModularSpecialOrder extends javax.swing.JPanel {
         base64Image = Base64.getEncoder().encodeToString(imageBytes);
     }//GEN-LAST:event_btnUploadImageActionPerformed
 
+    private void btnUploadBlueprintActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUploadBlueprintActionPerformed
+        byte[] imageBytes = imageManager.uploadImage();
+        
+        ImageIcon icon = new ImageIcon(imageBytes);
+        Image scaledImage = icon.getImage().getScaledInstance(150, 150, Image.SCALE_SMOOTH);
+        lblBlueprint.setIcon(new ImageIcon(scaledImage));
+        lblBlueprint.setText(null);
+        base64Image = Base64.getEncoder().encodeToString(imageBytes);
+        
+        int newRow = blueprintTable.getRowCount() + 1;
+        blueprintTable.addRow(new Object[] {newRow, "", base64Image});
+    }//GEN-LAST:event_btnUploadBlueprintActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAddMaterial;
@@ -405,11 +520,14 @@ public class ModularSpecialOrder extends javax.swing.JPanel {
     private javax.swing.JButton btnCreateMaterial;
     private javax.swing.JButton btnRemoveRow;
     private javax.swing.JButton btnSave;
+    private javax.swing.JButton btnUploadBlueprint;
     private javax.swing.JButton btnUploadImage;
     private javax.swing.JCheckBox cbxCopyright;
     private javax.swing.JCheckBox cbxResale;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JScrollPane jScrollPane3;
+    private javax.swing.JLabel lblBlueprint;
     private javax.swing.JLabel lblDescription;
     private javax.swing.JLabel lblHatName;
     private javax.swing.JLabel lblImage;
@@ -417,6 +535,7 @@ public class ModularSpecialOrder extends javax.swing.JPanel {
     private javax.swing.JLabel lblResale;
     private javax.swing.JLabel lblResale1;
     private javax.swing.JLabel lblWeight;
+    private javax.swing.JTable tblBlueprint;
     private javax.swing.JTable tblMaterial;
     private javax.swing.JTextArea txtDescription;
     private javax.swing.JTextField txtHatName;
