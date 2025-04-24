@@ -4,7 +4,9 @@ import java.security.MessageDigest;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 import models.*;
 import oru.inf.*;
 
@@ -488,14 +490,14 @@ public class DatabaseManager {
     }
 
     //Returnera material som inte beställts mellan två datum
-    public ArrayList<Component> getComponentsBetweenDates(String StartDate, String StopDate) {
+    public ArrayList<ComponentModel> getComponentsBetweenDates(String StartDate, String StopDate) {
         System.out.println("GET materials between " + StartDate + " and " + StopDate);
-        ArrayList<Component> componentList = new ArrayList<>();
+        ArrayList<ComponentModel> componentList = new ArrayList<>();
         try {
             ArrayList<HashMap<String, String>> materials = db.fetchRows("SELECT c.component_id, c.component_name,c.description, c.color, SUM(pc.amount) AS total_amount_needed, c.unit FROM orders o JOIN orderlines ol ON o.order_id = ol.order_id JOIN products p ON ol.product_id = p.product_id JOIN product_components pc ON p.product_id = pc.product_id JOIN components c ON pc.component_id = c.component_id WHERE o.order_status = 'confirmed' AND o.order_date BETWEEN '" + StartDate + "' AND '" + StopDate + "' AND p.stock_item = 0 GROUP BY c.component_id, c.component_name, c.unit, c.color ORDER BY c.component_name;");
             if (materials != null) {
                 for (HashMap<String, String> material : materials) {
-                    componentList.add(new Component(
+                    componentList.add(new ComponentModel(
                             Double.parseDouble(material.get("total_amount_needed")),
                             Integer.parseInt(material.get("component_id")),
                             material.get("component_name"),
@@ -747,13 +749,13 @@ public class DatabaseManager {
     }
 
     // Hämtar ett material
-    public Component getComponent(int componentId) {
+    public ComponentModel getComponent(int componentId) {
         try {
             String query = "SELECT * FROM components WHERE component_id = " + componentId;
             HashMap<String, String> row = db.fetchRow(query);
 
             if (row != null && !row.isEmpty()) {
-                return new Component(
+                return new ComponentModel(
                         0,
                         Integer.parseInt(row.get("component_id")),
                         row.get("component_name"),
@@ -772,7 +774,7 @@ public class DatabaseManager {
     }
 
     // Skapar ett material
-    public Component createComponent() {
+    public ComponentModel createComponent() {
         try {
             String maxIdStr = db.fetchColumn("SELECT MAX(component_id) FROM components").getFirst();
             int newId = (maxIdStr == null || maxIdStr.isEmpty()) ? 1 : Integer.parseInt(maxIdStr) + 1;
@@ -789,7 +791,7 @@ public class DatabaseManager {
     }
 // Uppdaterar ett material
 
-    public boolean updateComponent(Component component) {
+    public boolean updateComponent(ComponentModel component) {
         try {
             String query = "UPDATE components SET "
                     + "component_name = '" + component.getComponentName() + "', "
@@ -808,14 +810,14 @@ public class DatabaseManager {
     }
 
     //Returnera allt material
-    public ArrayList<Component> getComponents() {
+    public ArrayList<ComponentModel> getComponents() {
         System.out.println("GET materials");
-        ArrayList<Component> componentList = new ArrayList<>();
+        ArrayList<ComponentModel> componentList = new ArrayList<>();
         try {
             ArrayList<HashMap<String, String>> materials = db.fetchRows("SELECT * FROM components");
             if (materials != null) {
                 for (HashMap<String, String> material : materials) {
-                    componentList.add(new Component(
+                    componentList.add(new ComponentModel(
                             0,
                             Integer.parseInt(material.get("component_id")),
                             material.get("component_name"),
@@ -836,9 +838,9 @@ public class DatabaseManager {
     }
     //Returnera allt material för en produkt
 
-    public ArrayList<Component> getComponentsForProduct(int productId) {
+    public ArrayList<ComponentModel> getComponentsForProduct(int productId) {
 
-        ArrayList<Component> componentList = new ArrayList<>();
+        ArrayList<ComponentModel> componentList = new ArrayList<>();
         try {
             String query = "SELECT c.component_id, c.component_name, c.color, c.unit, c.type, pc.amount "
                     + "FROM components c "
@@ -847,7 +849,7 @@ public class DatabaseManager {
             ArrayList<HashMap<String, String>> materials = db.fetchRows(query);
             if (materials != null) {
                 for (HashMap<String, String> material : materials) {
-                    componentList.add(new Component(
+                    componentList.add(new ComponentModel(
                             Double.parseDouble(material.get("amount")),
                             Integer.parseInt(material.get("component_id")),
                             material.get("component_name"),
