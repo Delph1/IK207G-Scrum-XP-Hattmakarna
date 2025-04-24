@@ -296,20 +296,20 @@ public class SchemaPanel extends javax.swing.JPanel {
     private void btnRemoveOrderlineFromUserActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRemoveOrderlineFromUserActionPerformed
         var orderline = jListMyOrderlines.getSelectedValue();
         var user = Hattmakarna.currentUser;
-        LocalDate delivery_date = LocalDate.parse(tfDeliveryDate.getText()); 
-        orderline.setDeliveryDate(delivery_date);
+        //String delivery_date = tfDeliveryDate.getText(); 
+        //orderline.setDeliveryDate(delivery_date);
         myOrderlinesListModel.removeElement(orderline);
-        dbm.removeHatmakerOrderlines(orderline, user, delivery_date);
+        dbm.removeHatmakerOrderlines(orderline, user);
     }//GEN-LAST:event_btnRemoveOrderlineFromUserActionPerformed
 
     private void btnAddOrderLineActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddOrderLineActionPerformed
         var orderline = jListMyOrderlines.getSelectedValue();
         System.out.println("This is the orderline selected " + orderline);
         var user = Hattmakarna.currentUser;
-        LocalDate delivery_date = LocalDate.parse(tfDeliveryDate.getText()); 
+        String delivery_date = tfDeliveryDate.getText(); 
         System.out.println("This is the delivery date from textfield " + delivery_date);
         orderline.setDeliveryDate(delivery_date);
-        System.out.println("This is the delivery date from orderline " + orderline.getDeliveryDate().toString());
+        System.out.println("This is the delivery date from orderline " + orderline.getDeliveryDate());
         dbm.createHatmakerOrderlines(orderline, user, delivery_date);
     }//GEN-LAST:event_btnAddOrderLineActionPerformed
 
