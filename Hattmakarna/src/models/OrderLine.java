@@ -14,14 +14,16 @@ public class OrderLine {
     private int orderLine_id;
     private int price;
     private int product_id;
+    private String delivery_date;
 
-    public OrderLine( int orderLine_id,int order_id,boolean customer_approval, String description,  int price, int product_id) {
+    public OrderLine(int orderLine_id, int order_id, boolean customer_approval, String description, int price, int product_id, String delivery_date) {
         this.customer_approval = customer_approval;
         this.description = description;
         this.order_id = order_id;
         this.orderLine_id = orderLine_id;
         this.price = price;
         this.product_id = product_id;
+        this.delivery_date = delivery_date;
         System.out.println(orderLine_id);
     }
 
@@ -33,9 +35,10 @@ public class OrderLine {
         return customer_approval;
     }
 
-        public void setProductId(int productId) {
+    public void setProductId(int productId) {
         this.product_id = productId;
     }
+
     public void setDescription(String description) {
         this.description = description;
     }
@@ -66,6 +69,14 @@ public class OrderLine {
 
     @Override
     public String toString() {
-        return "Order-id: " + order_id + ",  " + "OrderLine-Id: " + orderLine_id + ",  " + "Beskrivning: " +description;
+        return "Order-id: " + order_id + ",  " + "OrderLine-Id: " + orderLine_id + ",  " + "Beskrivning: " + description;
+    }
+    
+    public String getDeliveryDate() {
+        return delivery_date; 
+    }
+    
+    public void setDeliveryDate(String delivery_date) {
+        this.delivery_date = delivery_date;
     }
 }

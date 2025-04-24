@@ -9,8 +9,10 @@ import java.io.File;
 import java.io.IOException;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
+import java.util.Map;
 import models.*;
 import org.apache.pdfbox.pdmodel.*;
+import org.apache.pdfbox.pdmodel.font.PDType0Font;
 import org.apache.pdfbox.pdmodel.font.PDType1Font;
 import org.apache.pdfbox.printing.PDFPrintable;
 import org.apache.pdfbox.printing.Scaling;
@@ -46,14 +48,18 @@ public class Print {
 
     public void showQoute() throws IOException {
         String headerText = "Offert";
-        createPDFForOrder(headerText);
+        createOrderDocument(headerText);
         Desktop.getDesktop().open(new File ("temp.pdf"));
     }
-        
+        public void showDeliveryNote() throws IOException {
+
+        createDeliveryNoteDocument();
+        Desktop.getDesktop().open(new File ("temp.pdf"));
+    }
     public void printQoute() throws IOException, PrinterException {
         PrinterJob printJob = PrinterJob.getPrinterJob();
         String headerText = "Offert";
-        document = createPDFForOrder(headerText);
+        document = createOrderDocument(headerText);
         PDFPrintable printdoc = new PDFPrintable (PDDocument.load(new File("temp.pdf")), Scaling.SHRINK_TO_FIT);
         if (printJob.printDialog()) {
             printJob.setPrintable(printdoc);
@@ -63,22 +69,110 @@ public class Print {
     
     public void showConfirmation() throws IOException {
         String headerText = "Orderbekräftelse";
-        createPDFForOrder(headerText);
+        createOrderDocument(headerText);
         Desktop.getDesktop().open(new File ("temp.pdf"));
     }
 
     public void printConfirmation() throws IOException, PrinterException {
         PrinterJob printJob = PrinterJob.getPrinterJob();
         String headerText = "Orderbekräftelse";
-        document = createPDFForOrder(headerText);
+        document = createOrderDocument(headerText);
         PDFPrintable printdoc = new PDFPrintable (PDDocument.load(new File("temp.pdf")), Scaling.SHRINK_TO_FIT);
         if (printJob.printDialog()) {
             printJob.setPrintable(printdoc);
             printJob.print();
         }
     }
-    
-    private PDDocument createPDFForOrder (String header) throws IOException {
+    private PDDocument createDeliveryNoteDocument() throws IOException {
+
+
+
+    customer = dbm.getCustomer(order.getCustomer_id());
+    Map<String, String> lang = dbm.getDeliveryNoteLanguage(customer.getCountry());
+    ArrayList<OrderLine> orderlines = dbm.getOrderlines(order.getId());
+
+    PDPage page = new PDPage();
+    PDDocument doc = new PDDocument();
+    doc.addPage(page);
+    PDPageContentStream cs = new PDPageContentStream(doc, page);
+    cs.beginText();
+    PDType0Font uniFont = PDType0Font.load(doc, new File("src/fonts/unifont-16.0.03.ttf"));
+    cs.setFont(uniFont, 24);
+    cs.newLineAtOffset(50, 740);
+    cs.showText(lang.get("delivery_note"));
+    cs.endText();
+
+    // Kund- och orderinfo
+    cs.beginText();
+    cs.setFont(uniFont, 14);
+    cs.newLineAtOffset(50, 700);
+    cs.showText(lang.get("order_number") + ": " + order.getId());
+    cs.newLineAtOffset(0, -16);
+    cs.showText(lang.get("order_date") + ": " + order.getOrder_date());
+    cs.newLineAtOffset(0, -16);
+    cs.showText(lang.get("customer_number") + ": " + customer.getId());
+    cs.newLineAtOffset(0, -16);
+    cs.showText(lang.get("name") + ": " + customer.getFirstName() + " " + customer.getLastName());
+    cs.newLineAtOffset(0, -16);
+    cs.showText(lang.get("street") + ": " + customer.getStreetName());
+    cs.newLineAtOffset(0, -16);
+    cs.showText(lang.get("postal") + ": " + customer.getPostalCode() + " " + customer.getPostalCity());
+    if (customer.getState() != null && !customer.getState().isEmpty()) {
+        cs.newLineAtOffset(0, -16);
+        cs.showText(lang.get("state") + ": " + customer.getState());
+    }
+    cs.newLineAtOffset(0, -16);
+    cs.showText(lang.get("country") + ": " + customer.getCountry());
+    cs.newLineAtOffset(0, -16);
+    cs.showText(lang.get("tariff") + ": 6505.00.90"); // Hårdkodat tullnummer för hattar
+       cs.newLineAtOffset(0, -16);
+    cs.endText();
+
+
+
+    float[] colWidths = {70, 240, 80, 80, 80};
+    String[] headers = {
+        lang.get("product_id"),
+        lang.get("description"),
+        lang.get("quantity"),
+        lang.get("unit"),
+        lang.get("total")
+    };
+
+    String[][] rows = new String[orderlines.size()][headers.length];
+    DecimalFormat df = new DecimalFormat("##.00");
+
+    for (int i = 0; i < orderlines.size(); i++) {
+        OrderLine ol = orderlines.get(i);
+        Product p = dbm.getProduct(ol.getProductId());
+        double totalPrice = 1 * ol.getPrice();
+        rows[i] = new String[]{
+            String.valueOf(ol.getProductId()),
+            p.getProductName(),
+            String.valueOf(1),
+            df.format(ol.getPrice()),
+            df.format(totalPrice)
+        };
+    }
+
+    createTable(cs, colWidths, headers, rows, 580);
+    cs.close();
+
+    try {
+        doc.save("temp.pdf");
+    } catch (Exception e) {
+        System.err.println("Fel vid sparande av följesedel");
+    }
+    try {
+        doc.close();
+    } catch (Exception e) {
+        System.err.println("Fel vid stängning av PDF");
+    }
+
+    return doc;
+}
+
+    private PDDocument createOrderDocument(String header) throws IOException {
 
         customer = dbm.getCustomer(order.getCustomer_id());
         double orderTotal = 0;
@@ -219,9 +313,9 @@ public class Print {
             // Text
             contentStream.beginText();
             if (isHeader) { 
-                contentStream.setFont(PDType1Font.HELVETICA_BOLD, 12);
+            //   contentStream.setFont(PDType1Font.HELVETICA_BOLD, 12);
             } else {
-                contentStream.setFont(PDType1Font.HELVETICA, 12);
+              //  contentStream.setFont(PDType1Font.HELVETICA, 12);
             }
             contentStream.newLineAtOffset(cellX + 2, y - 15);
             //NULL-kontroll
