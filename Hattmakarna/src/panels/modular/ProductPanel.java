@@ -41,16 +41,20 @@ public class ProductPanel extends javax.swing.JPanel {
         initComponents();        
     }
     
-    public ProductPanel(ModularWindow window, Product product) {
+    public ProductPanel (ModularWindow window, Product product) {
         initComponents();
         this.window = window; 
         this.product = product;
+        txtVikt.setText(String.valueOf(product.getWeight()));
+        txtProduktnamn.setText(product.getProductName() + " (Modifierad)");
+        txtPris.setText(String.valueOf(product.getPrice()));
+        txtBeskrivning.setText(product.getDescription());
         this.imageManager = new ImageManager(window, true);
         materialTable = (DefaultTableModel) tblMaterial.getModel();
-        tblMaterial.setModel(materialTable);
+        insertExistingComponentsIntoTable(product.getProductId());
 //        fillComboBoxes();
         smarterComboBoxes();
-        initComponents();        
+        tblMaterial.setModel(materialTable);
     }
     
     private void fillComboBoxes() {
@@ -147,6 +151,17 @@ public class ProductPanel extends javax.swing.JPanel {
             }
         });        
     }
+    
+    private void insertExistingComponentsIntoTable (int productId) {
+
+        materialTable.removeRow(0);
+        ArrayList<ComponentModel> components = dbm.getComponentsForProduct(productId);
+
+        for (ComponentModel component : components) {
+            materialTable.addRow(new Object[]{ component.getComponentId(), component.getComponentName(), component.getType(), component.getColor(), component.getAmount(), component.getUnit()}); 
+        }
+    }
+    
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
