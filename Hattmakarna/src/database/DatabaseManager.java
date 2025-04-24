@@ -1025,32 +1025,36 @@ public class DatabaseManager {
     }
     
     public Map<String, Set<String>> getComponentAttributesFromName (String componentName) {
+        System.out.println("GET Component attributes for " + componentName);
         Map<String, Set<String>> componentAttributes = new HashMap<>();
         try {
-            String typeQuery = "SELECT type from components WHERE = component_name = " + componentName;
+            String typeQuery = "SELECT type FROM components WHERE component_name = '" + componentName + "'";
             ArrayList<String> typesArray = db.fetchColumn(typeQuery);
             Set<String> types = new HashSet<>(typesArray);
             componentAttributes.put("types", types);
+            System.out.println("Successfully added types");
         } catch (InfException e) {
             System.err.println(e.getMessage());
             return null;
         }
 
-        try {
-            String typeQuery = "SELECT color from components WHERE = component_name = " + componentName;
-            ArrayList<String> colorArray = db.fetchColumn(typeQuery);
-            Set<String> colors = new HashSet<>(colorArray);
-            componentAttributes.put("colors", colors);
-        } catch (InfException e) {
-            System.err.println(e.getMessage());
-            return null;
-        }
+          //Colors är en fix lista som finns i klassen.
+//        try {
+//            String colorQuery = "SELECT color from components WHERE component_name = " + componentName;
+//            ArrayList<String> colorArray = db.fetchColumn(colorQuery);
+//            Set<String> colors = new HashSet<>(colorArray);
+//            componentAttributes.put("colors", colors);
+//        } catch (InfException e) {
+//            System.err.println(e.getMessage());
+//            return null;
+//        }
         
         try {
-            String typeQuery = "SELECT unit from components WHERE = component_name = " + componentName;
-            ArrayList<String> unitArray = db.fetchColumn(typeQuery);
+            String unitQuery = "SELECT unit FROM components WHERE component_name = '" + componentName + "'";
+            ArrayList<String> unitArray = db.fetchColumn(unitQuery);
             Set<String> units = new HashSet<>(unitArray);
             componentAttributes.put("units", units);
+            System.out.println("Successfully added units");
         } catch (InfException e) {
             System.err.println(e.getMessage());
             return null;
