@@ -41,6 +41,18 @@ public class ProductPanel extends javax.swing.JPanel {
         initComponents();        
     }
     
+    public ProductPanel(ModularWindow window, Product product) {
+        initComponents();
+        this.window = window; 
+        this.product = product;
+        this.imageManager = new ImageManager(window, true);
+        materialTable = (DefaultTableModel) tblMaterial.getModel();
+        tblMaterial.setModel(materialTable);
+//        fillComboBoxes();
+        smarterComboBoxes();
+        initComponents();        
+    }
+    
     private void fillComboBoxes() {
         JComboBox comboBoxNames = new JComboBox();
         JComboBox comboBoxColor = new JComboBox();
