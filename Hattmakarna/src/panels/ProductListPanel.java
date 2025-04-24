@@ -6,9 +6,19 @@ import javax.swing.table.DefaultTableModel;
 import javax.swing.JOptionPane;
 import static hattmakarna.Hattmakarna.dbm;
 import hattmakarna.ModularWindow;
+import java.awt.BorderLayout;
+import java.awt.FlowLayout;
 import java.awt.Image;
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayInputStream;
 import java.util.Base64;
+import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import models.*;
@@ -16,9 +26,14 @@ import models.*;
 
 public class ProductListPanel extends javax.swing.JPanel {
     private MainWindow window;
+    private JButton btnRight, btnLeft;
+    private ArrayList<ProductImage> images;
+    private int imageIndex = 0;
+    private JLabel imageLabel;
 
     public ProductListPanel(MainWindow window) {
             this.window = window;
+            this.images = new ArrayList<>();
             initComponents();
             fyllProduktTabell();
             skapaListener();
@@ -40,7 +55,7 @@ public class ProductListPanel extends javax.swing.JPanel {
     
     private void updateImage(int rad) {
         Object product_id = tblProdukter.getValueAt(rad, 0);
-        ProductImage image = dbm.getImage(Integer.parseInt(product_id.toString()));
+        ProductImage image = dbm.getProductImageForProduct(Integer.parseInt(product_id.toString()));
         
         if (image != null) {
             byte[] imageBytes = Base64.getDecoder().decode(image.getBase64());
@@ -67,7 +82,6 @@ public class ProductListPanel extends javax.swing.JPanel {
             model.addColumn("Status"); 
 
             for (Product p : produkter) {
-                if (p.getStockItem()) {
                 System.out.println(p.getProductName() + " - Status: " + (p.getDiscontinued() ? "Slutsåld" : "I lager"));
                 model.addRow(new Object[]{
                         p.getProductId(),
@@ -77,7 +91,6 @@ public class ProductListPanel extends javax.swing.JPanel {
                         p.getDescription(),
                         p.getDiscontinued() ? "Slutsåld" : "I lager" 
                     });
-                }
             }
 
             tblProdukter.setModel(model);  
@@ -87,6 +100,29 @@ public class ProductListPanel extends javax.swing.JPanel {
             JOptionPane.showMessageDialog(this, "Kunde inte hämta produkter: " + e.getMessage());
         }
     }
+    
+    private void swapPicture(int riktning) {
+        imageIndex += riktning;
+
+        if (imageIndex < 0) {
+            imageIndex = images.size() - 1;
+        } else if (imageIndex >= images.size()) {
+            imageIndex = 0;
+        }
+        
+         try {
+            String base64Sträng = images.get(imageIndex).getBase64();
+            byte[] bildBytes = Base64.getDecoder().decode(base64Sträng);
+            BufferedImage bild = ImageIO.read(new ByteArrayInputStream(bildBytes));
+            ImageIcon ikon = new ImageIcon(bild);
+            imageLabel.setIcon(ikon);
+            imageLabel.setText("");
+        } catch (Exception ex) {
+            imageLabel.setText("Kunde inte ladda bilden.");
+            ex.printStackTrace();
+        }
+    }
+
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -98,6 +134,8 @@ public class ProductListPanel extends javax.swing.JPanel {
         btnSlutsald = new javax.swing.JButton();
         lblImage = new javax.swing.JLabel();
         btnEditProduct = new javax.swing.JButton();
+        btnViewLargeImage = new javax.swing.JButton();
+        btn3dView = new javax.swing.JButton();
 
         setName(""); // NOI18N
 
@@ -138,6 +176,20 @@ public class ProductListPanel extends javax.swing.JPanel {
             }
         });
 
+        btnViewLargeImage.setText("Visa fullstor bild");
+        btnViewLargeImage.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnViewLargeImageActionPerformed(evt);
+            }
+        });
+
+        btn3dView.setText("Visa 3D-vy");
+        btn3dView.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btn3dViewActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
@@ -160,7 +212,12 @@ public class ProductListPanel extends javax.swing.JPanel {
                         .addGap(18, 18, 18)
                         .addComponent(NewProductBTN)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 47, Short.MAX_VALUE)
-                .addComponent(lblImage, javax.swing.GroupLayout.PREFERRED_SIZE, 239, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(lblImage, javax.swing.GroupLayout.PREFERRED_SIZE, 239, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(btnViewLargeImage)
+                        .addGap(18, 18, 18)
+                        .addComponent(btn3dView, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                 .addGap(21, 21, 21))
         );
         layout.setVerticalGroup(
@@ -176,7 +233,12 @@ public class ProductListPanel extends javax.swing.JPanel {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 340, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(lblImage, javax.swing.GroupLayout.PREFERRED_SIZE, 190, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(lblImage, javax.swing.GroupLayout.PREFERRED_SIZE, 190, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(btnViewLargeImage)
+                            .addComponent(btn3dView))))
                 .addContainerGap(93, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
@@ -226,10 +288,91 @@ public class ProductListPanel extends javax.swing.JPanel {
 
     }//GEN-LAST:event_btnEditProductActionPerformed
 
+    private void btnViewLargeImageActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnViewLargeImageActionPerformed
+        int rad = tblProdukter.getSelectedRow();
+        if (rad == -1) {
+                JOptionPane.showMessageDialog(this, "Välj en produkt först.");
+                return;
+        }
+        try {
+           
+            int productId = (int) tblProdukter.getValueAt(rad, 0);
+
+            ProductImage image = dbm.getProductImageForProduct(productId);
+            
+            // Avkoda Base64 → byte[]
+            byte[] bildBytes = Base64.getDecoder().decode(image.getBase64());
+            BufferedImage buffImage = ImageIO.read(new ByteArrayInputStream(bildBytes));
+
+            // Skapa fönster
+            JFrame frame = new JFrame("Förhandsvisning av hatt");
+            frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+            frame.setSize(600, 600); // eller anpassa till image.getWidth()
+
+            // Visa bild i JLabel
+            JLabel bildLabel = new JLabel(new ImageIcon(buffImage));
+            bildLabel.setHorizontalAlignment(JLabel.CENTER);
+            bildLabel.setVerticalAlignment(JLabel.CENTER);
+            frame.add(new JScrollPane(bildLabel), BorderLayout.CENTER);
+
+            frame.setLocationRelativeTo(null); // centrera
+            frame.setVisible(true);
+
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, "Kunde inte visa bilden.");
+            e.printStackTrace();
+        }
+    }//GEN-LAST:event_btnViewLargeImageActionPerformed
+    private void btn3dViewActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn3dViewActionPerformed
+       
+        int rad = tblProdukter.getSelectedRow();
+        if (rad == -1) {
+            JOptionPane.showMessageDialog(this, "Välj en produkt först.");
+            return;
+        }
+
+        // Ladda bilder
+        int productId = (int) tblProdukter.getValueAt(rad, 0);
+        images = dbm.get3DImagesForProduct(productId);
+
+        if (images.size() < 1) {
+            JOptionPane.showMessageDialog(this, "Inga bilder för 3D-vyn hittades.");
+            return;
+        }
+        
+        JFrame threedView = new JFrame("Visa hatt från olika vinklar");
+        threedView.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        threedView.setSize(500, 500);
+        threedView.setLayout(new BorderLayout());
+
+        // Bildvisare
+        imageLabel = new JLabel();
+        imageLabel.setHorizontalAlignment(JLabel.CENTER);
+        threedView.add(imageLabel, BorderLayout.CENTER);
+
+        // Panel med knappar
+        JPanel knappPanel = new JPanel(new FlowLayout());
+
+        JButton btnLeft = new JButton("←");
+        JButton btnRight = new JButton("→");
+
+        btnLeft.addActionListener(e -> swapPicture(-1));
+        btnRight.addActionListener(e -> swapPicture(1));
+
+        knappPanel.add(btnLeft);
+        knappPanel.add(btnRight);
+
+        threedView.add(knappPanel, BorderLayout.SOUTH);
+        threedView.setLocationRelativeTo(null);
+        threedView.setVisible(true);
+    }//GEN-LAST:event_btn3dViewActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton NewProductBTN;
+    private javax.swing.JButton btn3dView;
     private javax.swing.JButton btnEditProduct;
     private javax.swing.JButton btnSlutsald;
+    private javax.swing.JButton btnViewLargeImage;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JLabel lblImage;
