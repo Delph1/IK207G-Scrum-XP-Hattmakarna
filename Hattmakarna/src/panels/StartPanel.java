@@ -27,8 +27,6 @@ private void fyllDagensOrdrar() {
         }
     }
 
-    filtreradeOrdrar.sort(Comparator.comparing(Order::getDeliveryDate));
-
     DefaultTableModel model = new DefaultTableModel();
     model.addColumn("Order ID");
     model.addColumn("Kund ID");
@@ -114,9 +112,9 @@ private void fyllDagensOrdrar() {
                 .addContainerGap()
                 .addComponent(jLabel1)
                 .addGap(39, 39, 39)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(lblValkommen)
-                    .addComponent(btnSchema))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(btnSchema)
+                    .addComponent(lblValkommen))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(scrollDagensOrder, javax.swing.GroupLayout.PREFERRED_SIZE, 399, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(24, Short.MAX_VALUE))
