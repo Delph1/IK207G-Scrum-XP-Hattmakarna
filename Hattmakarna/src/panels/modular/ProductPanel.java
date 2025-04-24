@@ -361,7 +361,7 @@ public class ProductPanel extends javax.swing.JPanel {
             //Sparar komponenterna som hör till produkten
             String description = "";
             for (int i = 0; i < tblMaterial.getRowCount(); i++) {
-                Component component = new Component(
+                ComponentModel component = new ComponentModel(
                     Double.parseDouble(tblMaterial.getValueAt(i, 4).toString().replace(",", ".")),
                     tblMaterial.getValueAt(i, 0) == null || tblMaterial.getValueAt(i, 0).toString().length() == 0 ? 0 : Integer.parseInt(tblMaterial.getValueAt(i,0).toString()),
                     tblMaterial.getValueAt(i, 1).toString(),
@@ -374,7 +374,7 @@ public class ProductPanel extends javax.swing.JPanel {
                 if (component.getComponentId() != 0) {
                     dbm.updateComponent(component);
                 } else {
-                    Component newComponent = dbm.createComponent();
+                    ComponentModel newComponent = dbm.createComponent();
                     component.setComponentId(newComponent.getComponentId());
                     dbm.updateComponent(component);
                     dbm.setComponentForProduct(saveProduct.getProductId(), newComponent.getComponentId(), component.getAmount());
