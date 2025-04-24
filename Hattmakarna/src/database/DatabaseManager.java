@@ -1023,4 +1023,39 @@ public class DatabaseManager {
             return false;
         }
     }
+    
+    public Map<String, Set<String>> getComponentAttributesFromName (String componentName) {
+        Map<String, Set<String>> componentAttributes = new HashMap<>();
+        try {
+            String typeQuery = "SELECT type from components WHERE = component_name = " + componentName;
+            ArrayList<String> typesArray = db.fetchColumn(typeQuery);
+            Set<String> types = new HashSet<>(typesArray);
+            componentAttributes.put("types", types);
+        } catch (InfException e) {
+            System.err.println(e.getMessage());
+            return null;
+        }
+
+        try {
+            String typeQuery = "SELECT color from components WHERE = component_name = " + componentName;
+            ArrayList<String> colorArray = db.fetchColumn(typeQuery);
+            Set<String> colors = new HashSet<>(colorArray);
+            componentAttributes.put("colors", colors);
+        } catch (InfException e) {
+            System.err.println(e.getMessage());
+            return null;
+        }
+        
+        try {
+            String typeQuery = "SELECT unit from components WHERE = component_name = " + componentName;
+            ArrayList<String> unitArray = db.fetchColumn(typeQuery);
+            Set<String> units = new HashSet<>(unitArray);
+            componentAttributes.put("units", units);
+        } catch (InfException e) {
+            System.err.println(e.getMessage());
+            return null;
+        }
+       
+        return componentAttributes;
+    }
 }
