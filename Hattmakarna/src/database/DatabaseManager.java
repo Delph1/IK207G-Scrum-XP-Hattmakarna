@@ -981,32 +981,44 @@ public class DatabaseManager {
     
     
     public Map<String, String> getDeliveryNoteLanguage(String country) {
-    try {
-        // Först: försök hämta översättningar för angivet land
-        String query = "SELECT label_key, label_value FROM deliverynote_translation_entries WHERE country = '" + country + "'";
-        ArrayList<HashMap<String, String>> rows = db.fetchRows(query);
+        try {
+            // Först: försök hämta översättningar för angivet land
+            String query = "SELECT label_key, label_value FROM deliverynote_translation_entries WHERE country = '" + country + "'";
+            ArrayList<HashMap<String, String>> rows = db.fetchRows(query);
 
-        // Om inget resultat hittades, försök med fallback till engelska
-        if (rows == null || rows.isEmpty()) {
-            System.out.println("Inga översättningar hittades för '" + country + "'. Försöker med engelska (fallback).");
-            query = "SELECT label_key, label_value FROM deliverynote_translation_entries WHERE code = 'EN'";
-            rows = db.fetchRows(query);
-        }
-
-        if (rows != null && !rows.isEmpty()) {
-            Map<String, String> translations = new HashMap<>();
-            for (HashMap<String, String> row : rows) {
-                translations.put(row.get("label_key"), row.get("label_value"));
+            // Om inget resultat hittades, försök med fallback till engelska
+            if (rows == null || rows.isEmpty()) {
+                System.out.println("Inga översättningar hittades för '" + country + "'. Försöker med engelska (fallback).");
+                query = "SELECT label_key, label_value FROM deliverynote_translation_entries WHERE code = 'EN'";
+                rows = db.fetchRows(query);
             }
-            return translations;
-        } else {
-            System.err.println("Varken landsspecifika eller engelska översättningar hittades.");
+
+            if (rows != null && !rows.isEmpty()) {
+                Map<String, String> translations = new HashMap<>();
+                for (HashMap<String, String> row : rows) {
+                    translations.put(row.get("label_key"), row.get("label_value"));
+                }
+                return translations;
+            } else {
+                System.err.println("Varken landsspecifika eller engelska översättningar hittades.");
+                return null;
+            }
+
+        } catch (InfException e) {
+            System.err.println("Fel vid hämtning av översättningar: " + e.getMessage());
             return null;
         }
-
-    } catch (InfException e) {
-        System.err.println("Fel vid hämtning av översättningar: " + e.getMessage());
-        return null;
     }
-}
+    
+    public boolean deleteComponentForProduct(int productId, int componentId) {
+        try {
+            System.out.println("Radera relationen mellan komponenten " + componentId + " och produkten " + productId);
+            String query = "DELETE FROM product_components WHERE product_id = " + productId + " AND component_id = " + componentId;
+            db.delete(query);
+            return true;
+        } catch (InfException e) {
+            System.err.println("Kunde inte radera komponenten för produkt: " + e.getMessage());
+            return false;
+        }
+    }
 }

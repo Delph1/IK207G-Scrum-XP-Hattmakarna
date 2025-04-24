@@ -6,6 +6,7 @@ import java.awt.Dimension;
 import javax.swing.JPanel;
 import models.Product;
 import panels.*;
+import panels.modular.ProductPanel;
 
 public class ModularWindow extends javax.swing.JDialog {
 
@@ -33,8 +34,12 @@ public class ModularWindow extends javax.swing.JDialog {
     }
     
     public void newProduct() {
-    showPanel(new panels.modular.ProductPanel(this));
-}
+        showPanel(new ProductPanel(this));
+    }
+    
+    public void editProduct(Product product) {
+        showPanel(new ProductPanel(this, product));
+    }
     
     // Intern metod för att "måla" en panel
     private void redrawCurrentPanel() {

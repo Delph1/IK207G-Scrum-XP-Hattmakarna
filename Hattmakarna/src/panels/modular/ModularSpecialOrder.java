@@ -249,7 +249,7 @@ public class ModularSpecialOrder extends javax.swing.JPanel {
             }
         });
 
-        btnCreateMaterial.setText("Skapa material");
+        btnCreateMaterial.setText("Nytt material");
         btnCreateMaterial.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnCreateMaterialActionPerformed(evt);
