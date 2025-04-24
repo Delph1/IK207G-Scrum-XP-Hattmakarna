@@ -18,7 +18,7 @@ import javax.swing.JOptionPane;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.table.TableColumn;
-import models.Component;
+import models.ComponentModel;
 import models.Product;
 import javax.swing.table.DefaultTableModel;
 import models.ProductImage;
@@ -88,9 +88,9 @@ public class ModularSpecialOrder extends javax.swing.JPanel {
         Set<String> typeSet = new HashSet<>();
         Set<String> colorSet = new HashSet<>();
         
-        ArrayList<Component> components = dbm.getComponents();
+        ArrayList<ComponentModel> components = dbm.getComponents();
         
-        for (Component component : components) {
+        for (ComponentModel component : components) {
             nameSet.add(component.getComponentName());
             colorSet.add(component.getColor());
             typeSet.add(component.getType());
@@ -119,9 +119,9 @@ public class ModularSpecialOrder extends javax.swing.JPanel {
     private void insertExistingComponentsIntoTable (int productId) {
         
         materialTable.removeRow(0);
-        ArrayList<Component> components = dbm.getComponentsForProduct(productId);
+        ArrayList<ComponentModel> components = dbm.getComponentsForProduct(productId);
 
-        for (Component component : components) {
+        for (ComponentModel component : components) {
             materialTable.addRow(new Object[]{ component.getComponentName(), component.getType(), component.getColor(), component.getAmount(), component.getUnit()}); 
         }
     }
@@ -461,7 +461,7 @@ public class ModularSpecialOrder extends javax.swing.JPanel {
         
         //Skapar komponenterna som hör till produkten
         for (int i = 0; i < tblMaterial.getRowCount(); i++) {
-                Component newComponent = dbm.createComponent();
+                ComponentModel newComponent = dbm.createComponent();
                 newComponent.setComponentName(tblMaterial.getValueAt(i, 0).toString());
                 newComponent.setColor(tblMaterial.getValueAt(i, 2).toString());
                 newComponent.setType(tblMaterial.getValueAt(i, 1).toString());
