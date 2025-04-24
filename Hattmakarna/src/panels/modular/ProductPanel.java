@@ -17,6 +17,11 @@ import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumn;
 import models.*;
 import utils.ImageManager;
+import java.awt.Component;
+import java.util.Arrays;
+import java.util.Map;
+import java.util.TreeSet;
+import javax.swing.JTable;
 
 public class ProductPanel extends javax.swing.JPanel {
     private ModularWindow window;
@@ -30,23 +35,10 @@ public class ProductPanel extends javax.swing.JPanel {
         this.window = window; 
         this.imageManager = new ImageManager(window, true);
         materialTable = (DefaultTableModel) tblMaterial.getModel();
-        fillComboBoxes();
         tblMaterial.setModel(materialTable);
-    }
-    
-    public ProductPanel (ModularWindow window, Product product) {
-        initComponents();
-        this.window = window; 
-        this.product = product;
-        txtVikt.setText(String.valueOf(product.getWeight()));
-        txtProduktnamn.setText(product.getProductName() + " (Modifierad)");
-        txtPris.setText(String.valueOf(product.getPrice()));
-        txtBeskrivning.setText(product.getDescription());
-        this.imageManager = new ImageManager(window, true);
-        materialTable = (DefaultTableModel) tblMaterial.getModel();
-        insertExistingComponentsIntoTable(product.getProductId());
-        fillComboBoxes();
-        tblMaterial.setModel(materialTable);
+//        fillComboBoxes();
+        smarterComboBoxes();
+        initComponents();        
     }
     
     private void fillComboBoxes() {
@@ -60,62 +52,9 @@ public class ProductPanel extends javax.swing.JPanel {
         Set<String> typeSet = new HashSet<>();
         Set<String> colorSet = new HashSet<>();
         
-        ArrayList<Component> components = dbm.getComponents();
+        ArrayList<ComponentModel> components = dbm.getComponents();
         
-        for (Component component : components) {
-            nameSet.add(component.getComponentName());
-            colorSet.add(component.getColor());
-            typeSet.add(component.getType());
-        }
-        
-        comboBoxUnits.addItem("meter");
-        comboBoxUnits.addItem("styck");
-        
-        for(String name : nameSet)comboBoxNames.addItem(name);
-        for(String type : typeSet)comboBoxTypes.addItem(type);
-        for(String color : colorSet)comboBoxColor.addItem(color);
-
-        TableColumn nameColumn = tblMaterial.getColumnModel().getColumn(1);
-        nameColumn.setCellEditor(new DefaultCellEditor(comboBoxNames));
-        
-        TableColumn typesColumn = tblMaterial.getColumnModel().getColumn(2);
-        typesColumn.setCellEditor(new DefaultCellEditor(comboBoxTypes));
-
-        TableColumn colorColumn = tblMaterial.getColumnModel().getColumn(3);
-        colorColumn.setCellEditor(new DefaultCellEditor(comboBoxColor));
-        
-        TableColumn unitColumn = tblMaterial.getColumnModel().getColumn(5);
-        unitColumn.setCellEditor(new DefaultCellEditor(comboBoxUnits));    
-        //gömmer första kolumnen
-        tblMaterial.getColumnModel().getColumn(0).setMinWidth(0);
-        tblMaterial.getColumnModel().getColumn(0).setMaxWidth(0);
-        tblMaterial.getColumnModel().getColumn(0).setWidth(0);                
-    }
-    
-    private void insertExistingComponentsIntoTable (int productId) {
-        
-        materialTable.removeRow(0);
-        ArrayList<Component> components = dbm.getComponentsForProduct(productId);
-
-        for (Component component : components) {
-            materialTable.addRow(new Object[]{ component.getComponentId(), component.getComponentName(), component.getType(), component.getColor(), component.getAmount(), component.getUnit()}); 
-        }
-    }
-    
-    private void fillComboBoxes() {
-        JComboBox comboBoxNames = new JComboBox();
-        JComboBox comboBoxColor = new JComboBox();
-        JComboBox comboBoxTypes = new JComboBox();
-        JComboBox comboBoxUnits = new JComboBox();
-        
-        //Använder sets för att bara få in unika värden i listorna
-        Set<String> nameSet = new HashSet<>();
-        Set<String> typeSet = new HashSet<>();
-        Set<String> colorSet = new HashSet<>();
-        
-        ArrayList<Component> components = dbm.getComponents();
-        
-        for (Component component : components) {
+        for (ComponentModel component : components) {
             nameSet.add(component.getComponentName());
             colorSet.add(component.getColor());
             typeSet.add(component.getType());
@@ -139,6 +78,62 @@ public class ProductPanel extends javax.swing.JPanel {
         
         TableColumn unitColumn = tblMaterial.getColumnModel().getColumn(4);
         unitColumn.setCellEditor(new DefaultCellEditor(comboBoxUnits));    
+    }
+    
+    private void smarterComboBoxes() {
+        JComboBox comboBoxNames = new JComboBox();
+        ArrayList<ComponentModel> components = dbm.getComponents();
+        Set<String> nameSet = new HashSet<>();
+
+        for (ComponentModel component : components) {
+            nameSet.add(component.getComponentName());
+        }
+        for(String name : nameSet)comboBoxNames.addItem(name);
+        tblMaterial.getColumnModel().getColumn(0).setCellEditor(new DefaultCellEditor(comboBoxNames));
+        
+        tblMaterial.getColumnModel().getColumn(1).setCellEditor(new DefaultCellEditor(new JComboBox<>()) {
+            @Override
+            public Component getTableCellEditorComponent(JTable table, Object value, boolean isSelected, int row, int column) {
+                String ComponentName = tblMaterial.getValueAt(row, 1).toString();
+                Map<String, Set<String>> material = dbm.getComponentAttributesFromName(ComponentName);
+                Set<String> options = material.get("types");
+                JComboBox<String> comboBoxTypes = new JComboBox<>();
+                for (String option : options) {
+                    comboBoxTypes.addItem(option);
+                }
+                return comboBoxTypes;
+            }
+        });
+        Set<String> colors = new TreeSet<>(Arrays.asList(
+            "Aprikos", "Aubergine", "Azurblå", "Beige", "Blå", "Blågrå", "Blåsvart",
+            "Brun", "Burgundy", "Cerise", "Cyan", "Denim", "Gammelrosa", "Grå", "Gråblå",
+            "Grön", "Grönblå", "Gul", "Guld", "Indigo", "Kaki", "Koppar", "Korall",
+            "Kornblå", "Kräm", "Laxrosa", "Lavendel", "Lila", "Ljusblå", "Ljusgrå",
+            "Ljusgrön", "Ljusrosa", "Magenta", "Marinblå", "Mörkblå", "Mörkgrå",
+            "Mörkgrön", "Mörklila", "Mörkröd", "Nougat", "Olivgrön", "Orange",
+            "Petrol", "Rosa", "Rost", "Röd", "Rödbrun", "Safirblå", "Senapsgul",
+            "Silver", "Skogsgrön", "Svart", "Turkos", "Vit", "Vinröd", "Äppelgrön", "Äggskal"
+        ));
+        JComboBox<String> comboBoxColors = new JComboBox<>(colors.toArray(new String[0]));
+        tblMaterial.getColumnModel().getColumn(2).setCellEditor(new DefaultCellEditor(new JComboBox<>()) {
+            @Override
+            public Component getTableCellEditorComponent(JTable table, Object value, boolean isSelected, int row, int column) {
+                return comboBoxColors;
+            }
+        });
+        tblMaterial.getColumnModel().getColumn(4).setCellEditor(new DefaultCellEditor(new JComboBox<>()) {
+            @Override
+            public Component getTableCellEditorComponent(JTable table, Object value, boolean isSelected, int row, int column) {
+                String ComponentName = tblMaterial.getValueAt(row, 1).toString();
+                Map<String, Set<String>> material = dbm.getComponentAttributesFromName(ComponentName);
+                Set<String> options = material.get("units");
+                JComboBox<String> comboBoxUnits = new JComboBox<>();
+                for (String option : options) {
+                    comboBoxUnits.addItem(option);
+                }
+                return comboBoxUnits;
+            }
+        });        
     }
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
