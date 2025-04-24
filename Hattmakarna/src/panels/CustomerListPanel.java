@@ -60,6 +60,11 @@ public class CustomerListPanel extends javax.swing.JPanel {
         });
 
         showCustomerButton.setText("Visa kund");
+        showCustomerButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                showCustomerButtonActionPerformed(evt);
+            }
+        });
 
         customerTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -121,6 +126,10 @@ public class CustomerListPanel extends javax.swing.JPanel {
     private void deleteCustomerButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deleteCustomerButtonActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_deleteCustomerButtonActionPerformed
+
+    private void showCustomerButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_showCustomerButtonActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_showCustomerButtonActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

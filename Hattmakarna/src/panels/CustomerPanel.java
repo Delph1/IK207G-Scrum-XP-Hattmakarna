@@ -111,6 +111,7 @@ public class CustomerPanel extends javax.swing.JPanel {
         emailTextField = new javax.swing.JTextField();
         jScrollPane1 = new javax.swing.JScrollPane();
         mailList = new javax.swing.JList<>();
+        backButton = new javax.swing.JButton();
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -282,6 +283,14 @@ public class CustomerPanel extends javax.swing.JPanel {
         jScrollPane1.setViewportView(mailList);
 
         add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(320, 280, 195, 90));
+
+        backButton.setText("Tillbaka");
+        backButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                backButtonActionPerformed(evt);
+            }
+        });
+        add(backButton, new org.netbeans.lib.awtextra.AbsoluteConstraints(530, 390, -1, -1));
     }// </editor-fold>//GEN-END:initComponents
 
     private void saveCustomerButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_saveCustomerButtonActionPerformed
@@ -322,10 +331,15 @@ public class CustomerPanel extends javax.swing.JPanel {
         populateListModels(); 
     }//GEN-LAST:event_removeMailButtonActionPerformed
 
+    private void backButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_backButtonActionPerformed
+       window.showCustomerListPanel();
+    }//GEN-LAST:event_backButtonActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton addEmailButton;
     private javax.swing.JButton addPhonNumberButton;
+    private javax.swing.JButton backButton;
     private javax.swing.JTextField cityTextField;
     private javax.swing.JTextField countryTextField;
     private javax.swing.JPanel customerPanel;
