@@ -15,8 +15,9 @@ public class OrderLine {
     private int price;
     private int product_id;
     private String delivery_date;
+    private String hat_status;
 
-    public OrderLine(int orderLine_id, int order_id, boolean customer_approval, String description, int price, int product_id, String delivery_date) {
+    public OrderLine(int orderLine_id, int order_id, boolean customer_approval, String description, int price, int product_id, String delivery_date, String hat_status) {
         this.customer_approval = customer_approval;
         this.description = description;
         this.order_id = order_id;
@@ -24,7 +25,7 @@ public class OrderLine {
         this.price = price;
         this.product_id = product_id;
         this.delivery_date = delivery_date;
-        System.out.println(orderLine_id);
+        this.hat_status = hat_status;
     }
 
     public void setCustomerApproval(boolean customerApproval) {
@@ -78,5 +79,13 @@ public class OrderLine {
     
     public void setDeliveryDate(String delivery_date) {
         this.delivery_date = delivery_date;
+    }
+    
+    public String getHatStatus() {
+        return hat_status;
+    }
+    
+    public void setHatStatus(String hat_status) {
+        this.hat_status = hat_status;
     }
 }

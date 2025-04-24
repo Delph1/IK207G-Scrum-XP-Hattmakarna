@@ -487,11 +487,13 @@ public class OrderPanel extends javax.swing.JPanel {
                 int price = Integer.parseInt(tableModelOrderline.getValueAt(i, 2).toString());
                 boolean customer_approval = (Boolean) tableModelOrderline.getValueAt(i, 3);
                 String description = tableModelOrderline.getValueAt(i, 4).toString();
-
+                Product orderLineHat = dbm.getProduct(prod_id); //hämtar ut produkten för att kunna kolla om det är en lagervara
+                String hatStatus = orderLineHat.getStockItem() ? "ready" : "not ready"; //sätter status beroende på om det är en lagervara eller inte
                 orderLine.setProductId(prod_id);
                 orderLine.setPrice(price);
                 orderLine.setCustomerApproval(customer_approval);
                 orderLine.setDescription(description);
+                orderLine.setHatStatus(hatStatus);
 
                 dbm.updateOrderLine(orderLine);
             }
