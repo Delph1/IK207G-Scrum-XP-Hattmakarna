@@ -1076,4 +1076,31 @@ public class DatabaseManager {
        
         return componentAttributes;
     }
+    
+    public ArrayList<ProductImage> get3DImagesForProduct(int productId) {
+        System.out.println("GET images for product " + productId);
+        ArrayList<ProductImage> images = new ArrayList<>();
+        try {
+            String query = "SELECT * FROM images WHERE product_id = " + productId + " AND type = 3dview";
+            ArrayList<HashMap<String, String>> result = db.fetchRows(query);
+            if (result != null) {
+                for (HashMap<String, String> row : result) {
+                    images.add(new ProductImage (
+                            row.get("base64"),
+                            Integer.parseInt(row.get("image_id")),
+                            Integer.parseInt(row.get("product_id")),
+                            row.get("type"),
+                            row.get("description")
+                    ));
+                }
+                return images;
+            } else {
+                return null;
+            }
+        } catch (InfException e) {
+            System.err.println(e.getMessage());
+            return null;
+        }
+        
+    }
 }
