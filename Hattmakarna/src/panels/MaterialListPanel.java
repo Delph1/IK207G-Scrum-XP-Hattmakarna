@@ -129,7 +129,7 @@ public class MaterialListPanel extends javax.swing.JPanel {
         String startDate = txtStartDate.getText();
         String stopDate = txtStopDate.getText();
         
-        ArrayList<Component> components = dbm.getComponentsBetweenDates(startDate, stopDate);
+        ArrayList<ComponentModel> components = dbm.getComponentsBetweenDates(startDate, stopDate);
 
         String[] columns = {"ID", "Namn", "Färg", "Mängd"};
         
@@ -142,7 +142,7 @@ public class MaterialListPanel extends javax.swing.JPanel {
         Object[][] materialData = new Object[components.size()][4];
         
         for (int i = 0; i < components.size(); i++) {
-            Component component = components.get(i);
+            ComponentModel component = components.get(i);
             materialData[i][0] = component.getComponentId();
             materialData[i][1] = component.getComponentName();
             materialData[i][2] = component.getColor();
