@@ -178,7 +178,7 @@ public class CustomerPanel extends javax.swing.JPanel {
                             .addComponent(cityTextField)
                             .addComponent(stateTextField)
                             .addComponent(countryTextField))))
-                .addContainerGap(44, Short.MAX_VALUE))
+                .addContainerGap(41, Short.MAX_VALUE))
         );
         customerPanelLayout.setVerticalGroup(
             customerPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -214,7 +214,7 @@ public class CustomerPanel extends javax.swing.JPanel {
                 .addContainerGap(83, Short.MAX_VALUE))
         );
 
-        add(customerPanel, new org.netbeans.lib.awtextra.AbsoluteConstraints(16, 50, -1, -1));
+        add(customerPanel, new org.netbeans.lib.awtextra.AbsoluteConstraints(16, 50, 260, 320));
         customerPanel.getAccessibleContext().setAccessibleName("");
 
         jLabel2.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
@@ -227,7 +227,7 @@ public class CustomerPanel extends javax.swing.JPanel {
                 saveCustomerButtonActionPerformed(evt);
             }
         });
-        add(saveCustomerButton, new org.netbeans.lib.awtextra.AbsoluteConstraints(256, 382, 119, -1));
+        add(saveCustomerButton, new org.netbeans.lib.awtextra.AbsoluteConstraints(250, 390, 119, -1));
 
         jLabel10.setText("Telefonnummer");
         add(jLabel10, new org.netbeans.lib.awtextra.AbsoluteConstraints(389, 50, -1, -1));
