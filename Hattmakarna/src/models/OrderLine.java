@@ -14,9 +14,9 @@ public class OrderLine {
     private int orderLine_id;
     private int price;
     private int product_id;
-    private LocalDate delivery_date;
+    private String delivery_date;
 
-    public OrderLine(int orderLine_id, int order_id, boolean customer_approval, String description, int price, int product_id, LocalDate delivery_date) {
+    public OrderLine(int orderLine_id, int order_id, boolean customer_approval, String description, int price, int product_id, String delivery_date) {
         this.customer_approval = customer_approval;
         this.description = description;
         this.order_id = order_id;
@@ -72,11 +72,11 @@ public class OrderLine {
         return "Order-id: " + order_id + ",  " + "OrderLine-Id: " + orderLine_id + ",  " + "Beskrivning: " + description;
     }
     
-    public LocalDate getDeliveryDate() {
+    public String getDeliveryDate() {
         return delivery_date; 
     }
     
-    public void setDeliveryDate(LocalDate delivery_date) {
+    public void setDeliveryDate(String delivery_date) {
         this.delivery_date = delivery_date;
     }
 }

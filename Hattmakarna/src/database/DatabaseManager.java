@@ -153,7 +153,7 @@ public class DatabaseManager {
                         row.get("description"),
                         row.get("price") == null ? 0 : Integer.parseInt(row.get("price")),
                         row.get("product_id") == null ? 0 : Integer.parseInt(row.get("product_id")),
-                        LocalDate.parse("1111-11-11")
+                        "1111-11-11"
                 );
                 return orderLine;
             } else {
@@ -180,7 +180,7 @@ public class DatabaseManager {
                             row.get("description"),
                             Integer.parseInt(row.get("price")),
                             Integer.parseInt(row.get("product_id")),
-                            LocalDate.parse("1111-11-11")
+                            "1111-11-11"
                     ));
                 }
             }
@@ -206,7 +206,7 @@ public class DatabaseManager {
                             row.get("description"),
                             Integer.parseInt(row.get("price")),
                             Integer.parseInt(row.get("product_id")),
-                            LocalDate.parse("1111-11-11")
+                            "1111-11-11"
                     ));
                 }
             }
@@ -232,7 +232,7 @@ public class DatabaseManager {
                             row.get("description"),
                             Integer.parseInt(row.get("price")),
                             Integer.parseInt(row.get("product_id")),
-                            LocalDate.parse("1111-11-11")
+                            "1111-11-11"
                     ));
                 }
             }
@@ -243,14 +243,14 @@ public class DatabaseManager {
 
     }
 
-    public boolean createHatmakerOrderlines(OrderLine orderline, User user, LocalDate delivery_date) {
+    public boolean createHatmakerOrderlines(OrderLine orderline, User user, String delivery_date) {
         try {
             int orderline_id = orderline.getOrderLineId();
             int user_id = user.getUserId();
             //String date = delivery_date.toString();
             //System.out.println("This is the date from db manager " + date);
             System.out.println("This is the delivery date from dbmanager " + delivery_date);
-            String insert_sql = "INSERT INTO hatmaker (orderline_id, hatmaker, delivery_date) VALUES (" + orderline_id + ", " + user_id + ", " + delivery_date + ")";
+            String insert_sql = "INSERT INTO hatmaker (orderline_id, hatmaker, delivery_date) VALUES (" + orderline_id + ", " + user_id + ", " + "str_to_date('" + delivery_date + "', '%Y-%m-%d'))";
             db.insert(insert_sql);
             return true;
         } catch (InfException e) {
@@ -258,11 +258,11 @@ public class DatabaseManager {
         }
     }
 
-    public boolean removeHatmakerOrderlines(OrderLine orderline, User user, LocalDate delivery_date) {
+    public boolean removeHatmakerOrderlines(OrderLine orderline, User user) {
         try {
             int orderline_id = orderline.getOrderLineId();
             int user_id = user.getUserId();
-            String delete_sql = "DELETE FROM hatmaker WHERE orderline_id = " + orderline_id + " AND hatmaker = " + user_id + " AND delivery_date = " + delivery_date + "";
+            String delete_sql = "DELETE FROM hatmaker WHERE orderline_id = " + orderline_id + " AND hatmaker = " + user_id;
             db.delete(delete_sql);
             return true;
         } catch (InfException e) {
@@ -285,7 +285,7 @@ public class DatabaseManager {
                             row.get("description"),
                             Integer.parseInt(row.get("price")),
                             Integer.parseInt(row.get("product_id")),
-                            LocalDate.parse("1111-11-11")
+                            "1111-11-11"
                     ));
                 }
             }
