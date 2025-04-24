@@ -467,7 +467,7 @@ public class DatabaseManager {
             if (results != null) {
                 for (HashMap<String, String> row : results) {
                     customers.add(new Customer(
-                            row.get("customre_id") == null ? 0 : Integer.parseInt(row.get("customer_id")),
+                            row.get("customer_id") == null ? 0 : Integer.parseInt(row.get("customer_id")),
                             row.get("firstname"),
                             row.get("lastname"),
                             row.get("streetname"),
