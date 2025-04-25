@@ -138,18 +138,7 @@ public class SpecialOrderPanel extends javax.swing.JPanel {
         }
     }
     
-        private void smarterComboBoxes() {
-        
-        tblMaterial.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-
-        tblMaterial.getSelectionModel().addListSelectionListener(e -> {
-            if (!e.getValueIsAdjusting()) {
-                int rad = tblMaterial.getSelectedRow();
-                if (rad != -1) {
-                    uppdateraCellEditorsFörRad(tblMaterial, rad);
-                }
-            }
-        });
+    private void smarterComboBoxes() {
         
         JComboBox comboBoxNames = new JComboBox();
         ArrayList<ComponentModel> components = dbm.getComponents();
@@ -159,7 +148,7 @@ public class SpecialOrderPanel extends javax.swing.JPanel {
             nameSet.add(component.getComponentName());
         }
         for(String name : nameSet)comboBoxNames.addItem(name);
-        tblMaterial.getColumnModel().getColumn(1).setCellEditor(new DefaultCellEditor(comboBoxNames));
+        tblMaterial.getColumnModel().getColumn(0).setCellEditor(new DefaultCellEditor(comboBoxNames));
         
         Set<String> colors = new TreeSet<>(Arrays.asList(
             "Aprikos", "Aubergine", "Azurblå", "Beige", "Blå", "Blågrå", "Blåsvart",
@@ -172,12 +161,18 @@ public class SpecialOrderPanel extends javax.swing.JPanel {
             "Silver", "Skogsgrön", "Svart", "Turkos", "Vit", "Vinröd", "Äppelgrön", "Äggskal"
         ));
         JComboBox<String> comboBoxColors = new JComboBox<>(colors.toArray(new String[0]));
-        tblMaterial.getColumnModel().getColumn(3).setCellEditor(new DefaultCellEditor(comboBoxColors));
+        tblMaterial.getColumnModel().getColumn(2).setCellEditor(new DefaultCellEditor(comboBoxColors));
         
-        //gömmer första kolumnen
-        tblMaterial.getColumnModel().getColumn(0).setMinWidth(0);
-        tblMaterial.getColumnModel().getColumn(0).setMaxWidth(0);
-        tblMaterial.getColumnModel().getColumn(0).setWidth(0);          
+        tblMaterial.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+
+        tblMaterial.getSelectionModel().addListSelectionListener(e -> {
+            if (!e.getValueIsAdjusting()) {
+                int rad = tblMaterial.getSelectedRow();
+                if (rad != -1) {
+                    uppdateraCellEditorsFörRad(tblMaterial, rad);
+                }
+            }
+        });
     }
 
     private void uppdateraCellEditorsFörRad(JTable table, int row) {
@@ -186,10 +181,10 @@ public class SpecialOrderPanel extends javax.swing.JPanel {
         if (table.isEditing()) {
             table.getCellEditor().stopCellEditing();
         }
-        String valdTyp = (String) table.getValueAt(row, 2);
-        String valdEnhet = (String) table.getValueAt(row, 5);
+        String valdTyp = (String) table.getValueAt(row, 1);
+        String valdEnhet = (String) table.getValueAt(row, 4);
 
-        String componentName = table.getValueAt(row, 1).toString();
+        String componentName = table.getValueAt(row, 0).toString();
         Map<String, Set<String>> material = dbm.getComponentAttributesFromName(componentName);
 
         JComboBox<String> comboBoxTypes = new JComboBox<>();
@@ -205,12 +200,12 @@ public class SpecialOrderPanel extends javax.swing.JPanel {
         }
 
         // Kombobox för Typ
-        comboBoxTypes.setSelectedItem(table.getValueAt(row, 2));
-        table.getColumnModel().getColumn(2).setCellEditor(new DefaultCellEditor(comboBoxTypes));
+        comboBoxTypes.setSelectedItem(table.getValueAt(row, 1));
+        table.getColumnModel().getColumn(1).setCellEditor(new DefaultCellEditor(comboBoxTypes));
 
         // Kombobox för Enhet
-        comboBoxUnits.setSelectedItem(table.getValueAt(row, 5)); // kolumn "Enhet"
-        table.getColumnModel().getColumn(5).setCellEditor(new DefaultCellEditor(comboBoxUnits));
+        comboBoxUnits.setSelectedItem(table.getValueAt(row, 4)); // kolumn "Enhet"
+        table.getColumnModel().getColumn(4).setCellEditor(new DefaultCellEditor(comboBoxUnits));
     }
     private void createBlueprintListener() {
         tblBlueprint.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
