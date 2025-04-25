@@ -1,4 +1,3 @@
-
 package panels;
 
 import hattmakarna.MainWindow;
@@ -7,7 +6,6 @@ import models.*;
 import java.util.ArrayList;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
-
 
 public class OrderlistPanel extends javax.swing.JPanel {
 //Fält
@@ -28,61 +26,57 @@ public class OrderlistPanel extends javax.swing.JPanel {
         allOrders = dbm.getOrders();
         for (Order order : allOrders) {
             tableModel.addRow(new Object[]{order.getId(), order.getCustomer_id(), order.getOrder_date(), order.getOrder_status(), order.isExpress(), order.getShippingCost()});
-
             System.out.println(order.getId());
 
         }
 
     }
-    
-    public void filtreraKund(){
+
+    //Metod för att filtrera kunderna baserat på ID
+    public void filtreraKund() {
         String input = valdKund.getText().trim();
-            if(input.isEmpty()){
-                JOptionPane.showMessageDialog(null, "Den kunden finns inte, välj en annan");
-                return;
-            }      
-            
-            try {
-        int kundId = Integer.parseInt(input); //Gör kundIdt till en int så man kan använda == försökte == men det måste ju vara int för att kunna jämföra så
-
-        DefaultTableModel model = (DefaultTableModel) orderTable.getModel();
-        model.setRowCount(0); // måste rensa jTablet för annars läggs ordarna till och inga försvinner 
-
-        for (Order order : allOrders) {
-            if (order.getCustomer_id() == kundId) {
-                model.addRow(new Object[]{
-                    order.getId(),
-                    order.getCustomer_id(),
-                    order.getOrder_date(),
-                    order.getOrder_status(),
-                    order.isExpress(),
-                    order.getShippingCost()
-                });
-            }
+        if (input.isEmpty()) {
+            JOptionPane.showMessageDialog(null, "Den kunden finns inte, välj en annan");
+            return;
         }
 
-    } catch (NumberFormatException e) {
-        JOptionPane.showMessageDialog(null, "KundId måste vara ett heltal");
+        try {
+            int kundId = Integer.parseInt(input); //Gör kundIdt till en int så man kan använda == försökte == men det måste ju vara int för att kunna jämföra så
+
+            DefaultTableModel model = (DefaultTableModel) orderTable.getModel();
+            model.setRowCount(0); // måste rensa jTablet för annars läggs ordarna till och inga försvinner 
+
+            for (Order order : allOrders) {
+                if (order.getCustomer_id() == kundId) {
+                    model.addRow(new Object[]{
+                        order.getId(),
+                        order.getCustomer_id(),
+                        order.getOrder_date(),
+                        order.getOrder_status(),
+                        order.isExpress(),
+                        order.getShippingCost()
+                    });
+                }
+            }
+
+        } catch (NumberFormatException e) {
+            JOptionPane.showMessageDialog(null, "KundId måste vara ett heltal");
+        }
     }
-}
-    
-    
-    public void rensa(){
-       
+
+    public void rensa() {
+
         DefaultTableModel model = (DefaultTableModel) orderTable.getModel();
-        model.setRowCount(0); 
-        
+        model.setRowCount(0);
+
         tableModel = (DefaultTableModel) orderTable.getModel();
         allOrders = dbm.getOrders();
         for (Order order : allOrders) {
             tableModel.addRow(new Object[]{order.getId(), order.getCustomer_id(), order.getOrder_date(), order.getOrder_status(), order.isExpress(), order.getShippingCost()});
 
+        }
+
     }
- 
-    }
-
-
-
 
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
@@ -234,7 +228,7 @@ public class OrderlistPanel extends javax.swing.JPanel {
 
     private void newOrderButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_newOrderButtonActionPerformed
         window.showOrderPanel();
-        
+
     }//GEN-LAST:event_newOrderButtonActionPerformed
 
     private void deleteOrderButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deleteOrderButtonActionPerformed
@@ -247,7 +241,7 @@ public class OrderlistPanel extends javax.swing.JPanel {
 
         if (dbm.deleteOrder(selectedOrderId)) {
             tableModel.removeRow(selectedRowId);
-            System.out.println("YAY deleted");
+            System.out.println("Ordern är raderad");
         }
 
 
@@ -260,17 +254,17 @@ public class OrderlistPanel extends javax.swing.JPanel {
     }//GEN-LAST:event_showOrderButtonActionPerformed
 
     private void valdKundActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_valdKundActionPerformed
-    String placeholderText = valdKund.getText();
-    
-    
+        String placeholderText = valdKund.getText();
+
+
     }//GEN-LAST:event_valdKundActionPerformed
 
     private void filtreraBTNActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_filtreraBTNActionPerformed
-        filtreraKund(); 
+        filtreraKund();
     }//GEN-LAST:event_filtreraBTNActionPerformed
 
     private void rensaBTNActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rensaBTNActionPerformed
-rensa();
+        rensa();
 // TODO add your handling code here:
     }//GEN-LAST:event_rensaBTNActionPerformed
 

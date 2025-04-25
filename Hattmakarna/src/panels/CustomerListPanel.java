@@ -21,12 +21,7 @@ public class CustomerListPanel extends javax.swing.JPanel {
         this.window=window; 
         initComponents();
         tableModel = (DefaultTableModel) customerTable.getModel();
-        allCustomers= dbm.getCustomers();
-       for (Customer customer : allCustomers) {
-           tableModel.addRow(new Object[] {customer.getId(), customer.getFirstName(), customer.getLastName(), customer.getStreetName(), customer.getPostalCode(), customer.getPostalCity(), customer.getState(), customer.getCountry()});
-      System.out.println(customer.getId());
-       }
-        
+        updateCustomerList();
     }
 
     @SuppressWarnings("unchecked")
@@ -119,18 +114,42 @@ public class CustomerListPanel extends javax.swing.JPanel {
         );
     }// </editor-fold>//GEN-END:initComponents
 
+    private void updateCustomerList() {
+        allCustomers = dbm.getCustomers();
+        for (Customer customer : allCustomers) {
+            if (!customer.getFirstName().contentEquals("Borttagen")) {
+                tableModel.addRow(new Object[]{customer.getId(), customer.getFirstName(), customer.getLastName(), customer.getStreetName(), customer.getPostalCode(), customer.getPostalCity(), customer.getState(), customer.getCountry()});
+            }
+        }
+    }
+    
     private void NewCustomerBTNActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_NewCustomerBTNActionPerformed
         window.showCustomerPanel(null);
     }//GEN-LAST:event_NewCustomerBTNActionPerformed
 
     private void deleteCustomerButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deleteCustomerButtonActionPerformed
-        // TODO add your handling code here:
+        int selectedRowId = customerTable.getSelectedRow();
+        int selectedCustomerId = (int) customerTable.getValueAt(selectedRowId, 0);
+        Customer customer = dbm.getCustomer(selectedCustomerId);
+        customer.setFirstName("Borttagen");
+        customer.setLastName("");
+        customer.setStreetName("");
+        customer.setCountry("");
+        customer.setPostalCity("");
+        customer.setPostalCode("");
+        customer.setState("");
+        customer.setEmail(new ArrayList());
+        customer.setPhoneNumbers(new ArrayList());
+        dbm.updateCustomer(customer);
+        tableModel.removeRow(selectedRowId);
     }//GEN-LAST:event_deleteCustomerButtonActionPerformed
 
     private void showCustomerButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_showCustomerButtonActionPerformed
-        // TODO add your handling code here:
+        int selectedRowId = customerTable.getSelectedRow();
+        int selectedCustomerId = (int) customerTable.getValueAt(selectedRowId, 0);
+        Customer customer = dbm.getCustomer(selectedCustomerId);
+        window.showCustomerPanel(customer);
     }//GEN-LAST:event_showCustomerButtonActionPerformed
-
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton NewCustomerBTN;
