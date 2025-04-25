@@ -46,7 +46,7 @@ public class Print {
         this.stopDate = stopDate;
     }
 
-    public void showQoute() throws IOException {
+    public void showQuote() throws IOException {
         String headerText = "Offert";
         createOrderDocument(headerText);
         Desktop.getDesktop().open(new File ("temp.pdf"));
@@ -56,7 +56,7 @@ public class Print {
         createDeliveryNoteDocument();
         Desktop.getDesktop().open(new File ("temp.pdf"));
     }
-    public void printQoute() throws IOException, PrinterException {
+    public void printQuote() throws IOException, PrinterException {
         PrinterJob printJob = PrinterJob.getPrinterJob();
         String headerText = "Offert";
         document = createOrderDocument(headerText);
