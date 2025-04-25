@@ -29,7 +29,6 @@ public class MainWindow extends javax.swing.JFrame {
         startButton = new javax.swing.JButton();
         ordersButton = new javax.swing.JButton();
         jSeparator1 = new javax.swing.JSeparator();
-        btnPrint = new javax.swing.JButton();
         schemaButton = new javax.swing.JButton();
         btnMaterials = new javax.swing.JButton();
         statisticsBTN = new javax.swing.JButton();
@@ -73,13 +72,6 @@ public class MainWindow extends javax.swing.JFrame {
         ordersButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 ordersButtonActionPerformed(evt);
-            }
-        });
-
-        btnPrint.setText("Print");
-        btnPrint.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnPrintActionPerformed(evt);
             }
         });
 
@@ -148,12 +140,10 @@ public class MainWindow extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGap(84, 84, 84)
                         .addComponent(minProfilBTN)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(logOut)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(btnPrint))
+                        .addComponent(logOut))
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(startButton)
                         .addGap(18, 18, 18)
@@ -162,7 +152,7 @@ public class MainWindow extends javax.swing.JFrame {
                         .addComponent(btnMaterials)
                         .addGap(18, 18, 18)
                         .addComponent(schemaButton, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addGap(18, 18, 18)
                         .addComponent(statisticsBTN, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
                         .addComponent(customerListBTN, javax.swing.GroupLayout.PREFERRED_SIZE, 87, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -184,9 +174,8 @@ public class MainWindow extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(btnPrint)
-                        .addComponent(logOut))
-                    .addComponent(minProfilBTN))
+                        .addComponent(logOut)
+                        .addComponent(minProfilBTN)))
                 .addGap(4, 4, 4)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(startButton)
@@ -221,16 +210,6 @@ public class MainWindow extends javax.swing.JFrame {
         // Skalar nuvarande panel ifall fönster dras ut.
         redrawCurrentPanel();
     }//GEN-LAST:event_mainPanelComponentResized
-
-    private void btnPrintActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPrintActionPerformed
-        Order order = dbm.getOrder(1);
-        try {
-            Print printOrder = new Print(order);
-            printOrder.showQoute();
-        } catch (IOException e) {
-            System.err.println(e.getMessage());
-        }
-    }//GEN-LAST:event_btnPrintActionPerformed
 
     private void schemaButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_schemaButtonActionPerformed
        //Visar schemasida 
@@ -362,7 +341,6 @@ public class MainWindow extends javax.swing.JFrame {
     private javax.swing.JButton ProductListBTN;
     private javax.swing.JButton btnImageManager;
     private javax.swing.JButton btnMaterials;
-    private javax.swing.JButton btnPrint;
     private javax.swing.JButton customerListBTN;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
