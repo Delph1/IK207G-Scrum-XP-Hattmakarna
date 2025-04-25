@@ -1,4 +1,5 @@
 package hattmakarna;
+import utils.Print;
 import panels.modular.ProductPanel;
 import java.awt.Component;
 import panels.*; // Hämtar alla paneler
