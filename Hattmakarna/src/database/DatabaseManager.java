@@ -1083,7 +1083,7 @@ public class DatabaseManager {
         System.out.println("GET 3D images for product " + productId);
         ArrayList<ProductImage> images = new ArrayList<>();
         try {
-            String query = "SELECT * FROM images WHERE product_id = " + productId + " AND type = '3dview'";
+            String query = "SELECT * FROM images WHERE product_id = " + productId + " AND type = '3dvy'";
             ArrayList<HashMap<String, String>> result = db.fetchRows(query);
             if (result != null) {
                 for (HashMap<String, String> row : result) {
