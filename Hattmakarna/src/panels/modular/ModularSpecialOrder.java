@@ -82,6 +82,11 @@ public class ModularSpecialOrder extends javax.swing.JPanel {
         tblMaterial.setModel(materialTable);
         tblBlueprint.setModel(blueprintTable);
         createBlueprintListener();
+        //gömmer tredje kolumnen
+        tblBlueprint.getColumnModel().getColumn(2).setMinWidth(0);
+        tblBlueprint.getColumnModel().getColumn(2).setMaxWidth(0);
+        tblBlueprint.getColumnModel().getColumn(2).setWidth(0);
+
     }
 
     private void fillComboBoxes() {
