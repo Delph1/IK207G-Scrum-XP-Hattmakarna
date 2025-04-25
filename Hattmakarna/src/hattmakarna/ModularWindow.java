@@ -1,12 +1,13 @@
 package hattmakarna;
 
-import panels.modular.ModularSpecialOrder;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import javax.swing.JPanel;
 import models.Product;
 import panels.*;
 import panels.modular.ProductPanel;
+import panels.modular.UploadImages;
+import panels.modular.ModularSpecialOrder;
 
 public class ModularWindow extends javax.swing.JDialog {
 
@@ -39,6 +40,10 @@ public class ModularWindow extends javax.swing.JDialog {
     
     public void editProduct(Product product) {
         showPanel(new ProductPanel(this, product));
+    }
+    
+    public void uploadImages(int productId) {
+        showPanel(new UploadImages(this, productId));
     }
     
     // Intern metod för att "måla" en panel
