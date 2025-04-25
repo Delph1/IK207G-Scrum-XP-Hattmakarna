@@ -11,6 +11,7 @@ import java.awt.FlowLayout;
 import java.awt.Image;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
+import java.io.IOException;
 import java.util.Base64;
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
@@ -30,6 +31,7 @@ public class ProductListPanel extends javax.swing.JPanel {
     private ArrayList<ProductImage> images;
     private int imageIndex = 0;
     private JLabel imageLabel;
+    private JLabel textLabel;
 
     public ProductListPanel(MainWindow window) {
             this.window = window;
@@ -101,7 +103,7 @@ public class ProductListPanel extends javax.swing.JPanel {
         }
     }
     
-    private void swapPicture(int riktning) {
+    private void swapPicture(int riktning, JFrame threedView) {
         imageIndex += riktning;
 
         if (imageIndex < 0) {
@@ -117,7 +119,10 @@ public class ProductListPanel extends javax.swing.JPanel {
             ImageIcon ikon = new ImageIcon(bild);
             imageLabel.setIcon(ikon);
             imageLabel.setText("");
-        } catch (Exception ex) {
+            textLabel.setText(images.get(imageIndex).getDescription());
+            threedView.pack();
+
+        } catch (IOException ex) {
             imageLabel.setText("Kunde inte ladda bilden.");
             ex.printStackTrace();
         }
@@ -136,6 +141,7 @@ public class ProductListPanel extends javax.swing.JPanel {
         btnEditProduct = new javax.swing.JButton();
         btnViewLargeImage = new javax.swing.JButton();
         btn3dView = new javax.swing.JButton();
+        btnUploadImages = new javax.swing.JButton();
 
         setName(""); // NOI18N
 
@@ -190,6 +196,13 @@ public class ProductListPanel extends javax.swing.JPanel {
             }
         });
 
+        btnUploadImages.setText("Ladda upp bilder");
+        btnUploadImages.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnUploadImagesActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
@@ -211,13 +224,17 @@ public class ProductListPanel extends javax.swing.JPanel {
                                 .addComponent(btnEditProduct)))
                         .addGap(18, 18, 18)
                         .addComponent(NewProductBTN)))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 47, Short.MAX_VALUE)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(lblImage, javax.swing.GroupLayout.PREFERRED_SIZE, 239, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 42, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                        .addComponent(lblImage, javax.swing.GroupLayout.PREFERRED_SIZE, 239, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGroup(layout.createSequentialGroup()
+                            .addComponent(btnViewLargeImage)
+                            .addGap(18, 18, 18)
+                            .addComponent(btn3dView, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(btnViewLargeImage)
-                        .addGap(18, 18, 18)
-                        .addComponent(btn3dView, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                        .addComponent(btnUploadImages)
+                        .addGap(123, 123, 123)))
                 .addGap(21, 21, 21))
         );
         layout.setVerticalGroup(
@@ -238,7 +255,9 @@ public class ProductListPanel extends javax.swing.JPanel {
                         .addGap(18, 18, 18)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(btnViewLargeImage)
-                            .addComponent(btn3dView))))
+                            .addComponent(btn3dView))
+                        .addGap(18, 18, 18)
+                        .addComponent(btnUploadImages)))
                 .addContainerGap(93, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
@@ -340,15 +359,22 @@ public class ProductListPanel extends javax.swing.JPanel {
             return;
         }
         
-        JFrame threedView = new JFrame("Visa hatt från olika vinklar");
+        JFrame threedView = new JFrame("Hattvisare");
         threedView.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         threedView.setSize(500, 500);
         threedView.setLayout(new BorderLayout());
+
+        //Visar beskrivningen
+        textLabel = new JLabel();
+        textLabel.setVerticalAlignment(JLabel.NORTH);
+        textLabel.setHorizontalAlignment(JLabel.CENTER);
+        threedView.add(textLabel, BorderLayout.NORTH);
 
         // Bildvisare
         imageLabel = new JLabel();
         imageLabel.setHorizontalAlignment(JLabel.CENTER);
         threedView.add(imageLabel, BorderLayout.CENTER);
+        
 
         // Panel med knappar
         JPanel knappPanel = new JPanel(new FlowLayout());
@@ -356,8 +382,8 @@ public class ProductListPanel extends javax.swing.JPanel {
         JButton btnLeft = new JButton("←");
         JButton btnRight = new JButton("→");
 
-        btnLeft.addActionListener(e -> swapPicture(-1));
-        btnRight.addActionListener(e -> swapPicture(1));
+        btnLeft.addActionListener(e -> swapPicture(-1, threedView));
+        btnRight.addActionListener(e -> swapPicture(1, threedView));
 
         knappPanel.add(btnLeft);
         knappPanel.add(btnRight);
@@ -365,13 +391,43 @@ public class ProductListPanel extends javax.swing.JPanel {
         threedView.add(knappPanel, BorderLayout.SOUTH);
         threedView.setLocationRelativeTo(null);
         threedView.setVisible(true);
+        try {
+            String base64Sträng = images.get(0).getBase64();
+            byte[] bildBytes = Base64.getDecoder().decode(base64Sträng);
+            BufferedImage bild = ImageIO.read(new ByteArrayInputStream(bildBytes));
+            ImageIcon ikon = new ImageIcon(bild);
+            imageLabel.setIcon(ikon);
+            imageLabel.setText("");
+            textLabel.setText(images.get(0).getDescription());
+            threedView.pack();
+
+        } catch (Exception ex) {
+            imageLabel.setText("Kunde inte ladda bilden.");
+            ex.printStackTrace();
+        }
+
     }//GEN-LAST:event_btn3dViewActionPerformed
+
+    private void btnUploadImagesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUploadImagesActionPerformed
+        int rad = tblProdukter.getSelectedRow();
+        if (rad == -1) {
+            JOptionPane.showMessageDialog(this, "Välj en produkt först.");
+            return;
+        }
+        int productId = (int) tblProdukter.getValueAt(rad, 0);
+
+        ModularWindow modularWindow = new ModularWindow(window, true);
+        modularWindow.uploadImages(productId);
+        modularWindow.setVisible(true);
+        modularWindow.setAlwaysOnTop(true);
+    }//GEN-LAST:event_btnUploadImagesActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton NewProductBTN;
     private javax.swing.JButton btn3dView;
     private javax.swing.JButton btnEditProduct;
     private javax.swing.JButton btnSlutsald;
+    private javax.swing.JButton btnUploadImages;
     private javax.swing.JButton btnViewLargeImage;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JScrollPane jScrollPane1;
