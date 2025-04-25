@@ -55,7 +55,19 @@ public class ProductPanel extends javax.swing.JPanel {
         insertExistingComponentsIntoTable(product.getProductId());
 //        fillComboBoxes();
         smarterComboBoxes();
+        laddaBild();
         tblMaterial.setModel(materialTable);
+    }
+    
+    private void laddaBild() {
+        ProductImage image = dbm.getProductImageForProduct(product.getProductId());
+        if (image != null) {
+            byte[] imageBytes = Base64.getDecoder().decode(image.getBase64());
+            ImageIcon icon = new ImageIcon(imageBytes);
+            Image scaledImage = icon.getImage().getScaledInstance(300, 300, Image.SCALE_SMOOTH);
+            lblImage.setIcon(new ImageIcon(scaledImage));
+            lblImage.setText(null);            
+        }
     }
     
     private void fillComboBoxes() {
