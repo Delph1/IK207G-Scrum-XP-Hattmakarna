@@ -310,6 +310,14 @@ public class MainWindow extends javax.swing.JFrame {
        showPanel(new CustomerPanel(this,customer));
     }
     
+      /*/public void showCustomerPanel(int customerId) {
+       showPanel(new CustomerPanel(this, customerId));
+    }
+    
+    public void showCustomerPanel() {
+       showPanel(new CustomerPanel(this));
+    } */
+         
     public void showCustomerListPanel() {
        showPanel(new CustomerListPanel(this));
     }
@@ -367,6 +375,7 @@ public class MainWindow extends javax.swing.JFrame {
     private javax.swing.JButton statisticsBTN;
     // End of variables declaration//GEN-END:variables
 
-    
+   
+    }
 
-}
+   
