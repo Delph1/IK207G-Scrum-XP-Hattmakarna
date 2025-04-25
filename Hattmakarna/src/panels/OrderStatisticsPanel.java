@@ -12,12 +12,12 @@ import java.awt.print.PrinterException;
 import java.io.IOException;
 import models.*;
 
-public class Orderstatistics extends javax.swing.JPanel {
+public class OrderStatisticsPanel extends javax.swing.JPanel {
      private MainWindow window;
      private ArrayList<Integer> productIds = new ArrayList<>();
 
 
-    public Orderstatistics(MainWindow window) {
+    public OrderStatisticsPanel(MainWindow window) {
         initComponents();
         this.window=window;
         fyllComboBox();

@@ -31,7 +31,7 @@ import panels.OrderPanel;
 import panels.modular.*;
 import utils.ImageManager;
 
-public class ModularSpecialOrder extends javax.swing.JPanel {
+public class SpecialOrderPanel extends javax.swing.JPanel {
 
     private ModularWindow window;
     private DefaultTableModel materialTable;
@@ -42,7 +42,7 @@ public class ModularSpecialOrder extends javax.swing.JPanel {
     private String base64Image;
     private ImageManager imageManager;
     
-    public ModularSpecialOrder(ModularWindow window, OrderPanel order) {
+    public SpecialOrderPanel(ModularWindow window, OrderPanel order) {
         this.window = window;
         this.order = order;
         this.imageManager = new ImageManager(window, true);
@@ -63,7 +63,7 @@ public class ModularSpecialOrder extends javax.swing.JPanel {
         
     }
     
-    public ModularSpecialOrder(ModularWindow window, Product product, OrderPanel order) {
+    public SpecialOrderPanel(ModularWindow window, Product product, OrderPanel order) {
         this.window = window;
         this.product = product;
         this.order = order;

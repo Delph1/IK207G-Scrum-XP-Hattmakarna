@@ -16,11 +16,11 @@ import hattmakarna.ModularWindow;
  *
  * @author eriks
  */
-public class MinProfil extends javax.swing.JPanel {
+public class MyProfilePanel extends javax.swing.JPanel {
      private MainWindow window;
 private User currentUser;
   
-    public MinProfil(MainWindow window) {
+    public MyProfilePanel(MainWindow window) {
         initComponents();
         this.window=window;
         

@@ -19,14 +19,14 @@ import models.Product;
 import models.ProductImage;
 import utils.ImageManager;
 
-public class UploadImages extends javax.swing.JPanel {
+public class UploadImagesPanel extends javax.swing.JPanel {
 
     private ModularWindow window;
     private DefaultTableModel imageTable;
     private int productId;
     private ImageManager imageManager;
     
-    public UploadImages(ModularWindow window, int productId) {
+    public UploadImagesPanel(ModularWindow window, int productId) {
         this.window = window;
         this.productId = productId;
         this.imageTable = new DefaultTableModel();
