@@ -1078,4 +1078,53 @@ public class DatabaseManager {
        
         return componentAttributes;
     }
+    
+    public ArrayList<ProductImage> get3DImagesForProduct(int productId) {
+        System.out.println("GET 3D images for product " + productId);
+        ArrayList<ProductImage> images = new ArrayList<>();
+        try {
+            String query = "SELECT * FROM images WHERE product_id = " + productId + " AND type = '3dview'";
+            ArrayList<HashMap<String, String>> result = db.fetchRows(query);
+            if (result != null) {
+                for (HashMap<String, String> row : result) {
+                    images.add(new ProductImage (
+                            row.get("base64"),
+                            Integer.parseInt(row.get("image_id")),
+                            Integer.parseInt(row.get("product_id")),
+                            row.get("type"),
+                            row.get("description")
+                    ));
+                }
+                return images;
+            } else {
+                return null;
+            }
+        } catch (InfException e) {
+            System.err.println(e.getMessage());
+            return null;
+        }
+    }
+    public ProductImage getProductImageForProduct(int productId) {
+        System.out.println("GET product image for product " + productId);
+        ArrayList<ProductImage> images = new ArrayList<>();
+        try {
+            String query = "SELECT * FROM images WHERE product_id = " + productId + " AND type = 'Produktbild'";
+            HashMap<String, String> result = db.fetchRow(query);
+            if (result.size() > 0) {
+                ProductImage image = new ProductImage (
+                    result.get("base64"),
+                    Integer.parseInt(result.get("image_id")),
+                    Integer.parseInt(result.get("product_id")),
+                    result.get("type"),
+                    result.get("description")
+                );
+            return image;
+            } else {
+                return null;
+            }
+        } catch (InfException e) {
+            System.err.println(e.getMessage());
+            return null;
+        }
+    }
 }
