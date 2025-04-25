@@ -1,5 +1,5 @@
 
-package hattmakarna;
+package utils;
 
 import static hattmakarna.Hattmakarna.dbm;
 import java.awt.Desktop;
