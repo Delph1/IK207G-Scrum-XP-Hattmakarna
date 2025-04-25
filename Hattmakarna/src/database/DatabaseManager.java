@@ -256,7 +256,7 @@ public class DatabaseManager {
             return null;
         }
     }
-
+    
     public boolean createHatmakerOrderlines(OrderLine orderline, User user, String delivery_date) {
         try {
             int orderline_id = orderline.getOrderLineId();
@@ -269,6 +269,18 @@ public class DatabaseManager {
             return true;
         } catch (InfException e) {
             throw new RuntimeException("Det gick inte att lägga till orderraden till hatmaker: " + e.getMessage());
+        }
+    }
+    
+    public boolean updateHatmakerOrderLineDeliveryDate(String delivery_date, int orderline_id) {
+        try {
+            String query = "UPDATE hatmaker SET delivery_date = str_to_date('" + delivery_date + "', '%Y-%m-%d') WHERE orderline_id = " + orderline_id;
+            System.out.println(query);
+            db.update(query);
+            return true;
+        } catch (InfException e) {
+            System.err.println("Kunde inte uppdatera beställningsrad " + e.getMessage());
+            return false;
         }
     }
 

@@ -30,6 +30,7 @@ public class SchemaPanel extends javax.swing.JPanel {
     private DefaultListModel<OrderLine> listModel;
     private ArrayList<OrderLine> myOrderlinesList;
     private DefaultListModel<OrderLine> myOrderlinesListModel;
+
     /**
      * Konstruktor, Creates new form SchemaPanel
      */
@@ -49,7 +50,7 @@ public class SchemaPanel extends javax.swing.JPanel {
         btnRemoveOrderlineFromUser.setEnabled(false);
         jListMyOrderlines.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
             public void valueChanged(ListSelectionEvent event) {
-                if(jListMyOrderlines.getSelectedIndex() < 0) {
+                if (jListMyOrderlines.getSelectedIndex() < 0) {
                     btnRemoveOrderlineFromUser.setEnabled(false);
                 } else {
                     btnRemoveOrderlineFromUser.setEnabled(true);
@@ -60,7 +61,7 @@ public class SchemaPanel extends javax.swing.JPanel {
         btnAddOrderLine.setEnabled(false);
         jListMyOrderlines.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
             public void valueChanged(ListSelectionEvent event) {
-                if(jListMyOrderlines.getSelectedIndex() < 0) {
+                if (jListMyOrderlines.getSelectedIndex() < 0) {
                     btnAddOrderLine.setEnabled(false);
                 } else {
                     btnAddOrderLine.setEnabled(true);
@@ -70,15 +71,15 @@ public class SchemaPanel extends javax.swing.JPanel {
         btnAddOrderlineToUserList.setEnabled(false);
         orderLineList.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
             public void valueChanged(ListSelectionEvent event) {
-                if(orderLineList.getSelectedIndex() != -1 && userComboBox.getSelectedIndex() == 1) {
+                if (orderLineList.getSelectedIndex() != -1 && userComboBox.getSelectedIndex() == 1) {
                     btnAddOrderlineToUserList.setEnabled(true);
                 } else {
                     btnAddOrderlineToUserList.setEnabled(false);
                 }
             }
-        }); 
+        });
     }
-    
+
     private void loadUsers() {
         //Hämtar alla users från databasen via DatabaseManager
         ArrayList<User> users = dbm.getUsers();
@@ -97,7 +98,7 @@ public class SchemaPanel extends javax.swing.JPanel {
         // Sätt modellen 
         userComboBox.setModel(userModel);
     }
-    
+
     private void listOrderLines() {
         listModel.clear(); // Rensa befintliga poster i modellen
 
@@ -105,15 +106,15 @@ public class SchemaPanel extends javax.swing.JPanel {
             listModel.addElement(orderLine);
         }
     }
-    
+
     private void listMyOrderlines(int user_id) {
-        myOrderlinesListModel.clear(); 
-        for(OrderLine myOrderlines : myOrderlinesList) {
+        myOrderlinesListModel.clear();
+        for (OrderLine myOrderlines : myOrderlinesList) {
             myOrderlinesListModel.addElement(myOrderlines);
         }
-        
+
     }
-    
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -280,8 +281,8 @@ public class SchemaPanel extends javax.swing.JPanel {
             System.out.println("This number of orderlines are being fetched from getHatmakerOrderlines: " + allOrderLines.size());
         }
         listOrderLines();
-        
-        if(userId == -1 && orderLineList.getSelectedIndex() != -1) {
+
+        if (userId == -1 && orderLineList.getSelectedIndex() != -1) {
             btnAddOrderlineToUserList.setEnabled(true);
         } else {
             btnAddOrderlineToUserList.setEnabled(false);
@@ -311,9 +312,22 @@ public class SchemaPanel extends javax.swing.JPanel {
     private void btnAddOrderLineActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddOrderLineActionPerformed
         var orderline = jListMyOrderlines.getSelectedValue();
         var user = Hattmakarna.currentUser;
-        String delivery_date = tfDeliveryDate.getText(); 
-        orderline.setDeliveryDate(delivery_date);
-        dbm.createHatmakerOrderlines(orderline, user, delivery_date);
+        int user_id = user.getUserId();
+        int orderline_id = orderline.getOrderLineId();
+        String delivery_date = tfDeliveryDate.getText();
+        boolean isInDB = false;
+        for (OrderLine o : dbm.getHatmakerOrderlines(user_id)) {
+            if (o.getOrderLineId() == orderline_id) {
+                isInDB = true;
+            }
+        }
+        if (isInDB == true) {
+            dbm.updateHatmakerOrderLineDeliveryDate(delivery_date, orderline_id);
+        } else {
+            orderline.setDeliveryDate(delivery_date);
+            dbm.createHatmakerOrderlines(orderline, user, delivery_date);
+        }
+
     }//GEN-LAST:event_btnAddOrderLineActionPerformed
 
     private void jListMyOrderlinesValueChanged(javax.swing.event.ListSelectionEvent evt) {//GEN-FIRST:event_jListMyOrderlinesValueChanged
@@ -322,6 +336,20 @@ public class SchemaPanel extends javax.swing.JPanel {
             int orderline_id = orderline.getOrderLineId();
             String delivery_date = dbm.getHatmakerOrderLineDeliveryDate(orderline_id);
             tfDeliveryDate.setText(delivery_date);
+
+            User user = Hattmakarna.currentUser;
+            int user_id = user.getUserId();
+            boolean isInDB = false;
+            for (OrderLine o : dbm.getHatmakerOrderlines(user_id)) {
+                if (o.getOrderLineId() == orderline_id) {
+                    isInDB = true;
+                }
+            }
+            if(isInDB == true) {
+                btnAddOrderLine.setText("Ändra leveransdatum");
+            } else {
+                btnAddOrderLine.setText("Lägg till orderrad");
+            }
         }
     }//GEN-LAST:event_jListMyOrderlinesValueChanged
 
