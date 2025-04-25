@@ -711,13 +711,15 @@ public class DatabaseManager {
         }
     }
 
-    public User createUser() {
+    public User createUser(String username, String password, boolean active) {
         try {
+            
             String maxIdStr = db.fetchColumn("SELECT MAX(user_id) FROM users").getFirst();
             int newId = (maxIdStr == null || maxIdStr.isEmpty()) ? 1 : Integer.parseInt(maxIdStr) + 1;
 
-            String insert = "INSERT INTO users (user_id, username, password, active) VALUES ("
-                    + newId + ", '', '', 1)";
+            
+            String insert = "INSERT INTO users (user_id, username, password, active) VALUES (" +
+                newId + ", '" + username + "', '" + password + "', " + (active ? 1 : 0) + ")";
 
             db.insert(insert);
 

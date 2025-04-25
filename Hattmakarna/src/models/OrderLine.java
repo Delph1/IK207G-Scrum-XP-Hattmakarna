@@ -85,7 +85,7 @@ public class OrderLine {
         return hat_status;
     }
     
-    public void setHatStatus() {
+    public void setHatStatus(String hat_status) {
         this.hat_status = hat_status;
     }
 }
