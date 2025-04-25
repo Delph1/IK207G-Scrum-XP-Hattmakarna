@@ -529,7 +529,7 @@ public class ModularSpecialOrder extends javax.swing.JPanel {
         newProduct.setWeight(Double.parseDouble(txtWeight.getText().replace(",", ".")));
         dbm.updateProduct(newProduct);
         
-        //Sparar bilden om det finns någon
+        //Sparar produktbilden om det finns någon
         if (base64Image != null) {
             imageManager.saveNewImage(base64Image, newProduct.getProductId(), "Produktbild", "");
         }
@@ -595,8 +595,7 @@ public class ModularSpecialOrder extends javax.swing.JPanel {
         lblBlueprint.setText(null);
         base64Image = Base64.getEncoder().encodeToString(imageBytes);
         
-        int newRow = blueprintTable.getRowCount() + 1;
-        blueprintTable.addRow(new Object[] {newRow, "", base64Image});
+        blueprintTable.addRow(new Object[] {0, "", base64Image});
     }//GEN-LAST:event_btnUploadBlueprintActionPerformed
 
 
