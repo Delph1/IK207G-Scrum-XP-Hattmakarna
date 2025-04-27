@@ -155,7 +155,8 @@ public class DatabaseManager {
                         row.get("description"),
                         row.get("price") == null ? 0 : Integer.parseInt(row.get("price")),
                         row.get("product_id") == null ? 0 : Integer.parseInt(row.get("product_id")),
-                        "1111-11-11"
+                        "1111-11-11",
+                        row.get("hat_status")
                 );
                 return orderLine;
             } else {
@@ -182,7 +183,8 @@ public class DatabaseManager {
                             row.get("description"),
                             Integer.parseInt(row.get("price")),
                             Integer.parseInt(row.get("product_id")),
-                            "1111-11-11"
+                            "1111-11-11",
+                            row.get("hat_status")
                     ));
                 }
             }
@@ -208,7 +210,8 @@ public class DatabaseManager {
                             row.get("description"),
                             Integer.parseInt(row.get("price")),
                             Integer.parseInt(row.get("product_id")),
-                            "1111-11-11"
+                            "1111-11-11",
+                            row.get("hat_status")
                     ));
                 }
             }
@@ -234,7 +237,8 @@ public class DatabaseManager {
                             row.get("description"),
                             Integer.parseInt(row.get("price")),
                             Integer.parseInt(row.get("product_id")),
-                            "1111-11-11"
+                            "1111-11-11",
+                            row.get("hat_status")
                     ));
                 }
             }
@@ -287,7 +291,8 @@ public class DatabaseManager {
                             row.get("description"),
                             Integer.parseInt(row.get("price")),
                             Integer.parseInt(row.get("product_id")),
-                            "1111-11-11"
+                            "1111-11-11",
+                            row.get("hat_status")
                     ));
                 }
             }
@@ -323,7 +328,8 @@ public class DatabaseManager {
                     + "product_id = " + orderLine.getProductId() + ", "
                     + "price = " + orderLine.getPrice() + ", "
                     + "customer_approval = " + orderLine.getCustomerApproval() + ", "
-                    + "description = '" + orderLine.getDescription() + "' "
+                    + "description = '" + orderLine.getDescription() + "', "
+                    + "hat_status = '" + orderLine.getHatStatus() + "' "
                     + "WHERE orderline_id = " + orderLine.getOrderLineId();
             System.out.println(query);
             db.update(query);
@@ -1071,5 +1077,54 @@ public class DatabaseManager {
         }
        
         return componentAttributes;
+    }
+    
+    public ArrayList<ProductImage> get3DImagesForProduct(int productId) {
+        System.out.println("GET 3D images for product " + productId);
+        ArrayList<ProductImage> images = new ArrayList<>();
+        try {
+            String query = "SELECT * FROM images WHERE product_id = " + productId + " AND type = '3dvy'";
+            ArrayList<HashMap<String, String>> result = db.fetchRows(query);
+            if (result != null) {
+                for (HashMap<String, String> row : result) {
+                    images.add(new ProductImage (
+                            row.get("base64"),
+                            Integer.parseInt(row.get("image_id")),
+                            Integer.parseInt(row.get("product_id")),
+                            row.get("type"),
+                            row.get("description")
+                    ));
+                }
+                return images;
+            } else {
+                return null;
+            }
+        } catch (InfException e) {
+            System.err.println(e.getMessage());
+            return null;
+        }
+    }
+    public ProductImage getProductImageForProduct(int productId) {
+        System.out.println("GET product image for product " + productId);
+        ArrayList<ProductImage> images = new ArrayList<>();
+        try {
+            String query = "SELECT * FROM images WHERE product_id = " + productId + " AND type = 'Produktbild'";
+            HashMap<String, String> result = db.fetchRow(query);
+            if (result.size() > 0) {
+                ProductImage image = new ProductImage (
+                    result.get("base64"),
+                    Integer.parseInt(result.get("image_id")),
+                    Integer.parseInt(result.get("product_id")),
+                    result.get("type"),
+                    result.get("description")
+                );
+            return image;
+            } else {
+                return null;
+            }
+        } catch (InfException e) {
+            System.err.println(e.getMessage());
+            return null;
+        }
     }
 }
