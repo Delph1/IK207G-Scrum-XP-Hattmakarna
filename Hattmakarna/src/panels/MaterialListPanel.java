@@ -9,6 +9,7 @@ import javax.swing.table.DefaultTableModel;
 import utils.Print;
 import java.awt.print.PrinterException;
 import java.io.IOException;
+import javax.swing.JOptionPane;
 import utils.DatePicker;
 
 public class MaterialListPanel extends javax.swing.JPanel {
@@ -129,8 +130,18 @@ public class MaterialListPanel extends javax.swing.JPanel {
         String startDate = txtStartDate.getText();
         String stopDate = txtStopDate.getText();
         
+        if (stopDate.length() == 0 || startDate.length() == 0) {
+            JOptionPane.showConfirmDialog(this, "Du måste fylla i ett datum i båda fälten.");
+            return;
+        }
+        
         ArrayList<ComponentModel> components = dbm.getComponentsBetweenDates(startDate, stopDate);
 
+        if (components == null) {
+            JOptionPane.showMessageDialog(this, "Inget materialbehov hittades mellan dessa datum.");
+            return;
+        }
+        
         String[] columns = {"ID", "Namn", "Färg", "Mängd"};
         
         DefaultTableModel MaterialModel = new DefaultTableModel();
