@@ -7,7 +7,7 @@ import models.Product;
 import panels.*;
 import panels.modular.ProductPanel;
 import panels.modular.UploadImagesPanel;
-import panels.modular.SpecialOrder;
+import panels.modular.SpecialOrderPanel;
 
 public class ModularWindow extends javax.swing.JDialog {
 
@@ -19,11 +19,11 @@ public class ModularWindow extends javax.swing.JDialog {
     }
 
     public void specialOrder(OrderPanel order) {
-        showPanel(new SpecialOrder(this, order));
+        showPanel(new SpecialOrderPanel(this, order));
     }
     
     public void modifyHat(Product product, OrderPanel order) {
-        showPanel(new SpecialOrder(this, product, order));
+        showPanel(new SpecialOrderPanel(this, product, order));
     }
     
     // Intern metod för att visa ett panelobjekt i vår panel
