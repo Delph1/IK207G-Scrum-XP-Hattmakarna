@@ -237,6 +237,7 @@ public class DatabaseManager {
                             row.get("description"),
                             Integer.parseInt(row.get("price")),
                             Integer.parseInt(row.get("product_id")),
+                            row.get("delivery_date")
                             "1111-11-11",
                             row.get("hat_status")
                     ));
@@ -248,7 +249,19 @@ public class DatabaseManager {
         }
 
     }
-
+    
+    public String getHatmakerOrderLineDeliveryDate(int id) {
+        System.out.println("GET HatmakerOrderline " + id);
+        try {
+            String sqlQ = "SELECT delivery_date FROM hatmaker WHERE orderline_id = " + id;
+            String delivery_date = db.fetchSingle(sqlQ);
+            return delivery_date;
+        } catch (InfException e) {
+            System.err.println("Det gick inte att hämta beställningsrad för hatmaker: " + e.getMessage());
+            return null;
+        }
+    }
+    
     public boolean createHatmakerOrderlines(OrderLine orderline, User user, String delivery_date) {
         try {
             int orderline_id = orderline.getOrderLineId();
@@ -261,6 +274,18 @@ public class DatabaseManager {
             return true;
         } catch (InfException e) {
             throw new RuntimeException("Det gick inte att lägga till orderraden till hatmaker: " + e.getMessage());
+        }
+    }
+    
+    public boolean updateHatmakerOrderLineDeliveryDate(String delivery_date, int orderline_id) {
+        try {
+            String query = "UPDATE hatmaker SET delivery_date = str_to_date('" + delivery_date + "', '%Y-%m-%d') WHERE orderline_id = " + orderline_id;
+            System.out.println(query);
+            db.update(query);
+            return true;
+        } catch (InfException e) {
+            System.err.println("Kunde inte uppdatera beställningsrad " + e.getMessage());
+            return false;
         }
     }
 
