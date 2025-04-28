@@ -28,9 +28,11 @@ public class Print {
     private String startDate;
     private String stopDate;
     private int productId;
+    private Boolean IsExpress;
     
     public Print (Order order) {
         this.order = order;
+        this.IsExpress = order.isExpress();
     }
     
     public Print (String[][] materialLista, String startDate, String stopDate) {
@@ -84,8 +86,6 @@ public class Print {
         }
     }
     private PDDocument createDeliveryNoteDocument() throws IOException {
-
-
 
     customer = dbm.getCustomer(order.getCustomer_id());
     Map<String, String> lang = dbm.getDeliveryNoteLanguage(customer.getCountry());
@@ -212,6 +212,14 @@ public class Print {
         float yPosition = createTable(contentStream, columnWidths, headers, lines, yStart);
         
         double orderTotalVAT = orderTotal * 1.25;
+        double VAT = orderTotal *0.25;
+        
+        if (IsExpress) {
+            orderTotal = orderTotal * 1.20;
+            orderTotalVAT = orderTotalVAT * 1.20;
+            VAT = VAT * 1.20;
+        }        
+
  
         yPosition = yPosition - 40;
         contentStream.beginText();
@@ -221,9 +229,15 @@ public class Print {
         contentStream.newLineAtOffset(0, -40);
         contentStream.showText("Moms: "); 
         contentStream.newLineAtOffset(190, 0);
-        contentStream.showText(df.format(orderTotal * .25) + " SEK");
+        contentStream.showText(df.format(VAT) + " SEK");
         contentStream.newLineAtOffset(-190, -40);
         contentStream.showText("Summa inkl moms: " + df.format(orderTotalVAT) + " SEK");
+
+        if (IsExpress) {
+            contentStream.newLineAtOffset(0, -40);
+            contentStream.showText("Expressorder +20%: " + df.format(orderTotalVAT * 0.20) + "SEK");
+        }
+        
         contentStream.endText();
 
         //Saves the file to the project folder
