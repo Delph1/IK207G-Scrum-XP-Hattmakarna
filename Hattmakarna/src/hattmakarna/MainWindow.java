@@ -288,6 +288,12 @@ public class MainWindow extends javax.swing.JFrame {
        showPanel(new OrderlistPanel(this));
     }
     
+    public void showCustomerOrderPanel(int customerID) {
+       Order order = dbm.createOrder();
+       order.setCustomer_id(customerID);
+       dbm.updateOrder(order);
+       showPanel(new OrderPanel(this, order.getId()));
+    }
     public void showOrderPanel(int orderId) {
        showPanel(new OrderPanel(this, orderId));
     }
