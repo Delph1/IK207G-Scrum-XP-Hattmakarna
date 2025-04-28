@@ -110,6 +110,7 @@
     <Component class="javax.swing.JButton" name="showOrderButton">
       <Properties>
         <Property name="text" type="java.lang.String" value="Visa order"/>
+        <Property name="enabled" type="boolean" value="false"/>
       </Properties>
       <Events>
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="showOrderButtonActionPerformed"/>
@@ -118,6 +119,7 @@
     <Component class="javax.swing.JButton" name="deleteOrderButton">
       <Properties>
         <Property name="text" type="java.lang.String" value="Radera"/>
+        <Property name="enabled" type="boolean" value="false"/>
       </Properties>
       <Events>
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="deleteOrderButtonActionPerformed"/>
@@ -180,6 +182,9 @@
               <TableHeader reorderingAllowed="true" resizingAllowed="true"/>
             </Property>
           </Properties>
+          <Events>
+            <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="orderTableMouseClicked"/>
+          </Events>
         </Component>
       </SubComponents>
     </Container>
@@ -207,6 +212,7 @@
     <Component class="javax.swing.JButton" name="rensaBTN">
       <Properties>
         <Property name="text" type="java.lang.String" value="Rensa"/>
+        <Property name="enabled" type="boolean" value="false"/>
       </Properties>
       <Events>
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="rensaBTNActionPerformed"/>

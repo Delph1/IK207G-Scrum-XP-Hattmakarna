@@ -106,6 +106,7 @@ public class OrderlistPanel extends javax.swing.JPanel {
         });
 
         showOrderButton.setText("Visa order");
+        showOrderButton.setEnabled(false);
         showOrderButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 showOrderButtonActionPerformed(evt);
@@ -113,6 +114,7 @@ public class OrderlistPanel extends javax.swing.JPanel {
         });
 
         deleteOrderButton.setText("Radera");
+        deleteOrderButton.setEnabled(false);
         deleteOrderButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 deleteOrderButtonActionPerformed(evt);
@@ -142,6 +144,11 @@ public class OrderlistPanel extends javax.swing.JPanel {
                 return canEdit [columnIndex];
             }
         });
+        orderTable.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                orderTableMouseClicked(evt);
+            }
+        });
         jScrollPane2.setViewportView(orderTable);
 
         valdKund.setToolTipText("Ange kund-ID");
@@ -161,6 +168,7 @@ public class OrderlistPanel extends javax.swing.JPanel {
         });
 
         rensaBTN.setText("Rensa");
+        rensaBTN.setEnabled(false);
         rensaBTN.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 rensaBTNActionPerformed(evt);
@@ -242,6 +250,8 @@ public class OrderlistPanel extends javax.swing.JPanel {
         if (dbm.deleteOrder(selectedOrderId)) {
             tableModel.removeRow(selectedRowId);
             System.out.println("Ordern är raderad");
+              showOrderButton.setEnabled(false);
+        deleteOrderButton.setEnabled(false); 
         }
 
 
@@ -261,12 +271,19 @@ public class OrderlistPanel extends javax.swing.JPanel {
 
     private void filtreraBTNActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_filtreraBTNActionPerformed
         filtreraKund();
+        rensaBTN.setEnabled(true);
     }//GEN-LAST:event_filtreraBTNActionPerformed
 
     private void rensaBTNActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rensaBTNActionPerformed
         rensa();
+        rensaBTN.setEnabled(false); 
 // TODO add your handling code here:
     }//GEN-LAST:event_rensaBTNActionPerformed
+
+    private void orderTableMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_orderTableMouseClicked
+        showOrderButton.setEnabled(true);
+        deleteOrderButton.setEnabled(true); 
+    }//GEN-LAST:event_orderTableMouseClicked
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
