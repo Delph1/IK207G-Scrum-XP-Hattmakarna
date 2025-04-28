@@ -41,8 +41,7 @@ private void fyllDagensOrdrar() {
             order.getCustomer_id(),
             order.getOrder_status(),
             order.isExpress() ? "Ja" : "Nej",
-            order.getShippingCost(),
-            order.getDeliveryDate().toString()
+            order.getShippingCost()
         });
     }
 
