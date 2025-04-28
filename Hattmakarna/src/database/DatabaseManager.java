@@ -969,6 +969,21 @@ public class DatabaseManager {
             return null;
         }
     }
+    
+    public ArrayList<HashMap<String, String>> getOrdersByDeliveryDate(LocalDate deliveryDate) {
+        try {
+            String sql = 
+            "SELECT DISTINCT orders.* " +
+            "FROM orders, orderlines, hatmaker " +
+            "WHERE orders.order_id = orderlines.order_id " +
+            "AND orderlines.orderline_id = hatmaker.orderline_id " +
+            "AND hatmaker.delivery_date = '" + deliveryDate.toString() + "'";
+        return db.fetchRows(sql);
+    } catch (InfException e) {
+        System.err.println("Fel vid hämtning av ordrar: " + e.getMessage());
+        return new ArrayList<>();
+   }
+}
 
     public boolean updateImage(ProductImage image) {
         try {
