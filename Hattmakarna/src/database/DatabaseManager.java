@@ -315,7 +315,7 @@ public class DatabaseManager {
                             row.get("description"),
                             Integer.parseInt(row.get("price")),
                             Integer.parseInt(row.get("product_id")),
-                            "1111-11-11",
+                            "null",
                             row.get("hat_status")
                     ));
                 }
