@@ -70,7 +70,8 @@ public class OrderLine {
 
     @Override
     public String toString() {
-        return "Order-id: " + order_id + ",  " + "OrderLine-Id: " + orderLine_id + ",  " + "Beskrivning: " + description;
+        //return "Order-id: " + order_id + ",  " + "OrderLine-Id: " + orderLine_id + ",  " + "Beskrivning: " + description;
+        return "Order-id: " + order_id + ",  " + "OrderLine-Id: " + orderLine_id + ",  " + "Beskrivning: " + description + ", " + "Leveransdatum: " + delivery_date;
     }
     
     public String getDeliveryDate() {
