@@ -87,6 +87,7 @@ public class CalendarPanel extends javax.swing.JPanel {
         });
         
         jCalendar1.getCalendar().setTime(jCalendar1.getCalendar().getTime());
+        System.out.println("Hello");
     }
 
     /**
