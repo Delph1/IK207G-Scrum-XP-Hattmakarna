@@ -149,7 +149,7 @@ public class MainWindow extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGap(84, 84, 84)
                         .addComponent(btnCalendar)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(minProfilBTN)
@@ -185,11 +185,9 @@ public class MainWindow extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(btnPrint)
-                        .addComponent(logOut))
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(minProfilBTN)
-                        .addComponent(btnCalendar)))
+                        .addComponent(logOut)
+                        .addComponent(minProfilBTN))
+                    .addComponent(btnCalendar))
                 .addGap(4, 4, 4)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(startButton)
@@ -258,7 +256,7 @@ public class MainWindow extends javax.swing.JFrame {
     }//GEN-LAST:event_logOutActionPerformed
 
     private void minProfilBTNActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_minProfilBTNActionPerformed
-     showMinProfil();
+     showMyProfile();
         // TODO add your handling code here:
     }//GEN-LAST:event_minProfilBTNActionPerformed
 
@@ -281,7 +279,8 @@ public class MainWindow extends javax.swing.JFrame {
        showPanel(new StartPanel(this));
     }
     
-    showPanel(new MyProfile(this));
+    public void showMyProfile() {
+        showPanel(new MyProfile(this));
     }
     
     // Publik Metod för att skapa start-panelobjekt och anropa den interna metoden för att visa panelen
