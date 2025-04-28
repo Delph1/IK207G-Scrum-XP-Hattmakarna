@@ -6,7 +6,7 @@ import static hattmakarna.Hattmakarna.dbm;
 import models.*;
 import java.util.ArrayList;
 import javax.swing.table.DefaultTableModel;
-import hattmakarna.Print;
+import utils.Print;
 import java.awt.print.PrinterException;
 import java.io.IOException;
 import utils.DatePicker;
