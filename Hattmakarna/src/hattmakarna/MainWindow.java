@@ -7,6 +7,7 @@ import javax.swing.JPanel;
 import static hattmakarna.Hattmakarna.dbm;
 import java.awt.print.PrinterException;
 import java.io.IOException;
+import java.text.ParseException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import models.*;
@@ -37,6 +38,7 @@ public class MainWindow extends javax.swing.JFrame {
         logOut = new javax.swing.JButton();
         minProfilBTN = new javax.swing.JButton();
         btnImageManager = new javax.swing.JButton();
+        btnCalendar = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -131,6 +133,13 @@ public class MainWindow extends javax.swing.JFrame {
             }
         });
 
+        btnCalendar.setText("Kalender");
+        btnCalendar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnCalendarActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -140,7 +149,9 @@ public class MainWindow extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addGap(84, 84, 84)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(btnCalendar)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(minProfilBTN)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(logOut))
@@ -174,8 +185,11 @@ public class MainWindow extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(logOut)
-                        .addComponent(minProfilBTN)))
+                        .addComponent(btnPrint)
+                        .addComponent(logOut))
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(minProfilBTN)
+                        .addComponent(btnCalendar)))
                 .addGap(4, 4, 4)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(startButton)
@@ -252,13 +266,22 @@ public class MainWindow extends javax.swing.JFrame {
         showImageManagerPanel();
     }//GEN-LAST:event_btnImageManagerActionPerformed
 
+    private void btnCalendarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCalendarActionPerformed
+        User user = Hattmakarna.currentUser;
+        int user_id = user.getUserId();
+        try {
+            showCalendarPanel(user_id);
+        } catch (ParseException ex) {
+            Logger.getLogger(MainWindow.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_btnCalendarActionPerformed
+
     // Publik Metod för att skapa start-panelobjekt och anropa den interna metoden för att visa panelen
     public void showStartPanel() {
        showPanel(new StartPanel(this));
     }
     
-    public void showMinProfil(){
-    showPanel(new MyProfilePanel(this));
+    showPanel(new MyProfile(this));
     }
     
     // Publik Metod för att skapa start-panelobjekt och anropa den interna metoden för att visa panelen
@@ -323,7 +346,7 @@ public class MainWindow extends javax.swing.JFrame {
     }
     
     public void showandraLosen() {
-        showPanel(new ChangePasswordPanel(this));
+        showPanel(new ChangePassword(this));
 
     }
     
@@ -336,9 +359,14 @@ public class MainWindow extends javax.swing.JFrame {
         currentPanel.revalidate();
         currentPanel.repaint();
     }
+    
+    public void showCalendarPanel(int user_id) throws ParseException {
+        showPanel(new CalendarPanel(this, user_id));
+    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton ProductListBTN;
+    private javax.swing.JButton btnCalendar;
     private javax.swing.JButton btnImageManager;
     private javax.swing.JButton btnMaterials;
     private javax.swing.JButton customerListBTN;

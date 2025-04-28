@@ -7,7 +7,6 @@ package panels;
 import hattmakarna.Hattmakarna;
 import static hattmakarna.Hattmakarna.dbm;
 import hattmakarna.MainWindow;
-import java.time.LocalDate;
 import models.User;
 import java.util.ArrayList;
 import javax.swing.DefaultComboBoxModel;
@@ -30,6 +29,7 @@ public class SchemaPanel extends javax.swing.JPanel {
     private DefaultListModel<OrderLine> listModel;
     private ArrayList<OrderLine> myOrderlinesList;
     private DefaultListModel<OrderLine> myOrderlinesListModel;
+
     /**
      * Konstruktor, Creates new form SchemaPanel
      */
@@ -42,17 +42,6 @@ public class SchemaPanel extends javax.swing.JPanel {
         listModel = new DefaultListModel<>();
         orderLineList.setModel(listModel);
         listOrderLines();
-        btnAddOrderlineToUserList.setEnabled(false);
-        orderLineList.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
-            public void valueChanged(ListSelectionEvent event) {
-                if (orderLineList.getSelectedIndex() < 0) {
-                    btnAddOrderlineToUserList.setEnabled(false);
-                } else {
-                    btnAddOrderlineToUserList.setEnabled(true);
-                }
-            }
-        }
-        );
         myOrderlinesList = dbm.getHatmakerOrderlines(user_id);
         myOrderlinesListModel = new DefaultListModel<>();
         jListMyOrderlines.setModel(myOrderlinesListModel);
@@ -60,7 +49,7 @@ public class SchemaPanel extends javax.swing.JPanel {
         btnRemoveOrderlineFromUser.setEnabled(false);
         jListMyOrderlines.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
             public void valueChanged(ListSelectionEvent event) {
-                if(jListMyOrderlines.getSelectedIndex() < 0) {
+                if (jListMyOrderlines.getSelectedIndex() < 0) {
                     btnRemoveOrderlineFromUser.setEnabled(false);
                 } else {
                     btnRemoveOrderlineFromUser.setEnabled(true);
@@ -71,15 +60,25 @@ public class SchemaPanel extends javax.swing.JPanel {
         btnAddOrderLine.setEnabled(false);
         jListMyOrderlines.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
             public void valueChanged(ListSelectionEvent event) {
-                if(jListMyOrderlines.getSelectedIndex() < 0) {
+                if (jListMyOrderlines.getSelectedIndex() < 0) {
                     btnAddOrderLine.setEnabled(false);
                 } else {
                     btnAddOrderLine.setEnabled(true);
                 }
             }
         });
+        btnAddOrderlineToUserList.setEnabled(false);
+        orderLineList.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
+            public void valueChanged(ListSelectionEvent event) {
+                if (orderLineList.getSelectedIndex() != -1 && userComboBox.getSelectedIndex() == 1) {
+                    btnAddOrderlineToUserList.setEnabled(true);
+                } else {
+                    btnAddOrderlineToUserList.setEnabled(false);
+                }
+            }
+        });
     }
-    
+
     private void loadUsers() {
         //Hämtar alla users från databasen via DatabaseManager
         ArrayList<User> users = dbm.getUsers();
@@ -98,7 +97,7 @@ public class SchemaPanel extends javax.swing.JPanel {
         // Sätt modellen 
         userComboBox.setModel(userModel);
     }
-    
+
     private void listOrderLines() {
         listModel.clear(); // Rensa befintliga poster i modellen
 
@@ -106,15 +105,15 @@ public class SchemaPanel extends javax.swing.JPanel {
             listModel.addElement(orderLine);
         }
     }
-    
+
     private void listMyOrderlines(int user_id) {
-        myOrderlinesListModel.clear(); 
-        for(OrderLine myOrderlines : myOrderlinesList) {
+        myOrderlinesListModel.clear();
+        for (OrderLine myOrderlines : myOrderlinesList) {
             myOrderlinesListModel.addElement(myOrderlines);
         }
-        
+
     }
-    
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -167,6 +166,11 @@ public class SchemaPanel extends javax.swing.JPanel {
             }
         });
 
+        jListMyOrderlines.addListSelectionListener(new javax.swing.event.ListSelectionListener() {
+            public void valueChanged(javax.swing.event.ListSelectionEvent evt) {
+                jListMyOrderlinesValueChanged(evt);
+            }
+        });
         jScrollPane2.setViewportView(jListMyOrderlines);
 
         jLabel5.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
@@ -180,7 +184,7 @@ public class SchemaPanel extends javax.swing.JPanel {
         });
 
         lblChooseDeliveryDate.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
-        lblChooseDeliveryDate.setText("Välj planerat leveransdatum ");
+        lblChooseDeliveryDate.setText("Leveransdatum");
 
         btnAddOrderLine.setText("Lägg till orderrad");
         btnAddOrderLine.addActionListener(new java.awt.event.ActionListener() {
@@ -200,36 +204,38 @@ public class SchemaPanel extends javax.swing.JPanel {
                         .addGap(12, 12, 12)
                         .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 135, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(389, 389, 389)
-                        .addComponent(jLabel3, javax.swing.GroupLayout.DEFAULT_SIZE, 212, Short.MAX_VALUE)
-                        .addContainerGap(221, Short.MAX_VALUE))
+                        .addComponent(jLabel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                                .addGroup(layout.createSequentialGroup()
-                                    .addComponent(jLabel1)
-                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                    .addComponent(userComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, 141, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 103, Short.MAX_VALUE)
-                                    .addComponent(btnAddOrderlineToUserList))
-                                .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.LEADING))
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(jLabel1)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(userComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, 141, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(103, 103, 103)
+                                .addComponent(btnAddOrderlineToUserList))
                             .addGroup(layout.createSequentialGroup()
                                 .addGap(16, 16, 16)
                                 .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(orderStatusLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 136, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addGap(37, 37, 37)
+                                .addComponent(orderStatusLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 136, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 453, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 380, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGroup(layout.createSequentialGroup()
-                                    .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 117, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addComponent(btnRemoveOrderlineFromUser)))
-                            .addComponent(lblChooseDeliveryDate, javax.swing.GroupLayout.PREFERRED_SIZE, 166, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addGroup(layout.createSequentialGroup()
-                                .addComponent(tfDeliveryDate, javax.swing.GroupLayout.PREFERRED_SIZE, 136, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(47, 47, 47)
-                                .addComponent(btnAddOrderLine)))
+                                .addGap(18, 18, 18)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 117, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addGap(191, 191, 191)
+                                        .addComponent(btnRemoveOrderlineFromUser))
+                                    .addComponent(lblChooseDeliveryDate, javax.swing.GroupLayout.PREFERRED_SIZE, 166, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addComponent(tfDeliveryDate, javax.swing.GroupLayout.PREFERRED_SIZE, 136, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addGap(47, 47, 47)
+                                        .addComponent(btnAddOrderLine))))
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(57, 57, 57)
+                                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 453, javax.swing.GroupLayout.PREFERRED_SIZE)))
                         .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
         );
         layout.setVerticalGroup(
@@ -276,6 +282,12 @@ public class SchemaPanel extends javax.swing.JPanel {
             System.out.println("This number of orderlines are being fetched from getHatmakerOrderlines: " + allOrderLines.size());
         }
         listOrderLines();
+
+        if (userId == -1 && orderLineList.getSelectedIndex() != -1) {
+            btnAddOrderlineToUserList.setEnabled(true);
+        } else {
+            btnAddOrderlineToUserList.setEnabled(false);
+        }
     }//GEN-LAST:event_userComboBoxActionPerformed
 
     private void orderLineListValueChanged(javax.swing.event.ListSelectionEvent evt) {//GEN-FIRST:event_orderLineListValueChanged
@@ -287,31 +299,60 @@ public class SchemaPanel extends javax.swing.JPanel {
 
     private void btnAddOrderlineToUserListActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddOrderlineToUserListActionPerformed
         var orderline = orderLineList.getSelectedValue();
-        //var user = Hattmakarna.currentUser;
         myOrderlinesListModel.addElement(orderline);
         listModel.removeElement(orderline);
-        //dbm.updateHatmakerOrderlines(orderline, user);
     }//GEN-LAST:event_btnAddOrderlineToUserListActionPerformed
 
     private void btnRemoveOrderlineFromUserActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRemoveOrderlineFromUserActionPerformed
         var orderline = jListMyOrderlines.getSelectedValue();
         var user = Hattmakarna.currentUser;
-        //String delivery_date = tfDeliveryDate.getText(); 
-        //orderline.setDeliveryDate(delivery_date);
         myOrderlinesListModel.removeElement(orderline);
         dbm.removeHatmakerOrderlines(orderline, user);
     }//GEN-LAST:event_btnRemoveOrderlineFromUserActionPerformed
 
     private void btnAddOrderLineActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddOrderLineActionPerformed
         var orderline = jListMyOrderlines.getSelectedValue();
-        System.out.println("This is the orderline selected " + orderline);
         var user = Hattmakarna.currentUser;
-        String delivery_date = tfDeliveryDate.getText(); 
-        System.out.println("This is the delivery date from textfield " + delivery_date);
-        orderline.setDeliveryDate(delivery_date);
-        System.out.println("This is the delivery date from orderline " + orderline.getDeliveryDate());
-        dbm.createHatmakerOrderlines(orderline, user, delivery_date);
+        int user_id = user.getUserId();
+        int orderline_id = orderline.getOrderLineId();
+        String delivery_date = tfDeliveryDate.getText();
+        boolean isInDB = false;
+        for (OrderLine o : dbm.getHatmakerOrderlines(user_id)) {
+            if (o.getOrderLineId() == orderline_id) {
+                isInDB = true;
+            }
+        }
+        if (isInDB == true) {
+            dbm.updateHatmakerOrderLineDeliveryDate(delivery_date, orderline_id);
+        } else {
+            orderline.setDeliveryDate(delivery_date);
+            dbm.createHatmakerOrderlines(orderline, user, delivery_date);
+        }
+
     }//GEN-LAST:event_btnAddOrderLineActionPerformed
+
+    private void jListMyOrderlinesValueChanged(javax.swing.event.ListSelectionEvent evt) {//GEN-FIRST:event_jListMyOrderlinesValueChanged
+        if (jListMyOrderlines.getSelectedIndex() != -1) {
+            var orderline = jListMyOrderlines.getSelectedValue();
+            int orderline_id = orderline.getOrderLineId();
+            String delivery_date = dbm.getHatmakerOrderLineDeliveryDate(orderline_id);
+            tfDeliveryDate.setText(delivery_date);
+
+            User user = Hattmakarna.currentUser;
+            int user_id = user.getUserId();
+            boolean isInDB = false;
+            for (OrderLine o : dbm.getHatmakerOrderlines(user_id)) {
+                if (o.getOrderLineId() == orderline_id) {
+                    isInDB = true;
+                }
+            }
+            if(isInDB == true) {
+                btnAddOrderLine.setText("Ändra leveransdatum");
+            } else {
+                btnAddOrderLine.setText("Lägg till orderrad");
+            }
+        }
+    }//GEN-LAST:event_jListMyOrderlinesValueChanged
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
