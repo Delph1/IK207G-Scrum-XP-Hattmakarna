@@ -299,7 +299,7 @@ public class DatabaseManager {
             throw new RuntimeException("Det gick inte att ta bort orderraden från hatmaker: " + e.getMessage());
         }
     }
-
+    
     // Hämtar en objektlista med alla beställningsrader som inte tillhör en hattmakare
     public ArrayList<OrderLine> getUnassignedOrderlines() {
         try {
@@ -367,8 +367,8 @@ public class DatabaseManager {
     // Ta bort en beställningrad
     public boolean deleteOrderLine(int id) {
         try {
+            db.delete("DELETE FROM hatmaker WHERE orderline_id = " + id);
             db.delete("DELETE FROM orderlines where orderline_id = " + id);
-
             return true;
         } catch (InfException e) {
             System.err.println("Det gick inte att ta bort beställningsrad : " + e.getMessage());
