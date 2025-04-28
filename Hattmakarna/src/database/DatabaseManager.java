@@ -720,8 +720,8 @@ public class DatabaseManager {
             if (row != null) {
                 User user = new User(
                         Integer.parseInt(row.get("user_id")),
-                        row.get("password"),
                         row.get("username"),
+                        row.get("password"),
                         ParseBoolean(row.get("active"))
                 );
                 return user;
@@ -732,6 +732,29 @@ public class DatabaseManager {
             System.err.println("Det gick inte att hämta användaren: " + e.getMessage());
             return null;
         }
+    }
+    
+    public User getUserFromUsername (String username) {
+        System.out.println("GET user " + username);
+        try {
+            String query = "SELECT * FROM users WHERE username = '" + username + "'";
+            HashMap<String, String> row = db.fetchRow(query);
+            if (row != null) {
+                User user = new User(
+                        Integer.parseInt(row.get("user_id")),
+                        row.get("username"),
+                        row.get("password"),
+                        ParseBoolean(row.get("active"))
+                );
+                return user;
+            } else {
+                return null;
+            }
+        } catch (InfException e) {
+            System.err.println("Det gick inte att hämta användaren: " + e.getMessage());
+            return null;
+        }
+        
     }
 
     public User createUser(String username, String password, boolean active) {
