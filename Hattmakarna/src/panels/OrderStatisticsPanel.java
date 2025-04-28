@@ -11,6 +11,7 @@ import utils.Print;
 import java.awt.print.PrinterException;
 import java.io.IOException;
 import models.*;
+import utils.DatePicker;
 
 public class OrderStatisticsPanel extends javax.swing.JPanel {
      private MainWindow window;
@@ -21,6 +22,8 @@ public class OrderStatisticsPanel extends javax.swing.JPanel {
         initComponents();
         this.window=window;
         fyllComboBox();
+        DatePicker.attachToTextField(window, startDatum);
+        DatePicker.attachToTextField(window, slutDatum);
     }
     
 
