@@ -197,11 +197,12 @@ public class Print {
         for (OrderLine line : orderlines) {
             Product product = dbm.getProduct(line.getProductId());
             String product_name = product.getProductName();
+            double price = line.getPrice();
             String[] data = {
                 String.valueOf(line.getOrderLineId()),
                 String.valueOf(line.getProductId()),
                 product_name,
-                String.valueOf(line.getPrice()),
+                IsExpress ? String.valueOf(price * 1.20) : String.valueOf(price),
                 line.getCustomerApproval() ? "Ja" : "Nej"
             };
             lines[i] = data;
