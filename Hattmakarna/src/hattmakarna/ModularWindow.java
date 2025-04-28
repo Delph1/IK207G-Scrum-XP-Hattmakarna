@@ -6,7 +6,7 @@ import javax.swing.JPanel;
 import models.Product;
 import panels.*;
 import panels.modular.ProductPanel;
-import panels.modular.UploadImages;
+import panels.modular.UploadImagesPanel;
 import panels.modular.SpecialOrder;
 
 public class ModularWindow extends javax.swing.JDialog {
