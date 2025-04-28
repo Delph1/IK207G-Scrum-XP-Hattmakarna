@@ -743,7 +743,7 @@ public class DatabaseManager {
 
             
             String insert = "INSERT INTO users (user_id, username, password, active) VALUES (" +
-                newId + ", '" + username + "', '" + password + "', " + (active ? 1 : 0) + ")";
+                newId + ", '" + username + "', '" + md5(password) + "', " + (active ? 1 : 0) + ")";
 
             db.insert(insert);
 

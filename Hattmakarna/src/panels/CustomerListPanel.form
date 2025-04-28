@@ -22,18 +22,22 @@
           <Group type="102" attributes="0">
               <EmptySpace min="-2" pref="32" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="1" attributes="0">
-                  <Component id="jLabel1" min="-2" max="-2" attributes="0"/>
-                  <Group type="102" attributes="0">
+                  <Group type="102" alignment="1" attributes="0">
+                      <Component id="jLabel1" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace pref="538" max="32767" attributes="0"/>
+                  </Group>
+                  <Group type="102" alignment="1" attributes="0">
                       <Component id="jScrollPane1" min="-2" pref="344" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
-                      <Group type="103" groupAlignment="0" attributes="0">
-                          <Component id="showCustomerButton" min="-2" pref="99" max="-2" attributes="0"/>
-                          <Component id="NewCustomerBTN" min="-2" pref="99" max="-2" attributes="0"/>
-                          <Component id="deleteCustomerButton" min="-2" max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="0" max="-2" attributes="0">
+                          <Component id="showCustomerButton" max="32767" attributes="0"/>
+                          <Component id="NewCustomerBTN" max="32767" attributes="0"/>
+                          <Component id="createOrderForCustomerBTN" alignment="0" max="32767" attributes="0"/>
+                          <Component id="deleteCustomerButton" alignment="0" max="32767" attributes="0"/>
                       </Group>
+                      <EmptySpace pref="100" max="32767" attributes="0"/>
                   </Group>
               </Group>
-              <EmptySpace pref="142" max="32767" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
@@ -47,9 +51,11 @@
                   <Component id="jScrollPane1" min="-2" pref="256" max="-2" attributes="0"/>
                   <Group type="102" attributes="0">
                       <Component id="NewCustomerBTN" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace min="-2" pref="28" max="-2" attributes="0"/>
+                      <EmptySpace max="-2" attributes="0"/>
                       <Component id="showCustomerButton" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace min="-2" pref="26" max="-2" attributes="0"/>
+                      <EmptySpace max="-2" attributes="0"/>
+                      <Component id="createOrderForCustomerBTN" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace min="-2" pref="19" max="-2" attributes="0"/>
                       <Component id="deleteCustomerButton" min="-2" max="-2" attributes="0"/>
                   </Group>
               </Group>
@@ -78,6 +84,7 @@
     <Component class="javax.swing.JButton" name="deleteCustomerButton">
       <Properties>
         <Property name="text" type="java.lang.String" value="Ta bort kund"/>
+        <Property name="enabled" type="boolean" value="false"/>
       </Properties>
       <Events>
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="deleteCustomerButtonActionPerformed"/>
@@ -86,12 +93,16 @@
     <Component class="javax.swing.JButton" name="showCustomerButton">
       <Properties>
         <Property name="text" type="java.lang.String" value="Visa kund"/>
+        <Property name="enabled" type="boolean" value="false"/>
       </Properties>
       <Events>
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="showCustomerButtonActionPerformed"/>
       </Events>
     </Component>
     <Container class="javax.swing.JScrollPane" name="jScrollPane1">
+      <Events>
+        <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="jScrollPane1MouseClicked"/>
+      </Events>
 
       <Layout class="org.netbeans.modules.form.compat2.layouts.support.JScrollPaneSupportLayout"/>
       <SubComponents>
@@ -127,8 +138,21 @@
               <TableHeader reorderingAllowed="true" resizingAllowed="true"/>
             </Property>
           </Properties>
+          <Events>
+            <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="customerTableMouseClicked"/>
+            <EventHandler event="propertyChange" listener="java.beans.PropertyChangeListener" parameters="java.beans.PropertyChangeEvent" handler="customerTablePropertyChange"/>
+          </Events>
         </Component>
       </SubComponents>
     </Container>
+    <Component class="javax.swing.JButton" name="createOrderForCustomerBTN">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="Skapa order f&#xf6;r kund"/>
+        <Property name="enabled" type="boolean" value="false"/>
+      </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="createOrderForCustomerBTNActionPerformed"/>
+      </Events>
+    </Component>
   </SubComponents>
 </Form>
