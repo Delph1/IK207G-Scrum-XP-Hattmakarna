@@ -199,7 +199,7 @@ public class DatabaseManager {
     public ArrayList<OrderLine> getOrderlines() {
         try {
             ArrayList<OrderLine> orderlines = new ArrayList<>();
-            String query = "SELECT * FROM orderlines";
+            String query = "SELECT * FROM orderlines JOIN hatmaker ON orderlines.orderline_id = hatmaker.orderline_id";
             ArrayList<HashMap<String, String>> results = db.fetchRows(query);
             if (results != null) {
                 for (HashMap<String, String> row : results) {
@@ -210,7 +210,7 @@ public class DatabaseManager {
                             row.get("description"),
                             Integer.parseInt(row.get("price")),
                             Integer.parseInt(row.get("product_id")),
-                            "null",
+                            row.get("delivery_date"),
                             row.get("hat_status")
                     ));
                 }
@@ -299,7 +299,7 @@ public class DatabaseManager {
             throw new RuntimeException("Det gick inte att ta bort orderraden från hatmaker: " + e.getMessage());
         }
     }
-
+    
     // Hämtar en objektlista med alla beställningsrader som inte tillhör en hattmakare
     public ArrayList<OrderLine> getUnassignedOrderlines() {
         try {
@@ -315,7 +315,7 @@ public class DatabaseManager {
                             row.get("description"),
                             Integer.parseInt(row.get("price")),
                             Integer.parseInt(row.get("product_id")),
-                            "1111-11-11",
+                            "null",
                             row.get("hat_status")
                     ));
                 }
@@ -367,8 +367,8 @@ public class DatabaseManager {
     // Ta bort en beställningrad
     public boolean deleteOrderLine(int id) {
         try {
+            db.delete("DELETE FROM hatmaker WHERE orderline_id = " + id);
             db.delete("DELETE FROM orderlines where orderline_id = " + id);
-
             return true;
         } catch (InfException e) {
             System.err.println("Det gick inte att ta bort beställningsrad : " + e.getMessage());
