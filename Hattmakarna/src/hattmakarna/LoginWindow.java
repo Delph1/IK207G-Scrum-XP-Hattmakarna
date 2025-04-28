@@ -30,7 +30,7 @@ public class LoginWindow extends javax.swing.JFrame {
    User user = dbm.login(username, losenord);
 
     if (user != null) {
-        JOptionPane.showMessageDialog(this, "Inloggning lyckades. Välkommen " + user.getUserName());
+//        JOptionPane.showMessageDialog(this, "Inloggning lyckades. Välkommen " + user.getUserName());
         Hattmakarna.currentUser = user;
         MainWindow window = new MainWindow();
         window.setVisible(true);
@@ -75,12 +75,6 @@ public class LoginWindow extends javax.swing.JFrame {
         jLabel2.setText("Användarnamn");
 
         jLabel3.setText("Lösenord");
-
-        userNameText.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                userNameTextActionPerformed(evt);
-            }
-        });
 
         losenText.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -159,16 +153,12 @@ public class LoginWindow extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void loginBTNActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_loginBTNActionPerformed
-                    loggaIn();
+        loggaIn();
       
     }//GEN-LAST:event_loginBTNActionPerformed
 
-    private void userNameTextActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_userNameTextActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_userNameTextActionPerformed
-
     private void losenTextActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_losenTextActionPerformed
-        // TODO add your handling code here:
+        loggaIn();
     }//GEN-LAST:event_losenTextActionPerformed
 
     private void ottoLoginActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ottoLoginActionPerformed
