@@ -12,11 +12,11 @@ import javax.swing.JOptionPane;
  *
  * @author eriks
  */
-public class andraLosen extends javax.swing.JPanel {
+public class ChangePassword extends javax.swing.JPanel {
 private MainWindow window;
 private User currentUser;
    
-    public andraLosen(MainWindow window) {
+    public ChangePassword(MainWindow window) {
         initComponents();
         this.window=window;
         }

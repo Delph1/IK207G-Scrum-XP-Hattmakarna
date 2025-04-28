@@ -9,23 +9,23 @@ import hattmakarna.MainWindow;
 import models.User;
 import static hattmakarna.Hattmakarna.dbm;
 import javax.swing.JOptionPane;
-import hattmakarna.ModularWindow;
+import java.util.ArrayList;
+import javax.swing.GroupLayout;
 
 
-/**
- *
- * @author eriks
- */
-public class MinProfil extends javax.swing.JPanel {
+
+public class MyProfile extends javax.swing.JPanel {
      private MainWindow window;
 private User currentUser;
   
-    public MinProfil(MainWindow window) {
+    public MyProfile(MainWindow window) {
         initComponents();
         this.window=window;
+        fyllComboBoxen();
         
          currentUser = Hattmakarna.currentUser;
-                    dynamicNameLabel.setText(currentUser.getUserName());
+         dynamicNameLabel.setText(currentUser.getUserName());
+
     }
     
     
@@ -54,6 +54,50 @@ public void laggTillAnvandare() {
     }
 }
     
+public void fyllComboBoxen(){
+    anvandareComboBox.removeAllItems();
+    
+    ArrayList<User> users = dbm.getUsers();
+    for(User user : users){
+        if(user.isActive()){
+            if(user.isActive()){
+                anvandareComboBox.addItem(user.getUserName());
+
+            }
+        }
+    }
+}
+
+
+
+
+public void taBortAnvandare(){
+    String valdAnvandare = (String) anvandareComboBox.getSelectedItem();
+    if(valdAnvandare == null){
+        JOptionPane.showMessageDialog(this, "ingen användare vald");
+        return;
+    }
+    
+    ArrayList<User> users = dbm.getUsers();
+        for(User user : users){
+            if(user.getUserName().equals(valdAnvandare)){
+                user.setActive(false);
+                
+                boolean success = dbm.updateUser(user);
+                
+                if(success){
+                    JOptionPane.showMessageDialog(this, "Användare: " + valdAnvandare + " har avaktiverats");
+                    anvandareComboBox.removeAllItems();
+                    fyllComboBoxen();
+                } else{
+                    JOptionPane.showMessageDialog(this, "Kunde inte avaktiver användare, kan redan vara avaktiverad");
+                }
+                break;
+            }
+           
+        }
+}
+
     
     
     @SuppressWarnings("unchecked")
@@ -65,7 +109,8 @@ public void laggTillAnvandare() {
         dynamicNameLabel = new javax.swing.JLabel();
         andraLosenBTN = new javax.swing.JButton();
         laggTillAnvandareBTN = new javax.swing.JButton();
-        jButton3 = new javax.swing.JButton();
+        anvandareComboBox = new javax.swing.JComboBox<>();
+        taBortAnvandare = new javax.swing.JButton();
 
         jLabel2.setFont(new java.awt.Font("Segoe UI", 0, 40)); // NOI18N
         jLabel2.setText("Min profil:");
@@ -87,7 +132,18 @@ public void laggTillAnvandare() {
             }
         });
 
-        jButton3.setText("Ta bort Användare");
+        anvandareComboBox.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                anvandareComboBoxActionPerformed(evt);
+            }
+        });
+
+        taBortAnvandare.setText("Avaktivera Användare");
+        taBortAnvandare.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                taBortAnvandareActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
@@ -99,18 +155,19 @@ public void laggTillAnvandare() {
                         .addGap(182, 182, 182)
                         .addComponent(jLabel1))
                     .addGroup(layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(andraLosenBTN))
-                    .addGroup(layout.createSequentialGroup()
                         .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 189, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(dynamicNameLabel))
                     .addGroup(layout.createSequentialGroup()
                         .addContainerGap()
-                        .addComponent(laggTillAnvandareBTN))
+                        .addComponent(anvandareComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, 115, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(taBortAnvandare, javax.swing.GroupLayout.PREFERRED_SIZE, 145, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(layout.createSequentialGroup()
                         .addContainerGap()
-                        .addComponent(jButton3)))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                            .addComponent(andraLosenBTN, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(laggTillAnvandareBTN, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
@@ -122,13 +179,15 @@ public void laggTillAnvandare() {
                     .addComponent(dynamicNameLabel))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabel1)
-                .addGap(47, 47, 47)
+                .addGap(13, 13, 13)
                 .addComponent(andraLosenBTN)
-                .addGap(18, 18, 18)
+                .addGap(27, 27, 27)
                 .addComponent(laggTillAnvandareBTN)
-                .addGap(18, 18, 18)
-                .addComponent(jButton3)
-                .addContainerGap(131, Short.MAX_VALUE))
+                .addGap(27, 27, 27)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(anvandareComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(taBortAnvandare))
+                .addContainerGap(147, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
 
@@ -142,13 +201,23 @@ window.showandraLosen();
         // TODO add your handling code here:
     }//GEN-LAST:event_laggTillAnvandareBTNActionPerformed
 
+    private void anvandareComboBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_anvandareComboBoxActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_anvandareComboBoxActionPerformed
+
+    private void taBortAnvandareActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_taBortAnvandareActionPerformed
+taBortAnvandare();
+        // TODO add your handling code here:
+    }//GEN-LAST:event_taBortAnvandareActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton andraLosenBTN;
+    private javax.swing.JComboBox<String> anvandareComboBox;
     private javax.swing.JLabel dynamicNameLabel;
-    private javax.swing.JButton jButton3;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JButton laggTillAnvandareBTN;
+    private javax.swing.JButton taBortAnvandare;
     // End of variables declaration//GEN-END:variables
 }

@@ -31,7 +31,7 @@ import panels.OrderPanel;
 import panels.modular.*;
 import utils.ImageManager;
 
-public class ModularSpecialOrder extends javax.swing.JPanel {
+public class SpecialOrder extends javax.swing.JPanel {
 
     private ModularWindow window;
     private DefaultTableModel materialTable;
@@ -42,7 +42,7 @@ public class ModularSpecialOrder extends javax.swing.JPanel {
     private String base64Image;
     private ImageManager imageManager;
     
-    public ModularSpecialOrder(ModularWindow window, OrderPanel order) {
+    public SpecialOrder(ModularWindow window, OrderPanel order) {
         this.window = window;
         this.order = order;
         this.imageManager = new ImageManager(window, true);
@@ -63,7 +63,7 @@ public class ModularSpecialOrder extends javax.swing.JPanel {
         
     }
     
-    public ModularSpecialOrder(ModularWindow window, Product product, OrderPanel order) {
+    public SpecialOrder(ModularWindow window, Product product, OrderPanel order) {
         this.window = window;
         this.product = product;
         this.order = order;
@@ -529,7 +529,7 @@ public class ModularSpecialOrder extends javax.swing.JPanel {
         newProduct.setWeight(Double.parseDouble(txtWeight.getText().replace(",", ".")));
         dbm.updateProduct(newProduct);
         
-        //Sparar bilden om det finns någon
+        //Sparar produktbilden om det finns någon
         if (base64Image != null) {
             imageManager.saveNewImage(base64Image, newProduct.getProductId(), "Produktbild", "");
         }
@@ -595,8 +595,7 @@ public class ModularSpecialOrder extends javax.swing.JPanel {
         lblBlueprint.setText(null);
         base64Image = Base64.getEncoder().encodeToString(imageBytes);
         
-        int newRow = blueprintTable.getRowCount() + 1;
-        blueprintTable.addRow(new Object[] {newRow, "", base64Image});
+        blueprintTable.addRow(new Object[] {0, "", base64Image});
     }//GEN-LAST:event_btnUploadBlueprintActionPerformed
 
 

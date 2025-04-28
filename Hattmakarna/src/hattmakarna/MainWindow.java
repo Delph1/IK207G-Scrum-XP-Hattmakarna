@@ -1,4 +1,5 @@
 package hattmakarna;
+import utils.Print;
 import panels.modular.ProductPanel;
 import java.awt.Component;
 import panels.*; // Hämtar alla paneler
@@ -301,7 +302,7 @@ public class MainWindow extends javax.swing.JFrame {
     }
     
     public void showMinProfil(){
-    showPanel(new MinProfil(this));
+    showPanel(new MyProfile(this));
     }
     
     // Publik Metod för att skapa start-panelobjekt och anropa den interna metoden för att visa panelen
@@ -326,7 +327,7 @@ public class MainWindow extends javax.swing.JFrame {
     }
     
     public void showOrderStatisticsPanel() {
-        showPanel(new Orderstatistics(this)); 
+        showPanel(new OrderStatisticsPanel(this)); 
     }
     
     public void showCustomerPanel(Customer customer) {
@@ -366,7 +367,7 @@ public class MainWindow extends javax.swing.JFrame {
     }
     
     public void showandraLosen() {
-        showPanel(new andraLosen(this));
+        showPanel(new ChangePassword(this));
 
     }
     
