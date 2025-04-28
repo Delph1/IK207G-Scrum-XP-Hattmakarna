@@ -43,7 +43,7 @@ public class ModularWindow extends javax.swing.JDialog {
     }
     
     public void uploadImages(int productId) {
-        showPanel(new UploadImages(this, productId));
+        showPanel(new UploadImagesPanel(this, productId));
     }
     
     // Intern metod för att "måla" en panel

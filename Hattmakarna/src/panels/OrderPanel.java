@@ -4,8 +4,12 @@ package panels;
 import static hattmakarna.Hattmakarna.dbm;
 import hattmakarna.MainWindow;
 import hattmakarna.ModularWindow;
+import java.awt.print.PrinterException;
+import java.io.IOException;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.event.ListSelectionEvent;
@@ -15,6 +19,7 @@ import javax.swing.event.ListSelectionListener;
 import models.Order;
 import models.OrderLine;
 import models.Product;
+import utils.Print;
 
 
 public class OrderPanel extends javax.swing.JPanel {
@@ -128,13 +133,15 @@ public class OrderPanel extends javax.swing.JPanel {
         btnModifyHat = new javax.swing.JButton();
         jPanel1 = new javax.swing.JPanel();
         btnRemoveOrderline = new javax.swing.JButton();
-        btnConfirmOrder = new javax.swing.JButton();
         jScrollPane2 = new javax.swing.JScrollPane();
         tblOrderline = new javax.swing.JTable();
         btnSaveOrder = new javax.swing.JButton();
         jScrollPane4 = new javax.swing.JScrollPane();
         tblOrders = new javax.swing.JTable();
         lblAllOrders = new javax.swing.JLabel();
+        btnPrintOrderConfirmation = new javax.swing.JButton();
+        btnPrintQuote = new javax.swing.JButton();
+        lblPrint = new javax.swing.JLabel();
 
         jTable1.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -345,13 +352,6 @@ public class OrderPanel extends javax.swing.JPanel {
             }
         });
 
-        btnConfirmOrder.setText("Bekräfta order");
-        btnConfirmOrder.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnConfirmOrderActionPerformed(evt);
-            }
-        });
-
         tblOrderline.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
@@ -366,7 +366,7 @@ public class OrderPanel extends javax.swing.JPanel {
             tblOrderline.getColumnModel().getColumn(0).setHeaderValue("Orderrad-ID");
         }
 
-        btnSaveOrder.setText("Spara");
+        btnSaveOrder.setText("Bekräfta order");
         btnSaveOrder.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnSaveOrderActionPerformed(evt);
@@ -386,6 +386,22 @@ public class OrderPanel extends javax.swing.JPanel {
         lblAllOrders.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         lblAllOrders.setText("Alla ordrar");
 
+        btnPrintOrderConfirmation.setText("Orderbekräftelse");
+        btnPrintOrderConfirmation.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnPrintOrderConfirmationActionPerformed(evt);
+            }
+        });
+
+        btnPrintQuote.setText("Offert");
+        btnPrintQuote.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnPrintQuoteActionPerformed(evt);
+            }
+        });
+
+        lblPrint.setText("Skriv ut:");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
@@ -400,12 +416,21 @@ public class OrderPanel extends javax.swing.JPanel {
                         .addComponent(pnlNewOrder, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(btnRemoveOrderline)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(btnConfirmOrder)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGap(0, 0, Short.MAX_VALUE)
                         .addComponent(btnSaveOrder))
-                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addComponent(btnRemoveOrderline)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(lblPrint)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(btnPrintQuote)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(btnPrintOrderConfirmation)))))
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
@@ -426,20 +451,22 @@ public class OrderPanel extends javax.swing.JPanel {
                             .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(pnlNewOrder, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(26, 26, 26)
+                        .addGap(4, 4, 4)
+                        .addComponent(lblPrint)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(btnRemoveOrderline)
-                            .addComponent(lblAllOrders))
+                            .addComponent(lblAllOrders)
+                            .addComponent(btnPrintOrderConfirmation)
+                            .addComponent(btnPrintQuote))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 442, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addGroup(layout.createSequentialGroup()
                                 .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 443, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(18, 18, 18)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                    .addComponent(btnConfirmOrder)
-                                    .addComponent(btnSaveOrder))))))
-                .addGap(244, 244, 244))
+                                .addComponent(btnSaveOrder)))))
+                .addContainerGap())
         );
     }// </editor-fold>//GEN-END:initComponents
 
@@ -459,6 +486,7 @@ public class OrderPanel extends javax.swing.JPanel {
     }//GEN-LAST:event_btnAddOrderlineActionPerformed
 
     private void btnSaveOrderActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSaveOrderActionPerformed
+        cboxOrderstatus.setSelectedIndex(1);
         int customer_id = Integer.parseInt(tfCustomerID.getText());
         LocalDate order_date = LocalDate.parse(tfOrderDate.getText()); 
         //String order_status = tfOrderStatus.getText();
@@ -510,10 +538,6 @@ public class OrderPanel extends javax.swing.JPanel {
         OrderLine.removeRow(selectedTableRowID);
     }//GEN-LAST:event_btnRemoveOrderlineActionPerformed
 
-    private void btnConfirmOrderActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnConfirmOrderActionPerformed
-        cboxOrderstatus.setSelectedIndex(1);
-    }//GEN-LAST:event_btnConfirmOrderActionPerformed
-
     private void btnSpecialOrderActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSpecialOrderActionPerformed
         ModularWindow modularWindow = new ModularWindow(window, true);
         modularWindow.specialOrder(this);
@@ -533,11 +557,46 @@ public class OrderPanel extends javax.swing.JPanel {
         modularWindow.setAlwaysOnTop(true);
     }//GEN-LAST:event_btnModifyHatActionPerformed
 
+    private void btnPrintQuoteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPrintQuoteActionPerformed
+        int orderNo = Integer.parseInt(tfOrderID.getText());
+        if (orderNo != 0) {
+            Order order = dbm.getOrder(orderNo);
+            try {
+                Print printOrder = new Print(order);
+                printOrder.printQuote();
+            } catch (IOException e) {
+                System.err.println(e.getMessage());
+            } catch (PrinterException ex) {
+                System.err.println(ex.getMessage());
+            }
+        } else {
+            JOptionPane.showMessageDialog(this, "Du behöver spara din order först.");
+        }
+    }//GEN-LAST:event_btnPrintQuoteActionPerformed
+
+    private void btnPrintOrderConfirmationActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPrintOrderConfirmationActionPerformed
+        int orderNo = Integer.parseInt(tfOrderID.getText());
+        if (orderNo != 0) {
+            Order order = dbm.getOrder(orderNo);
+            try {
+                Print printOrder = new Print(order);
+                printOrder.printConfirmation();
+            } catch (IOException e) {
+                System.err.println(e.getMessage());
+            } catch (PrinterException ex) {
+                System.err.println(ex.getMessage());
+            }
+        } else {
+            JOptionPane.showMessageDialog(this, "Du behöver spara din order först.");
+        }
+    }//GEN-LAST:event_btnPrintOrderConfirmationActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAddOrderline;
-    private javax.swing.JButton btnConfirmOrder;
     private javax.swing.JButton btnModifyHat;
+    private javax.swing.JButton btnPrintOrderConfirmation;
+    private javax.swing.JButton btnPrintQuote;
     private javax.swing.JButton btnRemoveOrderline;
     private javax.swing.JButton btnSaveOrder;
     private javax.swing.JButton btnSpecialOrder;
@@ -562,6 +621,7 @@ public class OrderPanel extends javax.swing.JPanel {
     private javax.swing.JLabel lblOrderStatus;
     private javax.swing.JLabel lblOrderlineID;
     private javax.swing.JLabel lblPrice;
+    private javax.swing.JLabel lblPrint;
     private javax.swing.JLabel lblProductID;
     private javax.swing.JLabel lblShippingCostOrder;
     private javax.swing.JPanel pnlNewOrder;
