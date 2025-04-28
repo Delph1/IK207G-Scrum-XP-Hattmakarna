@@ -199,7 +199,7 @@ public class DatabaseManager {
     public ArrayList<OrderLine> getOrderlines() {
         try {
             ArrayList<OrderLine> orderlines = new ArrayList<>();
-            String query = "SELECT * FROM orderlines";
+            String query = "SELECT * FROM orderlines JOIN hatmaker ON orderlines.orderline_id = hatmaker.orderline_id";
             ArrayList<HashMap<String, String>> results = db.fetchRows(query);
             if (results != null) {
                 for (HashMap<String, String> row : results) {
@@ -210,7 +210,7 @@ public class DatabaseManager {
                             row.get("description"),
                             Integer.parseInt(row.get("price")),
                             Integer.parseInt(row.get("product_id")),
-                            "null",
+                            row.get("delivery_date"),
                             row.get("hat_status")
                     ));
                 }
