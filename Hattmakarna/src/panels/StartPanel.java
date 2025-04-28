@@ -14,11 +14,10 @@ public class StartPanel extends javax.swing.JPanel {
         this.window = window;
         initComponents(); 
         fyllDagensOrdrar();
-    }
+    } 
 
 private void fyllDagensOrdrar() {
     ArrayList<Order> dagensOrdrar = dbm.getOrders();
-
     LocalDate idag = LocalDate.now();
     ArrayList<Order> filtreradeOrdrar = new ArrayList<>();
     for (Order order : dagensOrdrar) {
