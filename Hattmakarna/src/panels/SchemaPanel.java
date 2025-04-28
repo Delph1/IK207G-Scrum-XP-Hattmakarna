@@ -288,6 +288,7 @@ public class SchemaPanel extends javax.swing.JPanel {
         } else {
             btnAddOrderlineToUserList.setEnabled(false);
         }
+        orderStatusLabel.setText("");
     }//GEN-LAST:event_userComboBoxActionPerformed
 
     private void orderLineListValueChanged(javax.swing.event.ListSelectionEvent evt) {//GEN-FIRST:event_orderLineListValueChanged
@@ -328,7 +329,7 @@ public class SchemaPanel extends javax.swing.JPanel {
             orderline.setDeliveryDate(delivery_date);
             dbm.createHatmakerOrderlines(orderline, user, delivery_date);
         }
-
+orderStatusLabel.setText("");
     }//GEN-LAST:event_btnAddOrderLineActionPerformed
 
     private void jListMyOrderlinesValueChanged(javax.swing.event.ListSelectionEvent evt) {//GEN-FIRST:event_jListMyOrderlinesValueChanged

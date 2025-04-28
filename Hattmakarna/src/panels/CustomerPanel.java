@@ -126,6 +126,7 @@ public class CustomerPanel extends javax.swing.JPanel {
 
         jLabel12.setText("jLabel12");
 
+        setEnabled(false);
         setName(""); // NOI18N
         setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
@@ -233,6 +234,11 @@ public class CustomerPanel extends javax.swing.JPanel {
         jLabel10.setText("Telefonnummer");
         add(jLabel10, new org.netbeans.lib.awtextra.AbsoluteConstraints(389, 50, -1, -1));
 
+        phoneNumberList.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                phoneNumberListMouseClicked(evt);
+            }
+        });
         jScrollPane2.setViewportView(phoneNumberList);
 
         add(jScrollPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(313, 112, 197, 90));
@@ -256,6 +262,7 @@ public class CustomerPanel extends javax.swing.JPanel {
         add(jLabel11, new org.netbeans.lib.awtextra.AbsoluteConstraints(410, 220, -1, -1));
 
         removePhoneNumberButton.setText("Ta bort");
+        removePhoneNumberButton.setEnabled(false);
         removePhoneNumberButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 removePhoneNumberButtonActionPerformed(evt);
@@ -272,6 +279,7 @@ public class CustomerPanel extends javax.swing.JPanel {
         add(addPhonNumberButton, new org.netbeans.lib.awtextra.AbsoluteConstraints(516, 78, -1, -1));
 
         removeMailButton.setText("Ta bort");
+        removeMailButton.setEnabled(false);
         removeMailButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 removeMailButtonActionPerformed(evt);
@@ -280,6 +288,11 @@ public class CustomerPanel extends javax.swing.JPanel {
         add(removeMailButton, new org.netbeans.lib.awtextra.AbsoluteConstraints(520, 280, -1, -1));
         add(emailTextField, new org.netbeans.lib.awtextra.AbsoluteConstraints(320, 250, 197, -1));
 
+        mailList.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                mailListMouseClicked(evt);
+            }
+        });
         jScrollPane1.setViewportView(mailList);
 
         add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(320, 280, 195, 90));
@@ -324,16 +337,26 @@ public class CustomerPanel extends javax.swing.JPanel {
     private void removePhoneNumberButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_removePhoneNumberButtonActionPerformed
        phoneNumbers.remove(phoneNumberList.getSelectedIndex());
        populateListModels(); 
+       removePhoneNumberButton.setEnabled(false);
     }//GEN-LAST:event_removePhoneNumberButtonActionPerformed
 
     private void removeMailButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_removeMailButtonActionPerformed
         mails.remove(mailList.getSelectedIndex()); 
         populateListModels(); 
+        removeMailButton.setEnabled(false);
     }//GEN-LAST:event_removeMailButtonActionPerformed
 
     private void backButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_backButtonActionPerformed
        window.showCustomerListPanel();
     }//GEN-LAST:event_backButtonActionPerformed
+
+    private void phoneNumberListMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_phoneNumberListMouseClicked
+        removePhoneNumberButton.setEnabled(true);
+    }//GEN-LAST:event_phoneNumberListMouseClicked
+
+    private void mailListMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_mailListMouseClicked
+       removeMailButton.setEnabled(true);
+    }//GEN-LAST:event_mailListMouseClicked
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
