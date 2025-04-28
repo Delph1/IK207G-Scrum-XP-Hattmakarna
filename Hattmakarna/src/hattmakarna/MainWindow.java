@@ -280,7 +280,7 @@ public class MainWindow extends javax.swing.JFrame {
     }
     
     public void showMyProfile() {
-        showPanel(new MyProfile(this));
+        showPanel(new MyProfilePanel(this));
     }
     
     // Publik Metod för att skapa start-panelobjekt och anropa den interna metoden för att visa panelen
@@ -345,7 +345,7 @@ public class MainWindow extends javax.swing.JFrame {
     }
     
     public void showandraLosen() {
-        showPanel(new ChangePassword(this));
+        showPanel(new ChangePasswordPanel(this));
 
     }
     
