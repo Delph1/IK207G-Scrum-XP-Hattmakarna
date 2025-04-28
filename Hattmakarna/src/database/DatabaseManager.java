@@ -210,7 +210,7 @@ public class DatabaseManager {
                             row.get("description"),
                             Integer.parseInt(row.get("price")),
                             Integer.parseInt(row.get("product_id")),
-                            "1111-11-11",
+                            "null",
                             row.get("hat_status")
                     ));
                 }
@@ -226,7 +226,7 @@ public class DatabaseManager {
     public ArrayList<OrderLine> getHatmakerOrderlines(int user_id) {
         try {
             ArrayList<OrderLine> orderlines = new ArrayList<>();
-            String query = "SELECT DISTINCT orderlines.* FROM orderlines, hatmaker WHERE orderlines.orderline_id IN (SELECT orderline_id FROM hatmaker WHERE hatmaker.hatmaker = " + user_id + ")";
+            String query = "SELECT * FROM orderlines JOIN hatmaker ON orderlines.orderline_id = hatmaker.orderline_id WHERE hatmaker = " + user_id;
             ArrayList<HashMap<String, String>> results = db.fetchRows(query);
             if (results != null) {
                 for (HashMap<String, String> row : results) {
@@ -237,8 +237,7 @@ public class DatabaseManager {
                             row.get("description"),
                             Integer.parseInt(row.get("price")),
                             Integer.parseInt(row.get("product_id")),
-                            row.get("delivery_date")
-                            "1111-11-11",
+                            row.get("delivery_date"),
                             row.get("hat_status")
                     ));
                 }
