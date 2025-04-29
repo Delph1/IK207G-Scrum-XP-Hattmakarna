@@ -1,7 +1,4 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
- */
+
 package hattmakarna;
 
 import javax.swing.JOptionPane;
@@ -12,34 +9,30 @@ public class LoginWindow extends javax.swing.JFrame {
     
     public LoginWindow() {
         initComponents();
-        
-
-    //SwingUtilities.invokeLater(() -> loginBTN.doClick());// Simulerar loginklick
     }
     
     public void loggaIn(){
        String username = userNameText.getText().trim();
        String losenord = new String(losenText.getPassword()).trim();
        
-  if (username.isEmpty() || losenord.isEmpty()) {
+        if (username.isEmpty() || losenord.isEmpty()) {
             JOptionPane.showMessageDialog(this, "Du måste fylla i både användarnamn och lösenord");
             return;
         }
 
-   User user = dbm.login(username, losenord);
+        User user = dbm.login(username, losenord);
 
-    if (user != null) {
-//        JOptionPane.showMessageDialog(this, "Inloggning lyckades. Välkommen " + user.getUserName());
-        Hattmakarna.currentUser = user;
-        MainWindow window = new MainWindow();
-        window.setVisible(true);
-        window.setExtendedState(window.getExtendedState()|window.MAXIMIZED_BOTH);
-        this.dispose();
-        
-    } else {
-        JOptionPane.showMessageDialog(this, "Felaktigt användarnamn eller lösenord.");
+        if (user != null) {
+            Hattmakarna.currentUser = user;
+            MainWindow window = new MainWindow();
+            window.setVisible(true);
+            window.setExtendedState(window.getExtendedState()|window.MAXIMIZED_BOTH);
+            this.dispose();
+
+        } else {
+            JOptionPane.showMessageDialog(this, "Felaktigt användarnamn eller lösenord.");
+        }
     }
-}
  
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
