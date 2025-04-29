@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 
-<Form version="1.3" maxVersion="1.9" type="org.netbeans.modules.form.forminfo.JPanelFormInfo">
+<Form version="1.5" maxVersion="1.9" type="org.netbeans.modules.form.forminfo.JPanelFormInfo">
   <Properties>
     <Property name="name" type="java.lang.String" value="" noResource="true"/>
   </Properties>
@@ -19,28 +19,24 @@
   <Layout>
     <DimensionLayout dim="0">
       <Group type="103" groupAlignment="0" attributes="0">
-          <Group type="102" attributes="0">
-              <EmptySpace max="-2" attributes="0"/>
+          <Group type="102" alignment="0" attributes="0">
+              <EmptySpace min="-2" pref="44" max="-2" attributes="0"/>
+              <Group type="103" groupAlignment="1" max="-2" attributes="0">
+                  <Component id="jPanel1" max="32767" attributes="0"/>
+                  <Component id="scrollDagensOrder" alignment="1" max="32767" attributes="0"/>
+                  <Component id="lblValkommen" alignment="0" min="-2" max="-2" attributes="0"/>
+              </Group>
+              <EmptySpace type="separate" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="0" attributes="0">
-                  <Component id="btnSchema" alignment="0" min="-2" max="-2" attributes="0"/>
-                  <Group type="102" alignment="0" attributes="0">
-                      <Group type="103" groupAlignment="0" attributes="0">
-                          <Component id="scrollDagensOrder" alignment="0" min="-2" pref="377" max="-2" attributes="0"/>
-                          <Component id="lblValkommen" alignment="0" min="-2" max="-2" attributes="0"/>
-                      </Group>
-                      <EmptySpace type="separate" max="-2" attributes="0"/>
-                      <Group type="103" groupAlignment="0" attributes="0">
-                          <Component id="lblValkommen1" min="-2" max="-2" attributes="0"/>
-                          <Group type="102" attributes="0">
-                              <Component id="jScrollPane1" min="-2" pref="344" max="-2" attributes="0"/>
-                              <EmptySpace max="-2" attributes="0"/>
-                              <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                                  <Component id="showCustomerButton" alignment="0" max="32767" attributes="0"/>
-                                  <Component id="NewCustomerBTN" alignment="0" max="32767" attributes="0"/>
-                                  <Component id="createOrderForCustomerBTN" alignment="0" max="32767" attributes="0"/>
-                                  <Component id="deleteCustomerButton" alignment="0" min="-2" pref="141" max="-2" attributes="0"/>
-                              </Group>
-                          </Group>
+                  <Component id="lblValkommen1" min="-2" max="-2" attributes="0"/>
+                  <Group type="102" attributes="0">
+                      <Component id="jScrollPane1" min="-2" pref="344" max="-2" attributes="0"/>
+                      <EmptySpace max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="0" max="-2" attributes="0">
+                          <Component id="showCustomerButton" alignment="0" max="32767" attributes="0"/>
+                          <Component id="NewCustomerBTN" alignment="0" max="32767" attributes="0"/>
+                          <Component id="createOrderForCustomerBTN" alignment="0" max="32767" attributes="0"/>
+                          <Component id="deleteCustomerButton" alignment="0" min="-2" pref="141" max="-2" attributes="0"/>
                       </Group>
                   </Group>
               </Group>
@@ -71,8 +67,8 @@
                   <Component id="jScrollPane1" alignment="0" pref="0" max="32767" attributes="0"/>
               </Group>
               <EmptySpace type="separate" max="-2" attributes="0"/>
-              <Component id="btnSchema" min="-2" max="-2" attributes="0"/>
-              <EmptySpace pref="103" max="32767" attributes="0"/>
+              <Component id="jPanel1" min="-2" max="-2" attributes="0"/>
+              <EmptySpace pref="66" max="32767" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
@@ -100,14 +96,6 @@
         </Component>
       </SubComponents>
     </Container>
-    <Component class="javax.swing.JButton" name="btnSchema">
-      <Properties>
-        <Property name="text" type="java.lang.String" value="G&#xe5; till Att g&#xf6;ra"/>
-      </Properties>
-      <Events>
-        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnSchemaActionPerformed"/>
-      </Events>
-    </Component>
     <Component class="javax.swing.JLabel" name="lblValkommen">
       <Properties>
         <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
@@ -182,5 +170,105 @@
         <Property name="text" type="java.lang.String" value="Kunder"/>
       </Properties>
     </Component>
+    <Container class="javax.swing.JPanel" name="jPanel1">
+
+      <Layout>
+        <DimensionLayout dim="0">
+          <Group type="103" groupAlignment="0" attributes="0">
+              <Group type="102" attributes="0">
+                  <EmptySpace max="-2" attributes="0"/>
+                  <Group type="103" groupAlignment="0" attributes="0">
+                      <Component id="jLabel1" min="-2" pref="192" max="-2" attributes="0"/>
+                      <Group type="102" alignment="0" attributes="0">
+                          <Component id="lblStartDateOrderlines" min="-2" pref="74" max="-2" attributes="0"/>
+                          <EmptySpace max="-2" attributes="0"/>
+                          <Component id="tfStartDateOrderlines" min="-2" pref="103" max="-2" attributes="0"/>
+                          <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                          <Component id="lblEndDateOrderlines" min="-2" pref="70" max="-2" attributes="0"/>
+                          <EmptySpace type="separate" max="-2" attributes="0"/>
+                          <Component id="tfEndDateOrderlines" min="-2" pref="117" max="-2" attributes="0"/>
+                          <EmptySpace min="-2" pref="39" max="-2" attributes="0"/>
+                          <Component id="btnSearchOrderlinesBetwDates" min="-2" max="-2" attributes="0"/>
+                      </Group>
+                      <Component id="jScrollPane2" alignment="0" min="-2" pref="879" max="-2" attributes="0"/>
+                  </Group>
+                  <EmptySpace max="32767" attributes="0"/>
+              </Group>
+          </Group>
+        </DimensionLayout>
+        <DimensionLayout dim="1">
+          <Group type="103" groupAlignment="0" attributes="0">
+              <Group type="102" alignment="0" attributes="0">
+                  <EmptySpace max="-2" attributes="0"/>
+                  <Component id="jLabel1" min="-2" max="-2" attributes="0"/>
+                  <EmptySpace min="-2" pref="12" max="-2" attributes="0"/>
+                  <Group type="103" groupAlignment="3" attributes="0">
+                      <Component id="lblStartDateOrderlines" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="tfStartDateOrderlines" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="lblEndDateOrderlines" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="tfEndDateOrderlines" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="btnSearchOrderlinesBetwDates" alignment="3" min="-2" max="-2" attributes="0"/>
+                  </Group>
+                  <EmptySpace pref="23" max="32767" attributes="0"/>
+                  <Component id="jScrollPane2" min="-2" pref="210" max="-2" attributes="0"/>
+              </Group>
+          </Group>
+        </DimensionLayout>
+      </Layout>
+      <SubComponents>
+        <Component class="javax.swing.JLabel" name="lblStartDateOrderlines">
+          <Properties>
+            <Property name="text" type="java.lang.String" value="Startdatum"/>
+          </Properties>
+        </Component>
+        <Component class="javax.swing.JTextField" name="tfStartDateOrderlines">
+        </Component>
+        <Component class="javax.swing.JLabel" name="lblEndDateOrderlines">
+          <Properties>
+            <Property name="text" type="java.lang.String" value="Stoppdatum"/>
+          </Properties>
+        </Component>
+        <Component class="javax.swing.JTextField" name="tfEndDateOrderlines">
+        </Component>
+        <Container class="javax.swing.JScrollPane" name="jScrollPane2">
+          <AuxValues>
+            <AuxValue name="autoScrollPane" type="java.lang.Boolean" value="true"/>
+          </AuxValues>
+
+          <Layout class="org.netbeans.modules.form.compat2.layouts.support.JScrollPaneSupportLayout"/>
+          <SubComponents>
+            <Component class="javax.swing.JTable" name="tblOrderlinesBetweenDates">
+              <Properties>
+                <Property name="model" type="javax.swing.table.TableModel" editor="org.netbeans.modules.form.editors2.TableModelEditor">
+                  <Table columnCount="8" rowCount="6">
+                    <Column editable="true" title="Order-ID" type="java.lang.Object"/>
+                    <Column editable="true" title="Orderrad-ID" type="java.lang.Object"/>
+                    <Column editable="true" title="Produkt-ID" type="java.lang.Object"/>
+                    <Column editable="true" title="Pris" type="java.lang.Object"/>
+                    <Column editable="true" title="Kundgodk&#xe4;nnande" type="java.lang.Object"/>
+                    <Column editable="true" title="Beskrivning" type="java.lang.Object"/>
+                    <Column editable="true" title="Status" type="java.lang.Object"/>
+                    <Column editable="true" title="Leveransdatum" type="java.lang.Object"/>
+                  </Table>
+                </Property>
+              </Properties>
+            </Component>
+          </SubComponents>
+        </Container>
+        <Component class="javax.swing.JLabel" name="jLabel1">
+          <Properties>
+            <Property name="text" type="java.lang.String" value="S&#xf6;k efter order mellan tv&#xe5; datum"/>
+          </Properties>
+        </Component>
+        <Component class="javax.swing.JButton" name="btnSearchOrderlinesBetwDates">
+          <Properties>
+            <Property name="text" type="java.lang.String" value="S&#xf6;k"/>
+          </Properties>
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnSearchOrderlinesBetwDatesActionPerformed"/>
+          </Events>
+        </Component>
+      </SubComponents>
+    </Container>
   </SubComponents>
 </Form>
