@@ -714,7 +714,27 @@ public class DatabaseManager {
 
         return result;
     }
+    
+public ArrayList<HashMap<String, String>> customerSalesBetweenDates(int customerId, String startDate, String stopDate) {
+    ArrayList<HashMap<String, String>> result = null;
 
+    try {
+        String query = "SELECT o.order_date, COUNT(*) AS quantity_sold, SUM(ol.price) AS total_sale "
+                + "FROM orders o "
+                + "JOIN orderlines ol ON o.order_id = ol.order_id "
+                + "WHERE o.order_status = 'COMPLETED' "
+                + "AND o.customer_id = " + customerId + " "
+                + "AND o.order_date BETWEEN '" + startDate + "' AND '" + stopDate + "' "
+                + "GROUP BY o.order_date "
+                + "ORDER BY o.order_date";
+
+        result = db.fetchRows(query);
+    } catch (InfException e) {
+        System.err.println("Could not fetch sales data: " + e.getMessage());
+    }
+
+    return result;
+}
     // Hämtar en objektlista med alla users
     public ArrayList<User> getUsers() {
         try {
