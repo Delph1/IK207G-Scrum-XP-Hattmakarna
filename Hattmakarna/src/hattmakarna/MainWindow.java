@@ -205,7 +205,7 @@ public class MainWindow extends javax.swing.JFrame {
        User user = Hattmakarna.currentUser;
        int user_id = user.getUserId();
        showSchemaPanel(user_id); 
-       lblHeader.setText("Hattmakarna - Schema");
+       lblHeader.setText("Hattmakarna - Att göra");
     }//GEN-LAST:event_schemaButtonActionPerformed
 
     private void btnMaterialsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMaterialsActionPerformed
