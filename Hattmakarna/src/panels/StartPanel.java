@@ -1,31 +1,35 @@
 package panels;
 
-import hattmakarna.MainWindow;
 import static hattmakarna.Hattmakarna.dbm;
+import hattmakarna.MainWindow;
 import hattmakarna.ModularWindow;
 import java.util.*;
 import javax.swing.table.DefaultTableModel;
 import java.time.LocalDate;
+import javax.swing.JOptionPane;
 import models.Customer;
 import utils.DatePicker;
+import models.Order;
+import models.OrderLine;
 
 public class StartPanel extends javax.swing.JPanel {
 
     private MainWindow window;
-    private int userId = 1;
     private ArrayList<Customer> allCustomers;
     private DefaultTableModel tableModel;
     private Object[][] orderlineData;
+    private Order order;
+    
 
     public StartPanel(MainWindow window) {
         this.window = window;
-        this.userId = userId;
         initComponents();
         tableModel = (DefaultTableModel) customerTable.getModel();
         updateCustomerList();
         fyllDagensOrdrar();
         DatePicker.attachToTextField(window, tfStartDateOrderlines);
         DatePicker.attachToTextField(window, tfEndDateOrderlines);
+        
     }
 
     private void fyllDagensOrdrar() {
@@ -89,7 +93,7 @@ public class StartPanel extends javax.swing.JPanel {
         tfEndDateOrderlines = new javax.swing.JTextField();
         jScrollPane2 = new javax.swing.JScrollPane();
         tblOrderlinesBetweenDates = new javax.swing.JTable();
-        jLabel1 = new javax.swing.JLabel();
+        lblSearchOrderlinesDate = new javax.swing.JLabel();
         btnSearchOrderlinesBetwDates = new javax.swing.JButton();
 
         setName(""); // NOI18N
@@ -173,20 +177,25 @@ public class StartPanel extends javax.swing.JPanel {
 
         tblOrderlinesBetweenDates.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null}
+
             },
             new String [] {
                 "Order-ID", "Orderrad-ID", "Produkt-ID", "Pris", "Kundgodkännande", "Beskrivning", "Status", "Leveransdatum"
             }
-        ));
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false, false, false, false, false, false, false, false
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        tblOrderlinesBetweenDates.setEnabled(false);
         jScrollPane2.setViewportView(tblOrderlinesBetweenDates);
 
-        jLabel1.setText("Sök efter order mellan två datum");
+        lblSearchOrderlinesDate.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        lblSearchOrderlinesDate.setText("Sök efter orderrader mellan två datum");
 
         btnSearchOrderlinesBetwDates.setText("Sök");
         btnSearchOrderlinesBetwDates.addActionListener(new java.awt.event.ActionListener() {
@@ -202,7 +211,6 @@ public class StartPanel extends javax.swing.JPanel {
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 192, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(lblStartDateOrderlines, javax.swing.GroupLayout.PREFERRED_SIZE, 74, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -213,14 +221,15 @@ public class StartPanel extends javax.swing.JPanel {
                         .addComponent(tfEndDateOrderlines, javax.swing.GroupLayout.PREFERRED_SIZE, 117, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(39, 39, 39)
                         .addComponent(btnSearchOrderlinesBetwDates))
-                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 879, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 879, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(lblSearchOrderlinesDate, javax.swing.GroupLayout.PREFERRED_SIZE, 294, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jLabel1)
+                .addComponent(lblSearchOrderlinesDate)
                 .addGap(12, 12, 12)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(lblStartDateOrderlines)
@@ -276,7 +285,7 @@ public class StartPanel extends javax.swing.JPanel {
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
                 .addGap(18, 18, 18)
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(66, Short.MAX_VALUE))
+                .addContainerGap(62, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
 
@@ -331,9 +340,56 @@ public class StartPanel extends javax.swing.JPanel {
 
     private void btnSearchOrderlinesBetwDatesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSearchOrderlinesBetwDatesActionPerformed
         String startDate = tfStartDateOrderlines.getText();
-        String Date = tfEndDateOrderlines.getText();
+        String endDate = tfEndDateOrderlines.getText();
 
-
+        if (startDate.length() == 0 || endDate.length() == 0) {
+            JOptionPane.showConfirmDialog(this, "Du måste fylla i ett datum i båda fälten.");
+            return;
+        }
+        
+        ArrayList<Order> ordersList = new ArrayList<>();
+        ordersList = dbm.getOrdersBetweenDates(startDate, endDate);
+        System.out.println("This is the ordersList" + ordersList);
+        if (ordersList == null) {
+            JOptionPane.showMessageDialog(this, "Inga ordrar hittades mellan dessa datum.");
+            return;
+        }
+        
+        ArrayList<OrderLine> orderlineList = new ArrayList<>(); 
+        for(Order order : ordersList) {
+            int order_id = order.getId();
+            ArrayList<OrderLine> result = dbm.getOrderlines(order_id);
+            orderlineList.addAll(result);
+        }
+        
+        String[] columns = {"Order-ID", "Orderrad-ID", "Produkt-ID", "Pris", "Kundgodkännande", "Beskrivning", "Status", "Leveransdatum"};
+        DefaultTableModel orderlineModel = new DefaultTableModel();
+        orderlineModel.addColumn(columns[0]);
+        orderlineModel.addColumn(columns[1]);
+        orderlineModel.addColumn(columns[2]);
+        orderlineModel.addColumn(columns[3]);
+        orderlineModel.addColumn(columns[4]);
+        orderlineModel.addColumn(columns[5]);
+        orderlineModel.addColumn(columns[6]);
+        orderlineModel.addColumn(columns[7]);
+        
+        Object[][] orderlineData = new Object[orderlineList.size()][8];
+        
+        for (int i = 0; i < orderlineList.size(); i++) {
+            OrderLine orderline = orderlineList.get(i);
+            orderlineData[i][0] = orderline.getOrderId();
+            orderlineData[i][1] = orderline.getOrderLineId();
+            orderlineData[i][2] = orderline.getProductId();
+            orderlineData[i][3] = orderline.getPrice();
+            orderlineData[i][4] = orderline.getCustomerApproval();
+            orderlineData[i][5] = orderline.getDescription();
+            orderlineData[i][6] = orderline.getHatStatus();
+            orderlineData[i][7] = orderline.getDeliveryDate();
+            orderlineModel.addRow(orderlineData[i]);
+        };
+        
+        tblOrderlinesBetweenDates.setModel(orderlineModel);
+        
     }//GEN-LAST:event_btnSearchOrderlinesBetwDatesActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -342,11 +398,11 @@ public class StartPanel extends javax.swing.JPanel {
     private javax.swing.JButton createOrderForCustomerBTN;
     private javax.swing.JTable customerTable;
     private javax.swing.JButton deleteCustomerButton;
-    private javax.swing.JLabel jLabel1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JLabel lblEndDateOrderlines;
+    private javax.swing.JLabel lblSearchOrderlinesDate;
     private javax.swing.JLabel lblStartDateOrderlines;
     private javax.swing.JLabel lblValkommen;
     private javax.swing.JLabel lblValkommen1;

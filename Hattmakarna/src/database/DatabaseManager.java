@@ -146,7 +146,7 @@ public class DatabaseManager {
     public ArrayList<Order> getOrdersBetweenDates(String startDate, String stopDate) {
         try {
             ArrayList<Order> orders = new ArrayList<>();
-            String query = "SELECT * FROM orders WHERE order_date BETWEEN " + startDate + " and " + stopDate;
+            String query = "SELECT * FROM orders WHERE order_date BETWEEN '" + startDate + "' and '" + stopDate + "'";
             ArrayList<HashMap<String, String>> results = db.fetchRows(query);
             if (results != null) {
                 for (HashMap<String, String> row : results) {
@@ -197,8 +197,9 @@ public class DatabaseManager {
     public ArrayList<OrderLine> getOrderlines(int order_id) {
         try {
             ArrayList<OrderLine> orderlines = new ArrayList<>();
-            String query = "SELECT * FROM orderlines WHERE order_id = " + order_id;
+            String query = "SELECT orderlines.orderline_id, order_id, customer_approval, description, price, product_id, delivery_date, hat_status FROM orderlines LEFT OUTER JOIN hatmaker ON orderlines.orderline_id = hatmaker.orderline_id WHERE order_id = " + order_id;
             ArrayList<HashMap<String, String>> results = db.fetchRows(query);
+            System.out.println("These are the results" + results);
             if (results != null) {
                 for (HashMap<String, String> row : results) {
                     orderlines.add(new OrderLine(
@@ -208,7 +209,7 @@ public class DatabaseManager {
                             row.get("description"),
                             Integer.parseInt(row.get("price")),
                             Integer.parseInt(row.get("product_id")),
-                            "1111-11-11",
+                            row.get("delivery_date"),
                             row.get("hat_status")
                     ));
                 }
