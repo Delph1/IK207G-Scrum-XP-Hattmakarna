@@ -2,23 +2,29 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JPanel.java to edit this template
  */
-package panels;
+package panels.modular;
 import hattmakarna.Hattmakarna;
-import hattmakarna.MainWindow;
+import hattmakarna.ModularWindow;
 import models.User;
 import static hattmakarna.Hattmakarna.dbm;
+import hattmakarna.MainWindow;
+import java.awt.Frame;
 import javax.swing.JOptionPane;
 /**
  *
  * @author eriks
  */
 public class ChangePasswordPanel extends javax.swing.JPanel {
-private MainWindow window;
-private User currentUser;
-   
-    public ChangePasswordPanel(MainWindow window) {
+
+    private ModularWindow window;
+    private User currentUser;
+    private MainWindow parent;
+    private Frame frame;
+    
+    public ChangePasswordPanel(ModularWindow window, Frame parent) {
         initComponents();
-        this.window=window;
+        this.window = window;
+        this.frame = parent;
         }
 
   public void andraLosen(){
@@ -114,9 +120,8 @@ private User currentUser;
     }// </editor-fold>//GEN-END:initComponents
 
     private void bekraftaBTNActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bekraftaBTNActionPerformed
-     andraLosen();
-     
-        // TODO add your handling code here:
+        andraLosen();
+        window.dispose();
     }//GEN-LAST:event_bekraftaBTNActionPerformed
 
 

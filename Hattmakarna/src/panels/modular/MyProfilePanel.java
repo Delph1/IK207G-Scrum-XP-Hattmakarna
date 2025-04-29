@@ -2,14 +2,14 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JPanel.java to edit this template
  */
-package panels;
+package panels.modular;
 
 import hattmakarna.Hattmakarna;
-import hattmakarna.MainWindow;
 import models.User;
 import static hattmakarna.Hattmakarna.dbm;
 import javax.swing.JOptionPane;
 import hattmakarna.ModularWindow;
+import java.awt.Frame;
 
 
 /**
@@ -17,15 +17,16 @@ import hattmakarna.ModularWindow;
  * @author eriks
  */
 public class MyProfilePanel extends javax.swing.JPanel {
-    private MainWindow window;
+    private ModularWindow window;
     private User currentUser;
-  
-    public MyProfilePanel(MainWindow window) {
+    private Frame frame;
+    
+    public MyProfilePanel(ModularWindow window, Frame frame) {
         initComponents();
-        this.window=window;
-        
-         currentUser = Hattmakarna.currentUser;
-                    dynamicNameLabel.setText(currentUser.getUserName());
+        this.window = window;
+        this.frame = frame;
+        currentUser = Hattmakarna.currentUser;
+        dynamicNameLabel.setText(currentUser.getUserName());
     }
     
     
@@ -154,7 +155,10 @@ public class MyProfilePanel extends javax.swing.JPanel {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnChangePasswordActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnChangePasswordActionPerformed
-        window.showandraLosen();
+        ModularWindow modularWindow = new ModularWindow(frame, true);
+        modularWindow.showandraLosen();;
+        modularWindow.setVisible(true);
+        modularWindow.setAlwaysOnTop(true);
     }//GEN-LAST:event_btnChangePasswordActionPerformed
 
     private void btnAddUserActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddUserActionPerformed

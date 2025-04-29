@@ -1,7 +1,9 @@
 package hattmakarna;
 
+import panels.modular.ChangePasswordPanel;
+import panels.modular.MyProfilePanel;
 import java.awt.BorderLayout;
-import java.awt.Dimension;
+import java.awt.Frame;
 import javax.swing.JPanel;
 import models.Product;
 import panels.*;
@@ -11,10 +13,11 @@ import panels.modular.SpecialOrderPanel;
 
 public class ModularWindow extends javax.swing.JDialog {
 
-    private JPanel panel;
+    private Frame window;
     
     public ModularWindow(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
+        this.window = parent;
         initComponents();
     }
 
@@ -45,13 +48,15 @@ public class ModularWindow extends javax.swing.JDialog {
     public void uploadImages(int productId) {
         showPanel(new UploadImagesPanel(this, productId));
     }
-    
-    // Intern metod för att "måla" en panel
-    private void redrawCurrentPanel() {
-        panel.revalidate();
-        panel.repaint();
+
+    public void showMyProfile() {
+        showPanel(new MyProfilePanel(this, window));
+    }    
+
+    public void showandraLosen() {
+        showPanel(new ChangePasswordPanel(this, window));
     }
-    
+        
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {

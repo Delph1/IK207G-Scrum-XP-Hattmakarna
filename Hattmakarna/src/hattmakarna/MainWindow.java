@@ -1,12 +1,8 @@
 package hattmakarna;
-import utils.Print;
-import panels.modular.ProductPanel;
 import java.awt.Component;
 import panels.*; // Hämtar alla paneler
 import javax.swing.JPanel;
 import static hattmakarna.Hattmakarna.dbm;
-import java.awt.print.PrinterException;
-import java.io.IOException;
 import java.text.ParseException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -262,7 +258,10 @@ public class MainWindow extends javax.swing.JFrame {
     }//GEN-LAST:event_logOutActionPerformed
 
     private void minProfilBTNActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_minProfilBTNActionPerformed
-        showMyProfile();
+        ModularWindow modularWindow = new ModularWindow(this, true);
+        modularWindow.showMyProfile();
+        modularWindow.setVisible(true);
+        modularWindow.setAlwaysOnTop(true);
     }//GEN-LAST:event_minProfilBTNActionPerformed
 
     private void btnImageManagerActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnImageManagerActionPerformed
@@ -284,10 +283,6 @@ public class MainWindow extends javax.swing.JFrame {
     // Publik Metod för att skapa start-panelobjekt och anropa den interna metoden för att visa panelen
     public void showStartPanel() {
        showPanel(new StartPanel(this));
-    }
-    
-    public void showMyProfile() {
-        showPanel(new MyProfilePanel(this));
     }
     
     // Publik Metod för att skapa start-panelobjekt och anropa den interna metoden för att visa panelen
@@ -347,10 +342,6 @@ public class MainWindow extends javax.swing.JFrame {
 
         // Målar den nya panelen
         redrawCurrentPanel();
-    }
-    
-    public void showandraLosen() {
-        showPanel(new ChangePasswordPanel(this));
     }
     
     // Intern metod för att "måla" en panel efter mainPanel's storlek
