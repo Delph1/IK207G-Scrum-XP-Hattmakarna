@@ -46,19 +46,8 @@
           </Group>
           <Group type="102" alignment="1" attributes="0">
               <EmptySpace max="32767" attributes="0"/>
-              <Group type="103" groupAlignment="0" attributes="0">
-                  <Group type="102" alignment="1" attributes="0">
-                      <Component id="loginBTN" min="-2" pref="210" max="-2" attributes="0"/>
-                      <EmptySpace min="-2" pref="132" max="-2" attributes="0"/>
-                  </Group>
-                  <Group type="102" alignment="1" attributes="0">
-                      <Group type="103" groupAlignment="0" attributes="0">
-                          <Component id="edithLogin" min="-2" max="-2" attributes="0"/>
-                          <Component id="ottoLogin" min="-2" max="-2" attributes="0"/>
-                      </Group>
-                      <EmptySpace min="-2" pref="40" max="-2" attributes="0"/>
-                  </Group>
-              </Group>
+              <Component id="loginBTN" min="-2" pref="210" max="-2" attributes="0"/>
+              <EmptySpace min="-2" pref="132" max="-2" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
@@ -79,11 +68,7 @@
               </Group>
               <EmptySpace pref="44" max="32767" attributes="0"/>
               <Component id="loginBTN" min="-2" max="-2" attributes="0"/>
-              <EmptySpace type="unrelated" max="-2" attributes="0"/>
-              <Component id="ottoLogin" min="-2" max="-2" attributes="0"/>
-              <EmptySpace max="-2" attributes="0"/>
-              <Component id="edithLogin" min="-2" max="-2" attributes="0"/>
-              <EmptySpace min="-2" pref="26" max="-2" attributes="0"/>
+              <EmptySpace min="-2" pref="90" max="-2" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
@@ -120,22 +105,6 @@
     <Component class="javax.swing.JPasswordField" name="losenText">
       <Events>
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="losenTextActionPerformed"/>
-      </Events>
-    </Component>
-    <Component class="javax.swing.JButton" name="ottoLogin">
-      <Properties>
-        <Property name="text" type="java.lang.String" value="OTTO"/>
-      </Properties>
-      <Events>
-        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="ottoLoginActionPerformed"/>
-      </Events>
-    </Component>
-    <Component class="javax.swing.JButton" name="edithLogin">
-      <Properties>
-        <Property name="text" type="java.lang.String" value="EDITH"/>
-      </Properties>
-      <Events>
-        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="edithLoginActionPerformed"/>
       </Events>
     </Component>
   </SubComponents>
