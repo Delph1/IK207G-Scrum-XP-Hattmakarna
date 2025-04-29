@@ -34,7 +34,6 @@ public class MainWindow extends javax.swing.JFrame {
         logOut = new javax.swing.JButton();
         minProfilBTN = new javax.swing.JButton();
         btnImageManager = new javax.swing.JButton();
-        btnCalendar = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -122,13 +121,6 @@ public class MainWindow extends javax.swing.JFrame {
             }
         });
 
-        btnCalendar.setText("Kalender");
-        btnCalendar.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnCalendarActionPerformed(evt);
-            }
-        });
-
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -156,8 +148,6 @@ public class MainWindow extends javax.swing.JFrame {
                         .addComponent(btnImageManager)
                         .addGap(18, 18, 18)
                         .addComponent(statisticsBTN, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
-                        .addComponent(btnCalendar)
                         .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
             .addComponent(jSeparator1)
@@ -182,8 +172,7 @@ public class MainWindow extends javax.swing.JFrame {
                     .addComponent(btnMaterials)
                     .addComponent(statisticsBTN)
                     .addComponent(ProductListBTN)
-                    .addComponent(btnImageManager)
-                    .addComponent(btnCalendar))
+                    .addComponent(btnImageManager))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -253,17 +242,6 @@ public class MainWindow extends javax.swing.JFrame {
         lblHeader.setText("Hattmakarna - Bilder");
     }//GEN-LAST:event_btnImageManagerActionPerformed
 
-    private void btnCalendarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCalendarActionPerformed
-        User user = Hattmakarna.currentUser;
-        int user_id = user.getUserId();
-        try {
-            showCalendarPanel(user_id);
-        } catch (ParseException ex) {
-            Logger.getLogger(MainWindow.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        lblHeader.setText("Hattmakarna - Kalender");
-    }//GEN-LAST:event_btnCalendarActionPerformed
-
     // Publik Metod för att skapa start-panelobjekt och anropa den interna metoden för att visa panelen
     public void showStartPanel() {
        showPanel(new StartPanel(this));
@@ -332,13 +310,8 @@ public class MainWindow extends javax.swing.JFrame {
         currentPanel.repaint();
     }
     
-    public void showCalendarPanel(int user_id) throws ParseException {
-        showPanel(new CalendarPanel(this, user_id));
-    }
-
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton ProductListBTN;
-    private javax.swing.JButton btnCalendar;
     private javax.swing.JButton btnImageManager;
     private javax.swing.JButton btnMaterials;
     private javax.swing.JLabel jLabel2;
