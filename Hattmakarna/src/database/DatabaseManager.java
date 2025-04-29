@@ -143,6 +143,30 @@ public class DatabaseManager {
 
     }
 
+    public ArrayList<Order> getOrdersBetweenDates(String startDate, String stopDate) {
+        try {
+            ArrayList<Order> orders = new ArrayList<>();
+            String query = "SELECT * FROM orders WHERE order_date BETWEEN " + startDate + " and " + stopDate;
+            ArrayList<HashMap<String, String>> results = db.fetchRows(query);
+            if (results != null) {
+                for (HashMap<String, String> row : results) {
+                    orders.add(new Order(
+                            row.get("order_id") == null ? 0 : Integer.parseInt(row.get("order_id")),
+                            row.get("customer_id") == null ? 0 : Integer.parseInt(row.get("customer_id")),
+                            LocalDate.parse(row.get("order_date")),
+                            row.get("order_status"),
+                            ParseBoolean(row.get("express")),
+                            row.get("shipping_cost") == null ? 0 : Integer.parseInt(row.get("shipping_cost"))
+                    ));
+                }
+            }
+            return orders;
+        } catch (InfException e) {
+            throw new RuntimeException("Fel vid hämtning av beställningar: " + e.getMessage());
+        }
+
+    }
+
     // Hämta en beställningsrad från databas
     public OrderLine getOrderLine(int id) {
         System.out.println("GET orderline " + id);
@@ -555,6 +579,7 @@ public class DatabaseManager {
             return null;
         }
     }
+        
     public Product getProduct(int product_id) {
         System.out.println("GET product " + product_id);
         try {
