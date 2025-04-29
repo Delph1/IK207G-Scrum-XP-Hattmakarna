@@ -1,5 +1,6 @@
 package hattmakarna;
 
+import panels.modular.CustomerPanel;
 import panels.modular.ChangePasswordPanel;
 import panels.modular.MyProfilePanel;
 import java.awt.BorderLayout;
