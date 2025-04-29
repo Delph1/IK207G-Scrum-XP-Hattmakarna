@@ -379,6 +379,8 @@ public class OrderPanel extends javax.swing.JPanel {
             }
         });
 
+        jScrollPane2.setHorizontalScrollBarPolicy(javax.swing.ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+
         tblOrderline.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
@@ -406,6 +408,9 @@ public class OrderPanel extends javax.swing.JPanel {
                 btnSaveOrderActionPerformed(evt);
             }
         });
+
+        jScrollPane4.setHorizontalScrollBarPolicy(javax.swing.ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+        jScrollPane4.setVerticalScrollBarPolicy(javax.swing.ScrollPaneConstants.VERTICAL_SCROLLBAR_NEVER);
 
         tblOrders.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
