@@ -1,8 +1,9 @@
-package panels;
+package panels.modular;
 
 import hattmakarna.Hattmakarna;
 import static hattmakarna.Hattmakarna.dbm;
 import hattmakarna.MainWindow;
+import hattmakarna.ModularWindow;
 import java.util.ArrayList;
 import javax.swing.DefaultListModel;
 import javax.swing.JOptionPane;
@@ -12,7 +13,7 @@ import utils.Validator;
 //Fält
 public class CustomerPanel extends javax.swing.JPanel {
 
-    private MainWindow window;
+    private ModularWindow window;
     private Customer customer;
     ArrayList<String> phoneNumbers;
     ArrayList<String> mails;
@@ -20,7 +21,7 @@ public class CustomerPanel extends javax.swing.JPanel {
     private DefaultListModel<String> mailModel;
 
     //Konstruktor 
-    public CustomerPanel(MainWindow window, Customer customer) {
+    public CustomerPanel(ModularWindow window, Customer customer) {
         // Vi tar emot och lagrar huvudfönstret som ett fält, då kan vi komma åt metoder som att byta panel
         this.window = window;
         initComponents();
@@ -153,6 +154,7 @@ public class CustomerPanel extends javax.swing.JPanel {
 
         setEnabled(false);
         setName(""); // NOI18N
+        setPreferredSize(new java.awt.Dimension(630, 430));
         setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jLabel1.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
@@ -389,7 +391,7 @@ if (!validFirstName || !validLastName || !validStreet || !validPostalCode || !va
     }//GEN-LAST:event_removeMailButtonActionPerformed
 
     private void backButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_backButtonActionPerformed
-       window.showCustomerListPanel();
+       window.dispose();
     }//GEN-LAST:event_backButtonActionPerformed
 
     private void phoneNumberListMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_phoneNumberListMouseClicked
