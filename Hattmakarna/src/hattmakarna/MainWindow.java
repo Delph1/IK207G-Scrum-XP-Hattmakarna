@@ -17,14 +17,15 @@ public class MainWindow extends javax.swing.JFrame {
         initComponents();
 
         // Börjar med att visa startpanelen
-       showStartPanel();
+        showStartPanel();
+        lblHeader.setText("Hattmakarna - Start");
     }
 
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jLabel1 = new javax.swing.JLabel();
+        lblHeader = new javax.swing.JLabel();
         mainPanel = new javax.swing.JPanel();
         jLabel2 = new javax.swing.JLabel();
         startButton = new javax.swing.JButton();
@@ -42,9 +43,9 @@ public class MainWindow extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        jLabel1.setFont(new java.awt.Font("Segoe UI", 1, 36)); // NOI18N
-        jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-        jLabel1.setText("Hattmakarna 0.1");
+        lblHeader.setFont(new java.awt.Font("Segoe UI", 1, 36)); // NOI18N
+        lblHeader.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        lblHeader.setText("Hattmakarna");
 
         mainPanel.setBackground(new java.awt.Color(204, 204, 204));
         mainPanel.setAlignmentX(0.0F);
@@ -148,7 +149,7 @@ public class MainWindow extends javax.swing.JFrame {
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(lblHeader, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addGap(84, 84, 84)
                         .addComponent(btnCalendar)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
@@ -183,7 +184,7 @@ public class MainWindow extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(lblHeader, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                         .addComponent(logOut)
                         .addComponent(minProfilBTN))
@@ -211,11 +212,13 @@ public class MainWindow extends javax.swing.JFrame {
     private void startButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_startButtonActionPerformed
         // Visa startpanelen när man trycker på "Start" knappen
         showStartPanel();
+        lblHeader.setText("Hattmakarna - Start");
     }//GEN-LAST:event_startButtonActionPerformed
 
     private void ordersButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ordersButtonActionPerformed
         // Visa beställningslista när man trycker på "Beställningar" knappen
         showOrderlistPanel();
+        lblHeader.setText("Hattmakarna - Beställningar");
     }//GEN-LAST:event_ordersButtonActionPerformed
 
     private void mainPanelComponentResized(java.awt.event.ComponentEvent evt) {//GEN-FIRST:event_mainPanelComponentResized
@@ -228,22 +231,27 @@ public class MainWindow extends javax.swing.JFrame {
        User user = Hattmakarna.currentUser;
        int user_id = user.getUserId();
        showSchemaPanel(user_id); 
+       lblHeader.setText("Hattmakarna - Schema");
     }//GEN-LAST:event_schemaButtonActionPerformed
 
     private void btnMaterialsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMaterialsActionPerformed
         showMaterialListPanel();
+        lblHeader.setText("Hattmakarna - Materialbeställning");
     }//GEN-LAST:event_btnMaterialsActionPerformed
 
     private void statisticsBTNActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_statisticsBTNActionPerformed
         showOrderStatisticsPanel();        // TODO add your handling code here:
+        lblHeader.setText("Hattmakarna - Statistik");
     }//GEN-LAST:event_statisticsBTNActionPerformed
 
     private void customerListBTNActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_customerListBTNActionPerformed
-        showCustomerListPanel();        
+        showCustomerListPanel();
+        lblHeader.setText("Hattmakarna - Kundlista");        
     }//GEN-LAST:event_customerListBTNActionPerformed
 
     private void ProductListBTNActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ProductListBTNActionPerformed
-        showProductListPanel();   
+        showProductListPanel();
+        lblHeader.setText("Hattmakarna - Hattar");
     }//GEN-LAST:event_ProductListBTNActionPerformed
 
     private void logOutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_logOutActionPerformed
@@ -251,17 +259,15 @@ public class MainWindow extends javax.swing.JFrame {
         LoginWindow window = new LoginWindow();
         window.setVisible(true);
         this.dispose();
-
-        // TODO add your handling code here:
     }//GEN-LAST:event_logOutActionPerformed
 
     private void minProfilBTNActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_minProfilBTNActionPerformed
-     showMyProfile();
-        // TODO add your handling code here:
+        showMyProfile();
     }//GEN-LAST:event_minProfilBTNActionPerformed
 
     private void btnImageManagerActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnImageManagerActionPerformed
         showImageManagerPanel();
+        lblHeader.setText("Hattmakarna - Bilder");
     }//GEN-LAST:event_btnImageManagerActionPerformed
 
     private void btnCalendarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCalendarActionPerformed
@@ -272,6 +278,7 @@ public class MainWindow extends javax.swing.JFrame {
         } catch (ParseException ex) {
             Logger.getLogger(MainWindow.class.getName()).log(Level.SEVERE, null, ex);
         }
+        lblHeader.setText("Hattmakarna - Kalender");
     }//GEN-LAST:event_btnCalendarActionPerformed
 
     // Publik Metod för att skapa start-panelobjekt och anropa den interna metoden för att visa panelen
@@ -317,14 +324,6 @@ public class MainWindow extends javax.swing.JFrame {
     public void showCustomerPanel(Customer customer) {
        showPanel(new CustomerPanel(this,customer));
     }
-    
-      /*/public void showCustomerPanel(int customerId) {
-       showPanel(new CustomerPanel(this, customerId));
-    }
-    
-    public void showCustomerPanel() {
-       showPanel(new CustomerPanel(this));
-    } */
          
     public void showCustomerListPanel() {
        showPanel(new CustomerListPanel(this));
@@ -352,10 +351,7 @@ public class MainWindow extends javax.swing.JFrame {
     
     public void showandraLosen() {
         showPanel(new ChangePasswordPanel(this));
-
     }
-    
-    
     
     // Intern metod för att "måla" en panel efter mainPanel's storlek
     private void redrawCurrentPanel() {
@@ -375,9 +371,9 @@ public class MainWindow extends javax.swing.JFrame {
     private javax.swing.JButton btnImageManager;
     private javax.swing.JButton btnMaterials;
     private javax.swing.JButton customerListBTN;
-    private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JSeparator jSeparator1;
+    private javax.swing.JLabel lblHeader;
     private javax.swing.JButton logOut;
     private javax.swing.JPanel mainPanel;
     private javax.swing.JButton minProfilBTN;

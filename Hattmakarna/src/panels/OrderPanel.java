@@ -367,7 +367,15 @@ public class OrderPanel extends javax.swing.JPanel {
             new String [] {
                 "Orderrad-ID", "Produkt-ID", "Pris", "Kundgodkännande", "Beskrivning", "Status"
             }
-        ));
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false, false, false, false, false, false
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
         jScrollPane2.setViewportView(tblOrderline);
         if (tblOrderline.getColumnModel().getColumnCount() > 0) {
             tblOrderline.getColumnModel().getColumn(0).setResizable(false);
