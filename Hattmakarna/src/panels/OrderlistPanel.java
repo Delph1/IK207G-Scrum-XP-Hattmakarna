@@ -145,8 +145,8 @@ public class OrderlistPanel extends javax.swing.JPanel {
             }
         });
         orderTable.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                orderTableMouseClicked(evt);
+            public void mousePressed(java.awt.event.MouseEvent evt) {
+                orderTableMousePressed(evt);
             }
         });
         jScrollPane2.setViewportView(orderTable);
@@ -280,10 +280,10 @@ public class OrderlistPanel extends javax.swing.JPanel {
 // TODO add your handling code here:
     }//GEN-LAST:event_rensaBTNActionPerformed
 
-    private void orderTableMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_orderTableMouseClicked
+    private void orderTableMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_orderTableMousePressed
         showOrderButton.setEnabled(true);
         deleteOrderButton.setEnabled(true); 
-    }//GEN-LAST:event_orderTableMouseClicked
+    }//GEN-LAST:event_orderTableMousePressed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
