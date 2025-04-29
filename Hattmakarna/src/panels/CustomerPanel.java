@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import javax.swing.DefaultListModel;
 import javax.swing.JOptionPane;
 import models.Customer;
+import utils.Validator;
 
 //Fält
 public class CustomerPanel extends javax.swing.JPanel {
@@ -45,6 +46,15 @@ public class CustomerPanel extends javax.swing.JPanel {
         phoneNumberList.setModel(phoneNumberModel);
         mailList.setModel(mailModel);
         populateListModels(); 
+        
+        Validator.setLength(firstNameTextField, 2, 50);
+        Validator.setLength(lastNameTextField, 2, 50);
+        Validator.setLength(streetAddressTextField, 2, 50);
+        Validator.setLength(postalCodeTextField, 2, 10);
+        Validator.setLength(stateTextField, 2, 50);
+        Validator.setLength(countryTextField, 2, 50);
+        Validator.setNumber(phoneNumberTextField);
+        Validator.setEmail(emailTextField);
     }
 
     //Fyller i listmodellerna med datan som finns i ArrayListorna
@@ -70,6 +80,21 @@ public class CustomerPanel extends javax.swing.JPanel {
     }
 
     public void updateCustomer() {
+        String firstName = firstNameTextField.getText();
+        String lastName = lastNameTextField.getText();
+        String streetAddress = streetAddressTextField.getText();
+        String postal_code = postalCodeTextField.getText();
+        String postal_city = cityTextField.getText();
+        String state = stateTextField.getText();
+        String country = countryTextField.getText();
+        this.customer.setFirstName(firstName);
+        this.customer.setLastName(lastName);
+        this.customer.setStreetName(streetAddress);
+        this.customer.setPostalCode(postal_code);
+        this.customer.setPostalCity(postal_city);
+        this.customer.setState(state);
+        this.customer.setCountry(country);
+        
         this.customer.setEmail(mails);
         this.customer.setPhoneNumbers(phoneNumbers);
         dbm.updateCustomer(this.customer);
@@ -308,21 +333,36 @@ public class CustomerPanel extends javax.swing.JPanel {
 
     private void saveCustomerButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_saveCustomerButtonActionPerformed
 
-        if (this.customer == null) {
-            newCustomer();
-            JOptionPane.showMessageDialog(this, "Kunden är sparad"); 
-            
+boolean validFirstName = Validator.isValid(firstNameTextField);
+boolean validLastName = Validator.isValid(lastNameTextField);
+boolean validStreet = Validator.isValid(streetAddressTextField);
+boolean validPostalCode = Validator.isValid(postalCodeTextField);
+boolean validCity = Validator.isValid(cityTextField);
+boolean validState = Validator.isValid(stateTextField);
+boolean validCountry = Validator.isValid(countryTextField);
 
+if (!validFirstName || !validLastName || !validStreet || !validPostalCode || !validCity || !validState || !validCountry) {
+   
+            JOptionPane.showMessageDialog(this, "Alla fält inte korrekt ifyllda."); 
         } else {
-            updateCustomer();
-            JOptionPane.showMessageDialog(this, "Kunden är uppdaterad"); 
-        }
+            if (this.customer == null) {
+                newCustomer();
+                JOptionPane.showMessageDialog(this, "Kunden är sparad"); 
+
+
+            } else {
+                updateCustomer();
+                JOptionPane.showMessageDialog(this, "Kunden är uppdaterad"); 
+            }
+        } 
 
     }//GEN-LAST:event_saveCustomerButtonActionPerformed
 
     private void addPhonNumberButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addPhonNumberButtonActionPerformed
-        phoneNumbers.add(phoneNumberTextField.getText()); 
-        populateListModels(); 
+        if(Validator.isValid(phoneNumberTextField)){
+            phoneNumbers.add(phoneNumberTextField.getText()); 
+            populateListModels(); 
+        }
     }//GEN-LAST:event_addPhonNumberButtonActionPerformed
 
     private void phoneNumberTextFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_phoneNumberTextFieldActionPerformed
@@ -330,8 +370,10 @@ public class CustomerPanel extends javax.swing.JPanel {
     }//GEN-LAST:event_phoneNumberTextFieldActionPerformed
 
     private void addEmailButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addEmailButtonActionPerformed
-       mails.add(emailTextField.getText());
-       populateListModels();
+        if(Validator.isValid(emailTextField)){
+           mails.add(emailTextField.getText());
+           populateListModels();
+        }
     }//GEN-LAST:event_addEmailButtonActionPerformed
 
     private void removePhoneNumberButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_removePhoneNumberButtonActionPerformed
