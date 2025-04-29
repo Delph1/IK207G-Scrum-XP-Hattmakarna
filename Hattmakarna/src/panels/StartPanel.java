@@ -31,7 +31,7 @@ public class StartPanel extends javax.swing.JPanel {
 
     for (HashMap<String, String> row : dagensOrdrar) {
         model.addRow(new Object[]{
-            row.get("id"),
+            row.get("order_id"),
             row.get("customer_id"),
             row.get("order_status"),
             row.get("express").equals("1") ? "Ja" : "Nej",
