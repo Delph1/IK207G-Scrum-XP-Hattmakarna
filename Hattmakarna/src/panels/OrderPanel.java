@@ -167,6 +167,7 @@ public class OrderPanel extends javax.swing.JPanel {
         jScrollPane3.setViewportView(jTable1);
 
         setName(""); // NOI18N
+        setPreferredSize(new java.awt.Dimension(1165, 607));
 
         pnlNewOrder.setOpaque(false);
 

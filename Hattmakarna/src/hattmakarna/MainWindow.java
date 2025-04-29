@@ -30,7 +30,6 @@ public class MainWindow extends javax.swing.JFrame {
         schemaButton = new javax.swing.JButton();
         btnMaterials = new javax.swing.JButton();
         statisticsBTN = new javax.swing.JButton();
-        customerListBTN = new javax.swing.JButton();
         ProductListBTN = new javax.swing.JButton();
         logOut = new javax.swing.JButton();
         minProfilBTN = new javax.swing.JButton();
@@ -74,7 +73,7 @@ public class MainWindow extends javax.swing.JFrame {
             }
         });
 
-        schemaButton.setText("Schema");
+        schemaButton.setText("Att göra");
         schemaButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 schemaButtonActionPerformed(evt);
@@ -92,13 +91,6 @@ public class MainWindow extends javax.swing.JFrame {
         statisticsBTN.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 statisticsBTNActionPerformed(evt);
-            }
-        });
-
-        customerListBTN.setText("Kunder");
-        customerListBTN.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                customerListBTNActionPerformed(evt);
             }
         });
 
@@ -146,9 +138,7 @@ public class MainWindow extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(lblHeader, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addGap(84, 84, 84)
-                        .addComponent(btnCalendar)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addGap(173, 173, 173)
                         .addComponent(minProfilBTN)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(logOut))
@@ -161,18 +151,18 @@ public class MainWindow extends javax.swing.JFrame {
                         .addGap(18, 18, 18)
                         .addComponent(schemaButton, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
-                        .addComponent(statisticsBTN, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
-                        .addComponent(customerListBTN, javax.swing.GroupLayout.PREFERRED_SIZE, 87, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
                         .addComponent(ProductListBTN)
                         .addGap(18, 18, 18)
                         .addComponent(btnImageManager)
+                        .addGap(18, 18, 18)
+                        .addComponent(statisticsBTN, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(btnCalendar)
                         .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
             .addComponent(jSeparator1)
             .addGroup(layout.createSequentialGroup()
-                .addComponent(mainPanel, javax.swing.GroupLayout.PREFERRED_SIZE, 1100, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(mainPanel, javax.swing.GroupLayout.PREFERRED_SIZE, 1167, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(0, 0, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
@@ -183,8 +173,7 @@ public class MainWindow extends javax.swing.JFrame {
                     .addComponent(lblHeader, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                         .addComponent(logOut)
-                        .addComponent(minProfilBTN))
-                    .addComponent(btnCalendar))
+                        .addComponent(minProfilBTN)))
                 .addGap(4, 4, 4)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(startButton)
@@ -192,9 +181,9 @@ public class MainWindow extends javax.swing.JFrame {
                     .addComponent(schemaButton)
                     .addComponent(btnMaterials)
                     .addComponent(statisticsBTN)
-                    .addComponent(customerListBTN)
                     .addComponent(ProductListBTN)
-                    .addComponent(btnImageManager))
+                    .addComponent(btnImageManager)
+                    .addComponent(btnCalendar))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -239,11 +228,6 @@ public class MainWindow extends javax.swing.JFrame {
         showOrderStatisticsPanel();        // TODO add your handling code here:
         lblHeader.setText("Hattmakarna - Statistik");
     }//GEN-LAST:event_statisticsBTNActionPerformed
-
-    private void customerListBTNActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_customerListBTNActionPerformed
-        showCustomerListPanel();
-        lblHeader.setText("Hattmakarna - Kundlista");        
-    }//GEN-LAST:event_customerListBTNActionPerformed
 
     private void ProductListBTNActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ProductListBTNActionPerformed
         showProductListPanel();
@@ -357,7 +341,6 @@ public class MainWindow extends javax.swing.JFrame {
     private javax.swing.JButton btnCalendar;
     private javax.swing.JButton btnImageManager;
     private javax.swing.JButton btnMaterials;
-    private javax.swing.JButton customerListBTN;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JSeparator jSeparator1;
     private javax.swing.JLabel lblHeader;
