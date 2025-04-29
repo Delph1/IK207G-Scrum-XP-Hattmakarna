@@ -5,6 +5,7 @@ import panels.modular.MyProfilePanel;
 import java.awt.BorderLayout;
 import java.awt.Frame;
 import javax.swing.JPanel;
+import models.Customer;
 import models.Product;
 import panels.*;
 import panels.modular.ProductPanel;
@@ -56,12 +57,18 @@ public class ModularWindow extends javax.swing.JDialog {
     public void showandraLosen() {
         showPanel(new ChangePasswordPanel(this, window));
     }
-        
+
+    public void showCustomerPanel(Customer customer) {
+       showPanel(new CustomerPanel(this,customer));
+    }
+         
+
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setPreferredSize(new java.awt.Dimension(650, 650));
         setSize(new java.awt.Dimension(620, 535));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
