@@ -251,7 +251,6 @@ public class SpecialOrderPanel extends javax.swing.JPanel {
         btnSave = new javax.swing.JButton();
         btnCancel = new javax.swing.JButton();
         btnRemoveRow = new javax.swing.JButton();
-        btnCreateMaterial = new javax.swing.JButton();
         jScrollPane2 = new javax.swing.JScrollPane();
         txtDescription = new javax.swing.JTextArea();
         txtWeight = new javax.swing.JTextField();
@@ -266,6 +265,8 @@ public class SpecialOrderPanel extends javax.swing.JPanel {
         tblBlueprint = new javax.swing.JTable();
         lblBlueprint = new javax.swing.JLabel();
         btnUploadBlueprint = new javax.swing.JButton();
+        lblMaterial = new javax.swing.JLabel();
+        lblRitning = new javax.swing.JLabel();
 
         setPreferredSize(new java.awt.Dimension(620, 535));
         setVerifyInputWhenFocusTarget(false);
@@ -330,13 +331,6 @@ public class SpecialOrderPanel extends javax.swing.JPanel {
             }
         });
 
-        btnCreateMaterial.setText("Nytt material");
-        btnCreateMaterial.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnCreateMaterialActionPerformed(evt);
-            }
-        });
-
         txtDescription.setColumns(20);
         txtDescription.setRows(5);
         jScrollPane2.setViewportView(txtDescription);
@@ -347,7 +341,7 @@ public class SpecialOrderPanel extends javax.swing.JPanel {
 
         lblResale1.setText("Copyright-skydd");
 
-        lblImage.setText("Ingen bild än...");
+        lblImage.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0), 2));
 
         btnUploadImage.setText("Välj bild ...");
         btnUploadImage.addActionListener(new java.awt.event.ActionListener() {
@@ -378,7 +372,7 @@ public class SpecialOrderPanel extends javax.swing.JPanel {
             tblBlueprint.getColumnModel().getColumn(1).setPreferredWidth(100);
         }
 
-        lblBlueprint.setText("Välj en ritning i listan");
+        lblBlueprint.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0), 2));
 
         btnUploadBlueprint.setText("Ladda upp ritning");
         btnUploadBlueprint.addActionListener(new java.awt.event.ActionListener() {
@@ -386,6 +380,10 @@ public class SpecialOrderPanel extends javax.swing.JPanel {
                 btnUploadBlueprintActionPerformed(evt);
             }
         });
+
+        lblMaterial.setText("Vänligen välj material nedan.");
+
+        lblRitning.setText("Vänligen välj en ritning nedan.");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
@@ -395,10 +393,11 @@ public class SpecialOrderPanel extends javax.swing.JPanel {
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(lblHatName)
-                            .addComponent(lblDescription)
-                            .addComponent(lblWeight))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                .addComponent(lblDescription)
+                                .addComponent(lblWeight))
+                            .addComponent(lblHatName))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addGroup(layout.createSequentialGroup()
@@ -424,27 +423,30 @@ public class SpecialOrderPanel extends javax.swing.JPanel {
                                 .addComponent(lblImage, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                             .addGroup(layout.createSequentialGroup()
                                 .addGap(32, 32, 32)
-                                .addComponent(btnUploadImage, javax.swing.GroupLayout.DEFAULT_SIZE, 130, Short.MAX_VALUE))))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addComponent(btnUploadBlueprint)
+                                .addComponent(btnUploadImage, javax.swing.GroupLayout.DEFAULT_SIZE, 148, Short.MAX_VALUE))))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 389, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(lblRitning)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(btnUploadBlueprint)))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(0, 75, Short.MAX_VALUE)
+                                .addComponent(btnCancel)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(btnSave))
+                            .addComponent(lblBlueprint, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(lblMaterial)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(btnCancel)
+                        .addComponent(btnAddMaterial)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(btnSave)))
+                        .addComponent(btnRemoveRow))
+                    .addComponent(jScrollPane1))
                 .addContainerGap())
-            .addGroup(layout.createSequentialGroup()
-                .addGap(6, 6, 6)
-                .addComponent(btnAddMaterial)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(btnRemoveRow)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(btnCreateMaterial))
-            .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.TRAILING)
-            .addGroup(layout.createSequentialGroup()
-                .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 395, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(lblBlueprint, javax.swing.GroupLayout.PREFERRED_SIZE, 179, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(19, 19, 19))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -466,32 +468,36 @@ public class SpecialOrderPanel extends javax.swing.JPanel {
                         .addComponent(lblImage, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(txtWeight, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(lblWeight))
                     .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                         .addComponent(cbxResale)
                         .addComponent(lblResale)
                         .addComponent(cbxCopyright)
                         .addComponent(lblResale1)
-                        .addComponent(btnUploadImage)))
-                .addGap(18, 18, 18)
+                        .addComponent(btnUploadImage))
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addComponent(lblWeight)
+                        .addComponent(txtWeight, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addGap(30, 30, 30)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btnAddMaterial)
                     .addComponent(btnRemoveRow)
-                    .addComponent(btnCreateMaterial))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                    .addComponent(btnAddMaterial)
+                    .addComponent(lblMaterial))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 142, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(lblBlueprint, javax.swing.GroupLayout.DEFAULT_SIZE, 126, Short.MAX_VALUE)
-                    .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 20, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(btnUploadBlueprint)
+                            .addComponent(lblRitning))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 126, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(lblBlueprint, javax.swing.GroupLayout.PREFERRED_SIZE, 126, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 48, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnSave)
-                    .addComponent(btnCancel)
-                    .addComponent(btnUploadBlueprint))
-                .addGap(12, 12, 12))
+                    .addComponent(btnCancel))
+                .addContainerGap())
         );
     }// </editor-fold>//GEN-END:initComponents
 
@@ -566,10 +572,6 @@ public class SpecialOrderPanel extends javax.swing.JPanel {
         tblMaterial.setModel(materialTable);
     }//GEN-LAST:event_btnRemoveRowActionPerformed
 
-    private void btnCreateMaterialActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCreateMaterialActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_btnCreateMaterialActionPerformed
-
     private void btnUploadImageActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUploadImageActionPerformed
         
         byte[] imageBytes = imageManager.uploadImage();
@@ -597,7 +599,6 @@ public class SpecialOrderPanel extends javax.swing.JPanel {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAddMaterial;
     private javax.swing.JButton btnCancel;
-    private javax.swing.JButton btnCreateMaterial;
     private javax.swing.JButton btnRemoveRow;
     private javax.swing.JButton btnSave;
     private javax.swing.JButton btnUploadBlueprint;
@@ -611,9 +612,11 @@ public class SpecialOrderPanel extends javax.swing.JPanel {
     private javax.swing.JLabel lblDescription;
     private javax.swing.JLabel lblHatName;
     private javax.swing.JLabel lblImage;
+    private javax.swing.JLabel lblMaterial;
     private javax.swing.JLabel lblPrice;
     private javax.swing.JLabel lblResale;
     private javax.swing.JLabel lblResale1;
+    private javax.swing.JLabel lblRitning;
     private javax.swing.JLabel lblWeight;
     private javax.swing.JTable tblBlueprint;
     private javax.swing.JTable tblMaterial;
