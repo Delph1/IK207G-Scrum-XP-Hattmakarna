@@ -64,12 +64,6 @@ public class CustomerListPanel extends javax.swing.JPanel {
             }
         });
 
-        jScrollPane1.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                jScrollPane1MouseClicked(evt);
-            }
-        });
-
         customerTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
@@ -87,13 +81,8 @@ public class CustomerListPanel extends javax.swing.JPanel {
             }
         });
         customerTable.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                customerTableMouseClicked(evt);
-            }
-        });
-        customerTable.addPropertyChangeListener(new java.beans.PropertyChangeListener() {
-            public void propertyChange(java.beans.PropertyChangeEvent evt) {
-                customerTablePropertyChange(evt);
+            public void mousePressed(java.awt.event.MouseEvent evt) {
+                customerTableMousePressed(evt);
             }
         });
         jScrollPane1.setViewportView(customerTable);
@@ -113,18 +102,16 @@ public class CustomerListPanel extends javax.swing.JPanel {
             .addGroup(layout.createSequentialGroup()
                 .addGap(32, 32, 32)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(jLabel1)
-                        .addContainerGap(538, Short.MAX_VALUE))
-                    .addGroup(layout.createSequentialGroup()
+                    .addComponent(jLabel1, javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
                         .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 344, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addComponent(showCustomerButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(NewCustomerBTN, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(createOrderForCustomerBTN, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(deleteCustomerButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                        .addContainerGap(100, Short.MAX_VALUE))))
+                            .addComponent(deleteCustomerButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                .addContainerGap(100, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -192,19 +179,11 @@ public class CustomerListPanel extends javax.swing.JPanel {
         window.showCustomerOrderPanel(selectedCustomerId);
     }//GEN-LAST:event_createOrderForCustomerBTNActionPerformed
 
-    private void jScrollPane1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jScrollPane1MouseClicked
-
-    }//GEN-LAST:event_jScrollPane1MouseClicked
-
-    private void customerTablePropertyChange(java.beans.PropertyChangeEvent evt) {//GEN-FIRST:event_customerTablePropertyChange
-
-    }//GEN-LAST:event_customerTablePropertyChange
-
-    private void customerTableMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_customerTableMouseClicked
+    private void customerTableMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_customerTableMousePressed
        showCustomerButton.setEnabled(true);
        createOrderForCustomerBTN.setEnabled(true);
        deleteCustomerButton.setEnabled(true);
-    }//GEN-LAST:event_customerTableMouseClicked
+    }//GEN-LAST:event_customerTableMousePressed
 
     
     // Variables declaration - do not modify//GEN-BEGIN:variables
