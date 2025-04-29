@@ -60,10 +60,21 @@ public class Print {
         createOrderDocument(headerText);
         Desktop.getDesktop().open(new File ("temp.pdf"));
     }
-        public void showDeliveryNote() throws IOException {
+    
+    public void showDeliveryNote() throws IOException {
 
         createDeliveryNoteDocument();
         Desktop.getDesktop().open(new File ("temp.pdf"));
+    }
+    
+    public void printDeliveryNote() throws IOException, PrinterException {
+        PrinterJob printJob = PrinterJob.getPrinterJob();
+        createDeliveryNoteDocument();
+        PDFPrintable printdoc = new PDFPrintable (PDDocument.load(new File("temp.pdf")), Scaling.SHRINK_TO_FIT);
+        if (printJob.printDialog()) {
+            printJob.setPrintable(printdoc);
+            printJob.print();
+        }
     }
     public void printQuote() throws IOException, PrinterException {
         PrinterJob printJob = PrinterJob.getPrinterJob();

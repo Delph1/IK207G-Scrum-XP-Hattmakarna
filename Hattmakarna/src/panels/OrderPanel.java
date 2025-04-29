@@ -104,6 +104,11 @@ public class OrderPanel extends javax.swing.JPanel {
         //Objektet ska se ut: {0, product_id, price, customer_approval, description});
     }
 
+    private void sendOrder() throws IOException, PrinterException {
+        Print sendOrder = new Print(order);
+        sendOrder.printDeliveryNote();
+    }
+    
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -152,6 +157,7 @@ public class OrderPanel extends javax.swing.JPanel {
         lblPrint = new javax.swing.JLabel();
         orderLineDoneButton = new javax.swing.JButton();
         goBackButton = new javax.swing.JButton();
+        btnSendOrder = new javax.swing.JButton();
 
         jTable1.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -176,12 +182,6 @@ public class OrderPanel extends javax.swing.JPanel {
         lblCustomerID.setText("Kund-ID");
 
         tfOrderID.setEnabled(false);
-
-        tfCustomerID.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                tfCustomerIDActionPerformed(evt);
-            }
-        });
 
         lblOrderDate.setText("Orderdatum");
 
@@ -222,12 +222,6 @@ public class OrderPanel extends javax.swing.JPanel {
         cboxExpressOrder.setText("Expressbeställning");
 
         lblShippingCostOrder.setText("Fraktkostnad");
-
-        tfShippingCostOrder.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                tfShippingCostOrderActionPerformed(evt);
-            }
-        });
 
         cboxOrderstatus.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Open", "Confirmed", "Ready", "Completed" }));
 
@@ -456,6 +450,13 @@ public class OrderPanel extends javax.swing.JPanel {
             }
         });
 
+        btnSendOrder.setText("Skicka");
+        btnSendOrder.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnSendOrderActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
@@ -464,23 +465,27 @@ public class OrderPanel extends javax.swing.JPanel {
                 .addContainerGap()
                 .addComponent(pnlNewOrder, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                        .addGroup(layout.createSequentialGroup()
+                            .addComponent(lblPrint)
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                            .addComponent(btnPrintQuote, javax.swing.GroupLayout.PREFERRED_SIZE, 66, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                            .addComponent(btnPrintOrderConfirmation)
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(goBackButton)
+                            .addGap(18, 18, 18)
+                            .addComponent(btnSaveOrder))
+                        .addGroup(layout.createSequentialGroup()
+                            .addComponent(btnRemoveOrderline, javax.swing.GroupLayout.PREFERRED_SIZE, 132, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                            .addComponent(orderLineDoneButton, javax.swing.GroupLayout.PREFERRED_SIZE, 125, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 517, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(lblPrint)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(btnPrintQuote, javax.swing.GroupLayout.PREFERRED_SIZE, 78, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(btnPrintOrderConfirmation)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(goBackButton)
-                        .addGap(18, 18, 18)
-                        .addComponent(btnSaveOrder))
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(btnRemoveOrderline, javax.swing.GroupLayout.PREFERRED_SIZE, 132, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(orderLineDoneButton, javax.swing.GroupLayout.PREFERRED_SIZE, 125, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 517, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 44, Short.MAX_VALUE)
+                        .addGap(445, 445, 445)
+                        .addComponent(btnSendOrder)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 46, Short.MAX_VALUE)
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -515,7 +520,9 @@ public class OrderPanel extends javax.swing.JPanel {
                                                 .addComponent(btnPrintOrderConfirmation))
                                             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                                                 .addComponent(goBackButton)
-                                                .addComponent(btnSaveOrder)))))))
+                                                .addComponent(btnSaveOrder)))))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(btnSendOrder)))
                         .addGap(0, 57, Short.MAX_VALUE))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -548,64 +555,78 @@ public class OrderPanel extends javax.swing.JPanel {
         cboxOrderstatus.setSelectedIndex(1);
         boolean tfCustomerIDValid = Validator.isValid(tfCustomerID);
         boolean tfShippingCostOrderValid = Validator.isValid(tfShippingCostOrder);
+        
         if (tfCustomerIDValid && tfShippingCostOrderValid) {
-        int customer_id = Integer.parseInt(tfCustomerID.getText());
-        LocalDate order_date = LocalDate.parse(tfOrderDate.getText());
-        //String order_status = tfOrderStatus.getText();
-        String order_status = cboxOrderstatus.getSelectedItem().toString();
-        boolean express = cboxExpressOrder.isSelected();
-        int shippingCost = Integer.parseInt(tfShippingCostOrder.getText());
+            int customer_id = Integer.parseInt(tfCustomerID.getText());
+            LocalDate order_date = LocalDate.parse(tfOrderDate.getText());
+            //String order_status = tfOrderStatus.getText();
+            String order_status = cboxOrderstatus.getSelectedItem().toString();
+            boolean express = cboxExpressOrder.isSelected();
+            int shippingCost = Integer.parseInt(tfShippingCostOrder.getText());
 
-        order.setCustomer_id(customer_id);
-        order.setOrder_date(order_date);
-        order.setOrder_status(order_status);
-        order.setExpress(express);
-        order.setShippingCost(shippingCost);
+            order.setCustomer_id(customer_id);
+            order.setOrder_date(order_date);
+            order.setOrder_status(order_status);
+            order.setExpress(express);
+            order.setShippingCost(shippingCost);
 
-        System.out.println(shippingCost);
-        dbm.updateOrder(order);
-
-        DefaultTableModel tableModelOrderline = (DefaultTableModel) tblOrderline.getModel();
-
-        for (int i = 0; i < tableModelOrderline.getRowCount(); i++) {
-            int null_orderId = 0;
-
-            if (tableModelOrderline.getValueAt(i, 0).equals(null_orderId)) {
-                OrderLine orderLine = dbm.createOrderLine(order.getId());
-                tableModelOrderline.setValueAt(orderLine.getOrderLineId(), i, 0);
-                int prod_id = Integer.parseInt(tableModelOrderline.getValueAt(i, 1).toString());
-                int price = Integer.parseInt(tableModelOrderline.getValueAt(i, 2).toString());
-                boolean customer_approval = (Boolean) tableModelOrderline.getValueAt(i, 3);
-                String description = tableModelOrderline.getValueAt(i, 4).toString();
-                Product orderLineHat = dbm.getProduct(prod_id); //hämtar ut produkten för att kunna kolla om det är en lagervara
-                String hatStatus = orderLineHat.getStockItem() ? "ready" : "not ready"; //sätter status beroende på om det är en lagervara eller inte
-                orderLine.setProductId(prod_id);
-                orderLine.setPrice(price);
-                orderLine.setCustomerApproval(customer_approval);
-                orderLine.setDescription(description);
-                orderLine.setHatStatus(hatStatus);
-
-                dbm.updateOrderLine(orderLine);
-            }
-           
-        }
-
-        boolean alILinesReady = true;
-
-        ArrayList<OrderLine> orderlines = dbm.getOrderlines(order.getId());
-        for (OrderLine line : orderlines) {
-            if (!line.getHatStatus().contentEquals("ready")) {
-                return;
-            }
-        }
-
-        if (alILinesReady) {
-            order.setOrder_status("Completed");
+            System.out.println(shippingCost);
             dbm.updateOrder(order);
-        }
-               JOptionPane.showMessageDialog(this, "Beställningen är sparad"); 
+
+            DefaultTableModel tableModelOrderline = (DefaultTableModel) tblOrderline.getModel();
+
+            for (int i = 0; i < tableModelOrderline.getRowCount(); i++) {
+                int null_orderId = 0;
+
+                if (tableModelOrderline.getValueAt(i, 0).equals(null_orderId)) {
+                    OrderLine orderLine = dbm.createOrderLine(order.getId());
+                    tableModelOrderline.setValueAt(orderLine.getOrderLineId(), i, 0);
+                    int prod_id = Integer.parseInt(tableModelOrderline.getValueAt(i, 1).toString());
+                    int price = Integer.parseInt(tableModelOrderline.getValueAt(i, 2).toString());
+                    boolean customer_approval = (Boolean) tableModelOrderline.getValueAt(i, 3);
+                    String description = tableModelOrderline.getValueAt(i, 4).toString();
+                    Product orderLineHat = dbm.getProduct(prod_id); //hämtar ut produkten för att kunna kolla om det är en lagervara
+                    String hatStatus = orderLineHat.getStockItem() ? "ready" : "not ready"; //sätter status beroende på om det är en lagervara eller inte
+                    orderLine.setProductId(prod_id);
+                    orderLine.setPrice(price);
+                    orderLine.setCustomerApproval(customer_approval);
+                    orderLine.setDescription(description);
+                    orderLine.setHatStatus(hatStatus);
+
+                    dbm.updateOrderLine(orderLine);
+                }
+
+            }
+
+            boolean alILinesReady = true;
+
+            ArrayList<OrderLine> orderlines = dbm.getOrderlines(order.getId());
+            for (OrderLine line : orderlines) {
+                if (!line.getHatStatus().contentEquals("ready")) {
+                    return;
+                }
+            }
+
+            if (alILinesReady) {
+                order.setOrder_status("Completed");
+                dbm.updateOrder(order);
+                int svar = JOptionPane.showConfirmDialog(this, "Din order är redo att skickas. Vill du skicka den nu?", "Bekräfta order", JOptionPane.YES_NO_OPTION);
+                if (svar == JOptionPane.YES_OPTION) {
+                    try {
+                        sendOrder();
+                    } catch (PrinterException ex) {
+                        Logger.getLogger(OrderPanel.class.getName()).log(Level.SEVERE, null, ex);
+                    } catch (IOException ex) {
+                        Logger.getLogger(OrderPanel.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                    order.setOrder_status("Despatched");
+                    dbm.updateOrder(order);
+                }
+            } else {
+                JOptionPane.showMessageDialog(this, "Beställningen är sparad"); 
+            }
         } else {
-                   JOptionPane.showMessageDialog(this, "Ogiltlig data"); 
+            JOptionPane.showMessageDialog(this, "Ogiltlig data"); 
         }
     }//GEN-LAST:event_btnSaveOrderActionPerformed
 
@@ -697,13 +718,35 @@ public class OrderPanel extends javax.swing.JPanel {
         window.showOrderlistPanel();
     }//GEN-LAST:event_goBackButtonActionPerformed
 
-    private void tfCustomerIDActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tfCustomerIDActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_tfCustomerIDActionPerformed
+    private void btnSendOrderActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSendOrderActionPerformed
 
-    private void tfShippingCostOrderActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tfShippingCostOrderActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_tfShippingCostOrderActionPerformed
+        boolean alILinesReady = true;
+
+        ArrayList<OrderLine> orderlines = dbm.getOrderlines(order.getId());
+        for (OrderLine line : orderlines) {
+            if (!line.getHatStatus().contentEquals("ready")) {
+                JOptionPane.showMessageDialog(this, "Beställningen är inte redo att skickas."); 
+                return;
+            }
+        }
+
+        if (alILinesReady) {
+            order.setOrder_status("Completed");
+            dbm.updateOrder(order);
+            int svar = JOptionPane.showConfirmDialog(this, "Din order är redo att skickas. Vill du skicka den nu?", "Bekräfta order", JOptionPane.YES_NO_OPTION);
+            if (svar == JOptionPane.YES_OPTION) {
+                try {
+                    sendOrder();
+                } catch (PrinterException ex) {
+                    Logger.getLogger(OrderPanel.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (IOException ex) {
+                    Logger.getLogger(OrderPanel.class.getName()).log(Level.SEVERE, null, ex);
+                }
+                order.setOrder_status("Despatched");
+                dbm.updateOrder(order);
+            }
+        }
+    }//GEN-LAST:event_btnSendOrderActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -713,6 +756,7 @@ public class OrderPanel extends javax.swing.JPanel {
     private javax.swing.JButton btnPrintQuote;
     private javax.swing.JButton btnRemoveOrderline;
     private javax.swing.JButton btnSaveOrder;
+    private javax.swing.JButton btnSendOrder;
     private javax.swing.JButton btnSpecialOrder;
     private javax.swing.JCheckBox cboxCustomerApproval;
     private javax.swing.JCheckBox cboxExpressOrder;

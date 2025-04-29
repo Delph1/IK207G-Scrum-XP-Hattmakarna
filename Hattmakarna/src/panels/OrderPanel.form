@@ -49,26 +49,32 @@
               <EmptySpace max="-2" attributes="0"/>
               <Component id="pnlNewOrder" min="-2" max="-2" attributes="0"/>
               <EmptySpace max="-2" attributes="0"/>
-              <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                  <Group type="102" attributes="0">
-                      <Component id="lblPrint" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace max="-2" attributes="0"/>
-                      <Component id="btnPrintQuote" min="-2" pref="78" max="-2" attributes="0"/>
-                      <EmptySpace max="-2" attributes="0"/>
-                      <Component id="btnPrintOrderConfirmation" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace max="32767" attributes="0"/>
-                      <Component id="goBackButton" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace type="separate" max="-2" attributes="0"/>
-                      <Component id="btnSaveOrder" min="-2" max="-2" attributes="0"/>
+              <Group type="103" groupAlignment="0" attributes="0">
+                  <Group type="103" alignment="0" groupAlignment="0" max="-2" attributes="0">
+                      <Group type="102" attributes="0">
+                          <Component id="lblPrint" min="-2" max="-2" attributes="0"/>
+                          <EmptySpace max="-2" attributes="0"/>
+                          <Component id="btnPrintQuote" min="-2" pref="66" max="-2" attributes="0"/>
+                          <EmptySpace max="-2" attributes="0"/>
+                          <Component id="btnPrintOrderConfirmation" min="-2" max="-2" attributes="0"/>
+                          <EmptySpace max="32767" attributes="0"/>
+                          <Component id="goBackButton" min="-2" max="-2" attributes="0"/>
+                          <EmptySpace type="separate" max="-2" attributes="0"/>
+                          <Component id="btnSaveOrder" min="-2" max="-2" attributes="0"/>
+                      </Group>
+                      <Group type="102" attributes="0">
+                          <Component id="btnRemoveOrderline" min="-2" pref="132" max="-2" attributes="0"/>
+                          <EmptySpace max="-2" attributes="0"/>
+                          <Component id="orderLineDoneButton" min="-2" pref="125" max="-2" attributes="0"/>
+                      </Group>
+                      <Component id="jScrollPane2" min="-2" pref="517" max="-2" attributes="0"/>
                   </Group>
-                  <Group type="102" attributes="0">
-                      <Component id="btnRemoveOrderline" min="-2" pref="132" max="-2" attributes="0"/>
-                      <EmptySpace max="-2" attributes="0"/>
-                      <Component id="orderLineDoneButton" min="-2" pref="125" max="-2" attributes="0"/>
+                  <Group type="102" alignment="0" attributes="0">
+                      <EmptySpace min="-2" pref="445" max="-2" attributes="0"/>
+                      <Component id="btnSendOrder" min="-2" max="-2" attributes="0"/>
                   </Group>
-                  <Component id="jScrollPane2" min="-2" pref="517" max="-2" attributes="0"/>
               </Group>
-              <EmptySpace pref="44" max="32767" attributes="0"/>
+              <EmptySpace pref="46" max="32767" attributes="0"/>
               <Component id="jPanel1" min="-2" max="-2" attributes="0"/>
               <EmptySpace type="separate" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="0" attributes="0">
@@ -114,6 +120,8 @@
                                       </Group>
                                   </Group>
                               </Group>
+                              <EmptySpace max="-2" attributes="0"/>
+                              <Component id="btnSendOrder" min="-2" max="-2" attributes="0"/>
                           </Group>
                       </Group>
                       <EmptySpace min="0" pref="57" max="32767" attributes="0"/>
@@ -295,9 +303,6 @@
           </Properties>
         </Component>
         <Component class="javax.swing.JTextField" name="tfCustomerID">
-          <Events>
-            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="tfCustomerIDActionPerformed"/>
-          </Events>
         </Component>
         <Component class="javax.swing.JLabel" name="lblOrderDate">
           <Properties>
@@ -400,9 +405,6 @@
           </Properties>
         </Component>
         <Component class="javax.swing.JTextField" name="tfShippingCostOrder">
-          <Events>
-            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="tfShippingCostOrderActionPerformed"/>
-          </Events>
         </Component>
         <Component class="javax.swing.JComboBox" name="cboxOrderstatus">
           <Properties>
@@ -601,6 +603,14 @@
       </Properties>
       <Events>
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="goBackButtonActionPerformed"/>
+      </Events>
+    </Component>
+    <Component class="javax.swing.JButton" name="btnSendOrder">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="Skicka"/>
+      </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnSendOrderActionPerformed"/>
       </Events>
     </Component>
   </SubComponents>
