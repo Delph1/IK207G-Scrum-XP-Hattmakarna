@@ -109,6 +109,7 @@ public class DatabaseManager {
                     + "shipping_cost = '" + order.getShippingCost() + "', "
                     + "express = " + order.isExpress() + " "
                     + "WHERE order_id = " + order.getId();
+            System.out.println(query);
             db.update(query);
             return true;
         } catch (InfException e) {

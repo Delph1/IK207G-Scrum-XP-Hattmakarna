@@ -69,15 +69,17 @@ public class OrderPanel extends javax.swing.JPanel {
         DefaultTableModel tableModelOrders = (DefaultTableModel) tblOrders.getModel();
         allCurrentOrders = dbm.getOrders(); 
         for(Order order : allCurrentOrders) {
-            tableModelOrders.addRow(new Object[]{order.getId(), order.getCustomer_id(), order.getOrder_date()});
+            tableModelOrders.addRow(new Object[]{order.getId(), order.getCustomer_id(), order.getOrder_date(), order.getOrder_status(), order.isExpress(), order.getShippingCost()});
         }
         btnRemoveOrderline.setEnabled(false);
         tblOrderline.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
             public void valueChanged(ListSelectionEvent event) {
                 if (tblOrderline.getSelectedRow() < 0) {
                     btnRemoveOrderline.setEnabled(false);
+                    orderLineDoneButton.setEnabled(false);
                 } else {
                     btnRemoveOrderline.setEnabled(true);
+                    orderLineDoneButton.setEnabled(true);
                 }
             }
         });
@@ -86,7 +88,7 @@ public class OrderPanel extends javax.swing.JPanel {
         DefaultTableModel tableModelOrderline = (DefaultTableModel) tblOrderline.getModel();
         
         for(OrderLine orderline : allOrderlines) {
-            tableModelOrderline.addRow(new Object[] {orderline.getOrderLineId(), orderline.getProductId(), orderline.getPrice(), orderline.getCustomerApproval(), orderline.getDescription()});
+            tableModelOrderline.addRow(new Object[] {orderline.getOrderLineId(), orderline.getProductId(), orderline.getPrice(), orderline.getCustomerApproval(), orderline.getDescription(), orderline.getHatStatus()});
         }
     }
     
@@ -142,6 +144,7 @@ public class OrderPanel extends javax.swing.JPanel {
         btnPrintOrderConfirmation = new javax.swing.JButton();
         btnPrintQuote = new javax.swing.JButton();
         lblPrint = new javax.swing.JLabel();
+        orderLineDoneButton = new javax.swing.JButton();
 
         jTable1.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -357,13 +360,12 @@ public class OrderPanel extends javax.swing.JPanel {
 
             },
             new String [] {
-                "Orderrad-ID", "Produkt-ID", "Pris", "Kundgodkännande", "Beskrivning"
+                "Orderrad-ID", "Produkt-ID", "Pris", "Kundgodkännande", "Beskrivning", "Status"
             }
         ));
         jScrollPane2.setViewportView(tblOrderline);
         if (tblOrderline.getColumnModel().getColumnCount() > 0) {
             tblOrderline.getColumnModel().getColumn(0).setResizable(false);
-            tblOrderline.getColumnModel().getColumn(0).setHeaderValue("Orderrad-ID");
         }
 
         btnSaveOrder.setText("Bekräfta order");
@@ -402,6 +404,14 @@ public class OrderPanel extends javax.swing.JPanel {
 
         lblPrint.setText("Skriv ut:");
 
+        orderLineDoneButton.setText("Klarmarkera rad");
+        orderLineDoneButton.setEnabled(false);
+        orderLineDoneButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                orderLineDoneButtonActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
@@ -424,6 +434,8 @@ public class OrderPanel extends javax.swing.JPanel {
                         .addGap(0, 0, Short.MAX_VALUE))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addComponent(btnRemoveOrderline)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(orderLineDoneButton)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(lblPrint)
@@ -458,7 +470,8 @@ public class OrderPanel extends javax.swing.JPanel {
                             .addComponent(btnRemoveOrderline)
                             .addComponent(lblAllOrders)
                             .addComponent(btnPrintOrderConfirmation)
-                            .addComponent(btnPrintQuote))
+                            .addComponent(btnPrintQuote)
+                            .addComponent(orderLineDoneButton))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 442, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -476,9 +489,10 @@ public class OrderPanel extends javax.swing.JPanel {
         int price = Integer.parseInt(tfPrice.getText());
         boolean customer_approval = cboxCustomerApproval.isSelected();
         String description = taDescription.getText();
+        String status = "";
 
         DefaultTableModel tableModelOrderline = (DefaultTableModel) tblOrderline.getModel();
-        tableModelOrderline.addRow(new Object[]{orderLine_id, product_id, price, customer_approval, description});
+        tableModelOrderline.addRow(new Object[]{orderLine_id, product_id, price, customer_approval, description, status});
 
         tfProductID.setText("");
         tfPrice.setText("");
@@ -504,7 +518,7 @@ public class OrderPanel extends javax.swing.JPanel {
         dbm.updateOrder(order);
         
         DefaultTableModel tableModelOrderline = (DefaultTableModel) tblOrderline.getModel();
-
+        
         for (int i = 0; i < tableModelOrderline.getRowCount(); i++) {
             int null_orderId = 0;
 
@@ -526,7 +540,21 @@ public class OrderPanel extends javax.swing.JPanel {
                 dbm.updateOrderLine(orderLine);
             }
         }
-
+        
+        
+       boolean alILinesReady = true;
+        
+        ArrayList<OrderLine> orderlines = dbm.getOrderlines(order.getId());
+        for (OrderLine line : orderlines) {
+            if (!line.getHatStatus().contentEquals("ready")) {
+                return;
+            }
+        }
+        
+        if (alILinesReady) {
+            order.setOrder_status("Completed");
+            dbm.updateOrder(order);
+        }
     }//GEN-LAST:event_btnSaveOrderActionPerformed
 
     private void btnRemoveOrderlineActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRemoveOrderlineActionPerformed
@@ -591,6 +619,28 @@ public class OrderPanel extends javax.swing.JPanel {
         }
     }//GEN-LAST:event_btnPrintOrderConfirmationActionPerformed
 
+    private void orderLineDoneButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_orderLineDoneButtonActionPerformed
+        int selectedTableRowID = tblOrderline.getSelectedRow();
+        int selectedOrderlineID = (int) tblOrderline.getValueAt(selectedTableRowID, 0);
+       OrderLine line = dbm.getOrderLine(selectedOrderlineID); 
+       line.setHatStatus("ready");
+        dbm.updateOrderLine(line);
+        DefaultTableModel tableModelOrderline = (DefaultTableModel) tblOrderline.getModel();
+        tableModelOrderline.setValueAt("ready", selectedTableRowID, 5);
+        tableModelOrderline.fireTableDataChanged();
+        
+        ArrayList<OrderLine> orderlines = dbm.getOrderlines(line.getOrderId());
+        for (OrderLine ol : orderlines) {
+            if (!ol.getHatStatus().contentEquals("ready")) {
+                return;
+            }
+        }
+        
+        Order order = dbm.getOrder(line.getOrderId());
+        order.setOrder_status("Completed");
+        dbm.updateOrder(order);
+    }//GEN-LAST:event_orderLineDoneButtonActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAddOrderline;
@@ -624,6 +674,7 @@ public class OrderPanel extends javax.swing.JPanel {
     private javax.swing.JLabel lblPrint;
     private javax.swing.JLabel lblProductID;
     private javax.swing.JLabel lblShippingCostOrder;
+    private javax.swing.JButton orderLineDoneButton;
     private javax.swing.JPanel pnlNewOrder;
     private javax.swing.JTextArea taDescription;
     private javax.swing.JTable tblOrderline;
