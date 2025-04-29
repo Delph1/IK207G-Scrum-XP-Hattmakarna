@@ -1,8 +1,9 @@
 
 package panels;
 
-import hattmakarna.MainWindow;
 import static hattmakarna.Hattmakarna.dbm;
+import hattmakarna.MainWindow;
+import hattmakarna.ModularWindow;
 import models.*;
 import java.util.ArrayList;
 import javax.swing.JOptionPane;
@@ -143,7 +144,10 @@ public class CustomerListPanel extends javax.swing.JPanel {
     }
     
     private void NewCustomerBTNActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_NewCustomerBTNActionPerformed
-        window.showCustomerPanel(null);
+        ModularWindow modularWindow = new ModularWindow(window, true);
+        modularWindow.showCustomerPanel(null);
+        modularWindow.setVisible(true);
+        modularWindow.setAlwaysOnTop(true);
     }//GEN-LAST:event_NewCustomerBTNActionPerformed
 
     private void deleteCustomerButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deleteCustomerButtonActionPerformed
@@ -170,7 +174,10 @@ public class CustomerListPanel extends javax.swing.JPanel {
         int selectedRowId = customerTable.getSelectedRow();
         int selectedCustomerId = (int) customerTable.getValueAt(selectedRowId, 0);
         Customer customer = dbm.getCustomer(selectedCustomerId);
-        window.showCustomerPanel(customer);
+        ModularWindow modularWindow = new ModularWindow(window, true);
+        modularWindow.showCustomerPanel(customer);
+        modularWindow.setVisible(true);
+        modularWindow.setAlwaysOnTop(true);
     }//GEN-LAST:event_showCustomerButtonActionPerformed
 
     private void createOrderForCustomerBTNActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_createOrderForCustomerBTNActionPerformed
