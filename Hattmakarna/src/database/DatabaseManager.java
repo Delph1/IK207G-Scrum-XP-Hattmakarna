@@ -597,7 +597,7 @@ public class DatabaseManager {
                             row.get("product_name"),
                             row.get("price") == null ? 0 : Integer.parseInt(row.get("price")),
                             ParseBoolean(row.get("copyright_approved")),
-                            ParseBoolean(row.get("discountinued")),
+                            ParseBoolean(row.get("discontinued")),
                             ParseBoolean(row.get("stock_item")),
                             Double.parseDouble(row.get("weight")),
                             row.get("description")
