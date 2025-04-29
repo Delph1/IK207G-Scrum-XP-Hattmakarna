@@ -93,6 +93,8 @@ public class ProductListPanel extends javax.swing.JPanel {
                         p.getDescription(),
                         p.getDiscontinued() ? "Slutsåld" : "I lager" 
                     });
+                
+            System.out.println(p.getDiscontinued());
             }
 
             tblProdukter.setModel(model);  
@@ -132,7 +134,6 @@ public class ProductListPanel extends javax.swing.JPanel {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jLabel1 = new javax.swing.JLabel();
         NewProductBTN = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
         tblProdukter = new javax.swing.JTable();
@@ -144,9 +145,6 @@ public class ProductListPanel extends javax.swing.JPanel {
         btnUploadImages = new javax.swing.JButton();
 
         setName(""); // NOI18N
-
-        jLabel1.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
-        jLabel1.setText("Produktlista");
 
         NewProductBTN.setText("Ny produkt");
         NewProductBTN.addActionListener(new java.awt.event.ActionListener() {
@@ -174,6 +172,8 @@ public class ProductListPanel extends javax.swing.JPanel {
                 btnSlutsaldActionPerformed(evt);
             }
         });
+
+        lblImage.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0), 2));
 
         btnEditProduct.setText("Ändra produkt");
         btnEditProduct.addActionListener(new java.awt.event.ActionListener() {
@@ -213,36 +213,30 @@ public class ProductListPanel extends javax.swing.JPanel {
                         .addGap(40, 40, 40)
                         .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 520, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createSequentialGroup()
-                                .addGap(269, 269, 269)
-                                .addComponent(jLabel1))
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(btnSlutsald)
-                                .addGap(18, 18, 18)
-                                .addComponent(btnEditProduct)))
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(btnSlutsald)
+                        .addGap(18, 18, 18)
+                        .addComponent(btnEditProduct)
                         .addGap(18, 18, 18)
                         .addComponent(NewProductBTN)))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 42, Short.MAX_VALUE)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                        .addComponent(lblImage, javax.swing.GroupLayout.PREFERRED_SIZE, 239, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGroup(layout.createSequentialGroup()
-                            .addComponent(btnViewLargeImage)
-                            .addGap(18, 18, 18)
-                            .addComponent(btn3dView, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
-                    .addGroup(layout.createSequentialGroup()
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 47, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(lblImage, javax.swing.GroupLayout.PREFERRED_SIZE, 239, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(btnViewLargeImage)
+                                .addGap(18, 18, 18)
+                                .addComponent(btn3dView, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                        .addGap(21, 21, 21))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addComponent(btnUploadImages)
-                        .addGap(123, 123, 123)))
-                .addGap(21, 21, 21))
+                        .addGap(76, 76, 76))))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jLabel1)
-                .addGap(24, 24, 24)
+                .addGap(30, 30, 30)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(NewProductBTN)
                     .addComponent(btnSlutsald)
@@ -252,13 +246,13 @@ public class ProductListPanel extends javax.swing.JPanel {
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 340, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(lblImage, javax.swing.GroupLayout.PREFERRED_SIZE, 190, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(btnViewLargeImage)
-                            .addComponent(btn3dView))
-                        .addGap(18, 18, 18)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(btn3dView)
+                            .addComponent(btnViewLargeImage))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(btnUploadImages)))
-                .addContainerGap(93, Short.MAX_VALUE))
+                .addContainerGap(109, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
 
@@ -429,7 +423,6 @@ public class ProductListPanel extends javax.swing.JPanel {
     private javax.swing.JButton btnSlutsald;
     private javax.swing.JButton btnUploadImages;
     private javax.swing.JButton btnViewLargeImage;
-    private javax.swing.JLabel jLabel1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JLabel lblImage;
     private javax.swing.JTable tblProdukter;
