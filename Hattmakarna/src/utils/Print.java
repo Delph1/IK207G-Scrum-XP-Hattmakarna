@@ -28,6 +28,7 @@ public class Print {
     private String startDate;
     private String stopDate;
     private int productId;
+    private int customerId;
     private Boolean IsExpress;
     
     public Print (Order order) {
@@ -44,6 +45,12 @@ public class Print {
     public Print (String[][] hatStats, int productId, String startDate, String stopDate) {
         this.data = hatStats;
         this.productId = productId;
+        this.startDate = startDate;
+        this.stopDate = stopDate;
+    }
+        public Print (String[][] hatStats, String startDate, String stopDate,int customerId) {
+        this.data = hatStats;
+        this.customerId = customerId;
         this.startDate = startDate;
         this.stopDate = stopDate;
     }
@@ -405,6 +412,16 @@ public class Print {
         }
     }
     
+        public void printCustomerStats() throws PrinterException, IOException {
+        PrinterJob printJob = PrinterJob.getPrinterJob();
+        createCustomerStatsList(data, customerId);
+        PDFPrintable printdoc = new PDFPrintable (PDDocument.load(new File("hatstats.pdf")), Scaling.SHRINK_TO_FIT);
+        if (printJob.printDialog()) {
+            printJob.setPrintable(printdoc);
+            printJob.print();
+        }
+    }
+    
     private void createHatHeader(PDPageContentStream contentStream, Product product) throws IOException {
         contentStream.beginText();
         contentStream.setFont(PDType1Font.HELVETICA, 14);
@@ -437,6 +454,20 @@ public class Print {
         contentStream.stroke();
     }
     
+    private void createCustomerHeader(PDPageContentStream contentStream, Customer customer) throws IOException {
+        contentStream.beginText();
+        contentStream.setFont(PDType1Font.HELVETICA, 14);
+        contentStream.newLineAtOffset(50, 695);
+        contentStream.showText("Kundnummer: " + Integer.toString(customer.getId()));
+        contentStream.newLineAtOffset(0, -16);
+        contentStream.showText("Namn: " + customer.getFirstName()+" "+customer.getLastName());
+        contentStream.endText();
+
+        contentStream.moveTo(40, 610);
+        contentStream.lineTo(580, 610);
+        contentStream.stroke();
+    }
+    
     private PDDocument createStatsList (String[][] data, int productId) throws IOException {
         String[] headers = {"Datum", "Antal sålda", "Summa"};
         
@@ -458,6 +489,48 @@ public class Print {
         Product product = dbm.getProduct(productId);
         
         createHatHeader(contentStream, product);
+        
+        createTable(contentStream, columnWidths, headers, data, 600);
+        
+        //Sparar filen
+        contentStream.close(); 
+        String path = "hatstats.pdf";
+
+        try {
+            document.save(path);  
+        } catch(Exception e) {
+            System.err.println("");
+        }
+        try {
+            document.close();
+        }
+        catch (Exception e) {
+            System.err.println("");
+        }
+        return document;
+    }
+    
+    private PDDocument createCustomerStatsList (String[][] data, int productId) throws IOException {
+        String[] headers = {"Datum", "Antal sålda", "Summa"};
+        
+        float[] columnWidths = {150, 150, 150};
+        
+        PDPage page = new PDPage();
+        document.addPage(page);
+        PDPageContentStream contentStream = new PDPageContentStream(document, page);
+        contentStream.beginText();
+        contentStream.setFont(PDType1Font.HELVETICA, 24);
+        contentStream.newLineAtOffset(50, 740);
+        contentStream.showText("Antal sålda hattar till kund: " + startDate + " - " + stopDate);
+        contentStream.endText();
+
+        contentStream.moveTo(40, 715);
+        contentStream.lineTo(580, 715);
+        contentStream.stroke();
+        
+        Customer customer = dbm.getCustomer(customerId);
+        
+        createCustomerHeader(contentStream, customer);
         
         createTable(contentStream, columnWidths, headers, data, 600);
         
