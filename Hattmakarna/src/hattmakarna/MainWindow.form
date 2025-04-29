@@ -47,8 +47,6 @@
                       <Component id="btnImageManager" min="-2" max="-2" attributes="0"/>
                       <EmptySpace type="separate" max="-2" attributes="0"/>
                       <Component id="statisticsBTN" min="-2" pref="100" max="-2" attributes="0"/>
-                      <EmptySpace type="separate" max="-2" attributes="0"/>
-                      <Component id="btnCalendar" min="-2" max="-2" attributes="0"/>
                       <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
                   </Group>
               </Group>
@@ -81,7 +79,6 @@
                   <Component id="statisticsBTN" alignment="3" min="-2" max="-2" attributes="0"/>
                   <Component id="ProductListBTN" alignment="3" min="-2" max="-2" attributes="0"/>
                   <Component id="btnImageManager" alignment="3" min="-2" max="-2" attributes="0"/>
-                  <Component id="btnCalendar" alignment="3" min="-2" max="-2" attributes="0"/>
               </Group>
               <EmptySpace max="-2" attributes="0"/>
               <Component id="jSeparator1" min="-2" pref="10" max="-2" attributes="0"/>
@@ -208,14 +205,6 @@
       </Properties>
       <Events>
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnImageManagerActionPerformed"/>
-      </Events>
-    </Component>
-    <Component class="javax.swing.JButton" name="btnCalendar">
-      <Properties>
-        <Property name="text" type="java.lang.String" value="Kalender"/>
-      </Properties>
-      <Events>
-        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnCalendarActionPerformed"/>
       </Events>
     </Component>
   </SubComponents>
